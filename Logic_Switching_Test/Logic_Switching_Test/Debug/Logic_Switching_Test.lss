@@ -3,25 +3,25 @@ Logic_Switching_Test.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  000000a6  0000011a  2**0
+  0 .data         00000000  00800100  000000ce  00000142  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000000a6  00000000  00000000  00000074  2**1
+  1 .text         000000ce  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  0000011a  2**0
+  2 .comment      00000030  00000000  00000000  00000142  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000020  00000000  00000000  0000014a  2**0
+  3 .debug_aranges 00000030  00000000  00000000  00000172  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000087  00000000  00000000  0000016a  2**0
+  4 .debug_info   000000de  00000000  00000000  000001a2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000053  00000000  00000000  000001f1  2**0
+  5 .debug_abbrev 000000b4  00000000  00000000  00000280  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000000bc  00000000  00000000  00000244  2**0
+  6 .debug_line   000000e8  00000000  00000000  00000334  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000024  00000000  00000000  00000300  2**2
+  7 .debug_frame  00000044  00000000  00000000  0000041c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000186  00000000  00000000  00000324  2**0
+  8 .debug_str    00000169  00000000  00000000  00000460  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000010  00000000  00000000  000004aa  2**0
+  9 .debug_ranges 00000020  00000000  00000000  000005c9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -66,32 +66,81 @@ Disassembly of section .text:
   82:	d8 e0       	ldi	r29, 0x08	; 8
   84:	de bf       	out	0x3e, r29	; 62
   86:	cd bf       	out	0x3d, r28	; 61
-  88:	0e 94 4a 00 	call	0x94	; 0x94 <main>
-  8c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <_exit>
+  88:	0e 94 57 00 	call	0xae	; 0xae <main>
+  8c:	0c 94 65 00 	jmp	0xca	; 0xca <_exit>
 
 00000090 <__bad_interrupt>:
   90:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000094 <main>:
+00000094 <SPI_Init>:
+}
 
-#include <avr/io.h>
+void SPI_Init()
+{
+	// Set MOSI ,SCK, and SS as output, others as input
+	SPI_DDR = (1<<MOSI)|(1<<SCK)|(1<<SS);
+  94:	80 eb       	ldi	r24, 0xB0	; 176
+  96:	84 b9       	out	0x04, r24	; 4
+	// CS pin is not active
+	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
+  98:	5c 9a       	sbi	0x0b, 4	; 11
+	// Enable SPI, Master Mode 0, set the clock rate fck/4
+	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+  9a:	80 e5       	ldi	r24, 0x50	; 80
+  9c:	8c bd       	out	0x2c, r24	; 44
+  9e:	08 95       	ret
+
+000000a0 <SPI_Write>:
+}
+
+void SPI_Write(unsigned char SPI_Data)
+{
+	// Activate the CS pin
+	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
+  a0:	5c 98       	cbi	0x0b, 4	; 11
+	// Start Write transmission
+	SPDR0 = SPI_Data;
+  a2:	8e bd       	out	0x2e, r24	; 46
+	// Wait for transmission complete
+	while(!(SPSR0 & (1<<SPIF0)));	
+  a4:	0d b4       	in	r0, 0x2d	; 45
+  a6:	07 fe       	sbrs	r0, 7
+  a8:	fd cf       	rjmp	.-6      	; 0xa4 <SPI_Write+0x4>
+	// CS pin is not active
+	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
+  aa:	5c 9a       	sbi	0x0b, 4	; 11
+  ac:	08 95       	ret
+
+000000ae <main>:
+void SPI_Init();
+void SPI_Write(unsigned char SPI_Data);
 
 int main(void)
 {
-	PORTA = 0xFF;
-  94:	8f ef       	ldi	r24, 0xFF	; 255
-  96:	82 b9       	out	0x02, r24	; 2
-	PORTD |= (1<<3 | 1<<4 | 1<<5);
-  98:	9b b1       	in	r25, 0x0b	; 11
-  9a:	98 63       	ori	r25, 0x38	; 56
-  9c:	9b b9       	out	0x0b, r25	; 11
+	DDRA = 0xFF;
+  ae:	8f ef       	ldi	r24, 0xFF	; 255
+  b0:	81 b9       	out	0x01, r24	; 1
+	Shift_Reg_Cntrl_DDR |= (1<<3 | 1<<4 | 1<<5);
+  b2:	9a b1       	in	r25, 0x0a	; 10
+  b4:	98 63       	ori	r25, 0x38	; 56
+  b6:	9a b9       	out	0x0a, r25	; 10
 	
+	Shift_Reg_Cntrl_PORT = 1<<Reset;
+  b8:	90 e2       	ldi	r25, 0x20	; 32
+  ba:	9b b9       	out	0x0b, r25	; 11
 	PORTA = 0xFF;
-  9e:	82 b9       	out	0x02, r24	; 2
-  a0:	ff cf       	rjmp	.-2      	; 0xa0 <main+0xc>
+  bc:	82 b9       	out	0x02, r24	; 2
+	
+	SPI_Init();
+  be:	0e 94 4a 00 	call	0x94	; 0x94 <SPI_Init>
+	
+	SPI_Write(0xFF);
+  c2:	8f ef       	ldi	r24, 0xFF	; 255
+  c4:	0e 94 50 00 	call	0xa0	; 0xa0 <SPI_Write>
+  c8:	ff cf       	rjmp	.-2      	; 0xc8 <main+0x1a>
 
-000000a2 <_exit>:
-  a2:	f8 94       	cli
+000000ca <_exit>:
+  ca:	f8 94       	cli
 
-000000a4 <__stop_program>:
-  a4:	ff cf       	rjmp	.-2      	; 0xa4 <__stop_program>
+000000cc <__stop_program>:
+  cc:	ff cf       	rjmp	.-2      	; 0xcc <__stop_program>
