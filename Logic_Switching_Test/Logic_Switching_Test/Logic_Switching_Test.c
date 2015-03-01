@@ -10,7 +10,7 @@
 
 int main(void)
 {
-	PORTA = 0xFF;
+	PORTA = 0xFF
 	PORTD |= (1<<3 | 1<<4 | 1<<5);
 	
 	PORTA = 0xFF;
