@@ -12,7 +12,7 @@
 #define SPI_PORT PORTB
 #define SPI_DDR  DDRB
 #define Switching_Circuitry_CS_PORT PORTD
-#define Switching_Circuitry_SPI_CS  PORTA4
+#define Switching_Circuitry_SPI_CS  PORTD4
 
 #define MOSI PORTB5
 #define SCK PORTB7
@@ -30,17 +30,20 @@ void SPI_Write(unsigned char SPI_Data);
 
 int main(void)
 {
+	_delay_ms(1000);
 	DDRA = 0x00;
 	Shift_Reg_Cntrl_DDR |= (1<<3 | 1<<4 | 1<<5);
 	DDRD |= 1<<6;
-	PORTD |= 1<<6;
 	
 	Shift_Reg_Cntrl_PORT |= 1<<Reset;
+	SPI_Init();
 	Shift_Reg_Cntrl_PORT &= ~(1<<OE);
+	
+	PORTD |= 1<<6;
 	
 	//PORTA = 0xFF;
 	
-	SPI_Init();
+	
 	
 	// Activate the CS pin
 	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
