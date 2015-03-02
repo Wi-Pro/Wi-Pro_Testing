@@ -140,7 +140,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000       0xce
+.text           0x00000000       0xd4
  *(.vectors)
  .vectors       0x00000000       0x7c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324pa.o
                 0x00000000                __vector_default
@@ -230,15 +230,15 @@ END GROUP
                 0x00000094        0xc Logic_Switching_Test.o
                 0x00000094                SPI_Init
  .text.SPI_Write
-                0x000000a0        0xe Logic_Switching_Test.o
+                0x000000a0        0xa Logic_Switching_Test.o
                 0x000000a0                SPI_Write
- .text.main     0x000000ae       0x1c Logic_Switching_Test.o
-                0x000000ae                main
-                0x000000ca                . = ALIGN (0x2)
+ .text.main     0x000000aa       0x26 Logic_Switching_Test.o
+                0x000000aa                main
+                0x000000d0                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000ca        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
-                0x000000ca                _exit
-                0x000000ca                exit
+ .fini9         0x000000d0        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+                0x000000d0                _exit
+                0x000000d0                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -257,11 +257,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000ca        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x000000d0        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000000ce                _etext = .
+                0x000000d4                _etext = .
 
-.data           0x00800100        0x0 load address 0x000000ce
+.data           0x00800100        0x0 load address 0x000000d4
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324pa.o
@@ -281,8 +281,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 0x00800100                PROVIDE (__bss_end, .)
-                0x000000ce                __data_load_start = LOADADDR (.data)
-                0x000000ce                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000000d4                __data_load_start = LOADADDR (.data)
+                0x000000d4                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800100        0x0
                 0x00800100                PROVIDE (__noinit_start, .)
@@ -356,17 +356,17 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000       0xde
+.debug_info     0x00000000       0xf0
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000       0xde Logic_Switching_Test.o
+ .debug_info    0x00000000       0xf0 Logic_Switching_Test.o
 
-.debug_abbrev   0x00000000       0xb4
+.debug_abbrev   0x00000000       0xc1
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0xb4 Logic_Switching_Test.o
+ .debug_abbrev  0x00000000       0xc1 Logic_Switching_Test.o
 
-.debug_line     0x00000000       0xe8
+.debug_line     0x00000000       0xed
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0xe8 Logic_Switching_Test.o
+ .debug_line    0x00000000       0xed Logic_Switching_Test.o
 
 .debug_frame    0x00000000       0x44
  *(.debug_frame)

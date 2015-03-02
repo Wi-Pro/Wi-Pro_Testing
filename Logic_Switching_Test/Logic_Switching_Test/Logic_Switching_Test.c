@@ -5,8 +5,9 @@
  *  Author: Adam Vogel
  */ 
 
-
+# define F_CPU 1000000UL
 #include <avr/io.h>
+#include <util/delay.h>
 
 #define SPI_PORT PORTB
 #define SPI_DDR  DDRB
@@ -29,19 +30,28 @@ void SPI_Write(unsigned char SPI_Data);
 
 int main(void)
 {
-	DDRA = 0xFF;
+	DDRA = 0x00;
 	Shift_Reg_Cntrl_DDR |= (1<<3 | 1<<4 | 1<<5);
+	DDRD |= 1<<6;
+	PORTD |= 1<<6;
 	
-	Shift_Reg_Cntrl_PORT = 1<<Reset;
-	PORTA = 0xFF;
+	Shift_Reg_Cntrl_PORT |= 1<<Reset;
+	Shift_Reg_Cntrl_PORT &= ~(1<<OE);
+	
+	//PORTA = 0xFF;
 	
 	SPI_Init();
 	
-	SPI_Write(0xFF);
+	// Activate the CS pin
+	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
+	SPI_Write(0x07);
+	SPI_Write(0x01);
+	// CS pin is not active
+	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 	
     while(1)
     {
-        //TODO:: Please write your application code 
+
     }
 }
 
@@ -57,12 +67,8 @@ void SPI_Init()
 
 void SPI_Write(unsigned char SPI_Data)
 {
-	// Activate the CS pin
-	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
 	// Start Write transmission
 	SPDR0 = SPI_Data;
 	// Wait for transmission complete
 	while(!(SPSR0 & (1<<SPIF0)));	
-	// CS pin is not active
-	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 }
