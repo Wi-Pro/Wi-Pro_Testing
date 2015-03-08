@@ -1,0 +1,184 @@
+
+WifiModule.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000014  00800100  00000188  0000021c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000188  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000006  00800114  00800114  00000230  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000230  2**0
+                  CONTENTS, READONLY
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__ctors_end>
+   4:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+   8:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+   c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  10:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  14:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  18:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  1c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  20:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  24:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  28:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  2c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  30:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  34:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  38:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  3c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  40:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  44:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  48:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  4c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  50:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  54:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  58:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  5c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  60:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  64:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  68:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  6c:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  70:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  74:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+  78:	0c 94 5b 00 	jmp	0xb6	; 0xb6 <__bad_interrupt>
+
+0000007c <__ctors_end>:
+  7c:	11 24       	eor	r1, r1
+  7e:	1f be       	out	0x3f, r1	; 63
+  80:	cf ef       	ldi	r28, 0xFF	; 255
+  82:	d8 e0       	ldi	r29, 0x08	; 8
+  84:	de bf       	out	0x3e, r29	; 62
+  86:	cd bf       	out	0x3d, r28	; 61
+
+00000088 <__do_copy_data>:
+  88:	11 e0       	ldi	r17, 0x01	; 1
+  8a:	a0 e0       	ldi	r26, 0x00	; 0
+  8c:	b1 e0       	ldi	r27, 0x01	; 1
+  8e:	e8 e8       	ldi	r30, 0x88	; 136
+  90:	f1 e0       	ldi	r31, 0x01	; 1
+  92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
+  94:	05 90       	lpm	r0, Z+
+  96:	0d 92       	st	X+, r0
+  98:	a4 31       	cpi	r26, 0x14	; 20
+  9a:	b1 07       	cpc	r27, r17
+  9c:	d9 f7       	brne	.-10     	; 0x94 <__do_copy_data+0xc>
+
+0000009e <__do_clear_bss>:
+  9e:	21 e0       	ldi	r18, 0x01	; 1
+  a0:	a4 e1       	ldi	r26, 0x14	; 20
+  a2:	b1 e0       	ldi	r27, 0x01	; 1
+  a4:	01 c0       	rjmp	.+2      	; 0xa8 <.do_clear_bss_start>
+
+000000a6 <.do_clear_bss_loop>:
+  a6:	1d 92       	st	X+, r1
+
+000000a8 <.do_clear_bss_start>:
+  a8:	aa 31       	cpi	r26, 0x1A	; 26
+  aa:	b2 07       	cpc	r27, r18
+  ac:	e1 f7       	brne	.-8      	; 0xa6 <.do_clear_bss_loop>
+  ae:	0e 94 5d 00 	call	0xba	; 0xba <main>
+  b2:	0c 94 c2 00 	jmp	0x184	; 0x184 <_exit>
+
+000000b6 <__bad_interrupt>:
+  b6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+000000ba <main>:
+  ba:	0e 94 b3 00 	call	0x166	; 0x166 <uart1_init>
+  be:	0e 94 9a 00 	call	0x134	; 0x134 <uart0_init>
+  c2:	8f ef       	ldi	r24, 0xFF	; 255
+  c4:	8b b9       	out	0x0b, r24	; 11
+  c6:	8e e0       	ldi	r24, 0x0E	; 14
+  c8:	91 e0       	ldi	r25, 0x01	; 1
+  ca:	0e 94 88 00 	call	0x110	; 0x110 <uart_send>
+  ce:	ff cf       	rjmp	.-2      	; 0xce <main+0x14>
+
+000000d0 <uart_sendStream>:
+  d0:	cf 93       	push	r28
+  d2:	c8 2f       	mov	r28, r24
+  d4:	8a 30       	cpi	r24, 0x0A	; 10
+  d6:	19 f4       	brne	.+6      	; 0xde <uart_sendStream+0xe>
+  d8:	8d e0       	ldi	r24, 0x0D	; 13
+  da:	0e 94 68 00 	call	0xd0	; 0xd0 <uart_sendStream>
+  de:	80 91 c0 00 	lds	r24, 0x00C0
+  e2:	85 ff       	sbrs	r24, 5
+  e4:	fc cf       	rjmp	.-8      	; 0xde <uart_sendStream+0xe>
+  e6:	c0 93 c6 00 	sts	0x00C6, r28
+  ea:	80 e0       	ldi	r24, 0x00	; 0
+  ec:	90 e0       	ldi	r25, 0x00	; 0
+  ee:	cf 91       	pop	r28
+  f0:	08 95       	ret
+
+000000f2 <uart_receiveStream>:
+  f2:	cf 93       	push	r28
+  f4:	bc 01       	movw	r22, r24
+  f6:	80 91 c0 00 	lds	r24, 0x00C0
+  fa:	87 ff       	sbrs	r24, 7
+  fc:	fc cf       	rjmp	.-8      	; 0xf6 <uart_receiveStream+0x4>
+  fe:	c0 91 c6 00 	lds	r28, 0x00C6
+ 102:	8c 2f       	mov	r24, r28
+ 104:	0e 94 68 00 	call	0xd0	; 0xd0 <uart_sendStream>
+ 108:	8c 2f       	mov	r24, r28
+ 10a:	90 e0       	ldi	r25, 0x00	; 0
+ 10c:	cf 91       	pop	r28
+ 10e:	08 95       	ret
+
+00000110 <uart_send>:
+ 110:	20 e0       	ldi	r18, 0x00	; 0
+ 112:	fc 01       	movw	r30, r24
+ 114:	e2 0f       	add	r30, r18
+ 116:	f1 1d       	adc	r31, r1
+ 118:	30 81       	ld	r19, Z
+ 11a:	33 23       	and	r19, r19
+ 11c:	41 f0       	breq	.+16     	; 0x12e <uart_send+0x1e>
+ 11e:	40 91 c8 00 	lds	r20, 0x00C8
+ 122:	45 ff       	sbrs	r20, 5
+ 124:	fc cf       	rjmp	.-8      	; 0x11e <uart_send+0xe>
+ 126:	30 93 ce 00 	sts	0x00CE, r19
+ 12a:	2f 5f       	subi	r18, 0xFF	; 255
+ 12c:	f2 cf       	rjmp	.-28     	; 0x112 <uart_send+0x2>
+ 12e:	80 e0       	ldi	r24, 0x00	; 0
+ 130:	90 e0       	ldi	r25, 0x00	; 0
+ 132:	08 95       	ret
+
+00000134 <uart0_init>:
+ 134:	10 92 c5 00 	sts	0x00C5, r1
+ 138:	89 e1       	ldi	r24, 0x19	; 25
+ 13a:	80 93 c4 00 	sts	0x00C4, r24
+ 13e:	88 e1       	ldi	r24, 0x18	; 24
+ 140:	80 93 c1 00 	sts	0x00C1, r24
+ 144:	86 e0       	ldi	r24, 0x06	; 6
+ 146:	80 93 c2 00 	sts	0x00C2, r24
+ 14a:	8a b1       	in	r24, 0x0a	; 10
+ 14c:	83 60       	ori	r24, 0x03	; 3
+ 14e:	8a b9       	out	0x0a, r24	; 10
+ 150:	80 e0       	ldi	r24, 0x00	; 0
+ 152:	91 e0       	ldi	r25, 0x01	; 1
+ 154:	90 93 15 01 	sts	0x0115, r25
+ 158:	80 93 14 01 	sts	0x0114, r24
+ 15c:	90 93 17 01 	sts	0x0117, r25
+ 160:	80 93 16 01 	sts	0x0116, r24
+ 164:	08 95       	ret
+
+00000166 <uart1_init>:
+ 166:	10 92 cd 00 	sts	0x00CD, r1
+ 16a:	89 e1       	ldi	r24, 0x19	; 25
+ 16c:	80 93 cc 00 	sts	0x00CC, r24
+ 170:	88 e1       	ldi	r24, 0x18	; 24
+ 172:	80 93 c9 00 	sts	0x00C9, r24
+ 176:	86 e0       	ldi	r24, 0x06	; 6
+ 178:	80 93 ca 00 	sts	0x00CA, r24
+ 17c:	8a b1       	in	r24, 0x0a	; 10
+ 17e:	8c 60       	ori	r24, 0x0C	; 12
+ 180:	8a b9       	out	0x0a, r24	; 10
+ 182:	08 95       	ret
+
+00000184 <_exit>:
+ 184:	f8 94       	cli
+
+00000186 <__stop_program>:
+ 186:	ff cf       	rjmp	.-2      	; 0x186 <__stop_program>

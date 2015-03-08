@@ -4,17 +4,17 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.2</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
-    <ProjectGuid>{5b284284-63bf-4ad5-9cb9-04f5f398724c}</ProjectGuid>
-    <avrdevice>ATtiny2313</avrdevice>
+    <ProjectGuid>{d0f5c440-9acb-4152-826b-259e568f9d8e}</ProjectGuid>
+    <avrdevice>ATmega324P</avrdevice>
     <avrdeviceseries>none</avrdeviceseries>
     <OutputType>Executable</OutputType>
     <Language>C</Language>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>VoltageControl</AssemblyName>
-    <Name>VoltageControl</Name>
-    <RootNamespace>VoltageControl</RootNamespace>
+    <AssemblyName>WifiModule</AssemblyName>
+    <Name>WifiModule</Name>
+    <RootNamespace>WifiModule</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
@@ -33,7 +33,7 @@
         <documentation help="" />
         <offline-documentation help="" />
         <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.17.0" />
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.21.0" />
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
@@ -95,13 +95,19 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="VoltageControl.c">
+    <Compile Include="WifiModule.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="VoltageControlDriver.c">
+    <Compile Include="PrintDriver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="VoltageControlDriver.h">
+    <Compile Include="PrintDriver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WifiDriver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="WifiDriver.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

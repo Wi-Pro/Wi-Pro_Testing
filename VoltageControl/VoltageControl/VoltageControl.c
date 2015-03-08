@@ -7,9 +7,11 @@
 
 
 #include <avr/io.h>
+#include "VoltageControlDriver.h"
 
 int main(void)
 {
+	setVcc(VCC_6_8V);
     while(1)
     {
         //TODO:: Please write your application code 
