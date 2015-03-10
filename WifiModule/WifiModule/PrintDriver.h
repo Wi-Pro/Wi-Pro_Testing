@@ -9,8 +9,11 @@
 #ifndef PRINTDRIVER_H_
 #define PRINTDRIVER_H_
 
-#define BAUD_RATE 2400 
+#define BAUD_RATE 4800 
 #define F_CPU 1000000UL
+
+#define CTS PORTD4
+#define RTS PORTD5 
 
 void uart0_init();
 void uart1_init();

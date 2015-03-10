@@ -17,27 +17,6 @@ void uart_flush()
 	while (UCSR0A & (1<<RXC0)) dummy = UDR0;
 }
 
-int uart_send(unsigned char data[])
-{
-	uint8_t i = 0;
-	while(data[i] != 0x00){
-		while(!(UCSR1A & (1<<UDRE1)));
-		UDR1 = data[i];
-		i++;
-	}
-	return 0;
-}
-
-void uart_receive(unsigned char data[])
-{
-	uint16_t i = 0; 
-	do 
-	{
-		while (!(UCSR0A & (1<<RXC0)));
-		data[i]=UDR0;
-	} while(data[i] != 0x00);
-
-}
 
 int uart_sendStream(char ch,FILE *stream)
 {
@@ -68,16 +47,8 @@ void uart0_init()
 	UBRR0L = (((F_CPU/BAUD_RATE)/16)-1);
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0); 		// enable Rx & Tx
 	UCSR0C=  (1<<UCSZ01)|(1<<UCSZ00);  	       // config USART; 8N1
-	DDRD |= (1<<PORTD1)|(1<<PORTD0);
+	//DDRD |= (1<<PORTD1)|(1<<PORTD0);
 	// Define Output/Input Stream
 	stdout = stdin = &uart_stream;
 }
 
-void uart1_init()
-{
-	UBRR1H = (((F_CPU/BAUD_RATE)/16)-1)>>8;	// set baud rate
-	UBRR1L = (((F_CPU/BAUD_RATE)/16)-1);
-	UCSR1B = (1<<RXEN1)|(1<<TXEN1); 		// enable Rx & Tx
-	UCSR1C=  (1<<UCSZ11)|(1<<UCSZ10);  	       // config USART; 8N1
-	DDRD |= (1<<PORTD2)|(1<<PORTD3);	//rx and tx as outputs 
-}
