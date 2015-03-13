@@ -41,7 +41,7 @@ int main(void)
 	
 	PORTD |= 1<<6;
 	
-	//PORTA = 0xFF;
+	//PORTA = 0x00;
 	
 	
 	

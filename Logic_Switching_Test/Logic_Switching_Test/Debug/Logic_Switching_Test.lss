@@ -144,7 +144,7 @@ int main(void)
 	
 	PORTD |= 1<<6;
   ce:	5e 9a       	sbi	0x0b, 6	; 11
-	//PORTA = 0xFF;
+	//PORTA = 0x00;
 	
 	
 	
