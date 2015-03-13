@@ -36,7 +36,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../main.c \
+../WifiModule.c \
 ../PrintDriver.c \
 ../WifiDriver.c
 
@@ -48,22 +48,22 @@ ASM_SRCS +=
 
 
 OBJS +=  \
-main.o \
+WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 OBJS_AS_ARGS +=  \
-main.o \
+WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 C_DEPS +=  \
-main.d \
+WifiModule.d \
 PrintDriver.d \
 WifiDriver.d
 
 C_DEPS_AS_ARGS +=  \
-main.d \
+WifiModule.d \
 PrintDriver.d \
 WifiDriver.d
 

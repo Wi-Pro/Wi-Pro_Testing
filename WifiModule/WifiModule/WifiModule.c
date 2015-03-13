@@ -5,6 +5,7 @@
  *  Author: Brandon
  */ 
 
+#define F_CPU 1000000UL
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -12,32 +13,32 @@
 #include "PrintDriver.h"
 #include "WifiDriver.h"
 
+unsigned char size = 10;
+//unsigned char* string = "Super Duper Long String!";
+//unsigned char* command = "get wlan.mac\n\r";
+
+//string[24] = "\0";  
+
 int main(void)
 {
-	//cli(); 
+	cli(); 
 	uart_init();
 	uart0_init(); 
-	printf("Initializing Wi-Fi Driver...\n");
-	//Set RTS as output
-	//DDRD |= (1<<RTS);
-	//Set CTS as input
-	//DDRD &= ~(1<<CTS);
-	//PORTD |= (1<<RTS);
-	//Wait until Wi-Fi gives clear to send
-	//while(!(PIND & (1<<CTS)));
-	//_delay_ms(1000);
-	//uart_send("This is a really super long ridiculously useless test string\0");
-	unsigned char data;
-	unsigned char counter = 0; 
-    while(counter <= 9)
-    {
-		uart_send(counter | 0x30);
-		printf("Polling..\n");
-		//data = uart_receiveChar();
-		while (!(UCSR1A & (1<<RXC1)));
-		data = UDR1; 
-		printf("%c\n", data);
-		counter++; 
+	//printf("%s\n", string);
+	sei(); 
+	unsigned char command[6] = "scan\n\r";
+	//uart_send(command, 6);
+	//printf("Sending!\n");
+	sendCommand(0, "bus");
+	unsigned const char* data = getReceiveBuffer(); 
+	//printf("Found Receive!\n");
+	printf("Received Data: %s\n", data);
+	for(int i = 0; i < 200; i++)
+	{
+		printf("%c", data[i]);
 	}
+
 	printf("Done!\n");
 }
+
+

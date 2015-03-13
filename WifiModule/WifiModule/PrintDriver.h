@@ -18,7 +18,7 @@
 void uart0_init();
 void uart1_init();
 void uart_flush();
-int uart_send(unsigned char data[]);
+//int uart_send(unsigned char data[]);
 int uart_sendStream(char ch,FILE *stream);
 int uart_receiveStream(FILE *stream);
 

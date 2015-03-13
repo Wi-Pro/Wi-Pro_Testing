@@ -13,38 +13,46 @@
 #include "PrintDriver.h"
 #include "WifiDriver.h"
 
+unsigned char receiveBuffer[MaxRecSize];
+unsigned int  i = 0;
+uint8_t receiveFlag = 0; 
+uint8_t sendFlag = 0; 
+unsigned int transLength = 0;
+
 void uart_init()
 {
 	UBRR1H = (((F_CPU/BAUD_RATE)/16)-1)>>8;	// set baud rate
 	UBRR1L = (((F_CPU/BAUD_RATE)/16)-1);
-	UCSR1B = (1<<RXEN1)|(1<<TXEN1); 		// enable Rx & Tx
-	UCSR1C=  (1<<UCSZ11)|(1<<UCSZ10);  	       // config USART; 8N1
+	UCSR1B = (1<<RXEN1)|(1<<TXEN1); // enable Rx & Tx
+	UCSR1C =  (1<<UCSZ11)|(1<<UCSZ10); // config USART; 8N1
 	UCSR1B |= (1<<RXCIE1);	//Enable Receive Interrupt 
-	DDRD |=  (1<<PORTD3);	//rx as output
-	DDRD &= ~(1<<PORTD2);
 }
 
-int uart_send(unsigned char data[])
+int uart_send(unsigned char data[], unsigned int length)
 {
-	printf("Uart Send Function: %c\n", data);
+	//printf("Uart Send Function: %c\n", data);
 	uint8_t i = 0;
-	while(data[i] != 0x00){
+	while(i <= length){
 		while(!(UCSR1A & (1<<UDRE1)));
 		UDR1 = data[i];
+		//while(!(UCSR1A & (1<<TXC1))); //wait for transmit to complete
 		i++;
 	}
-	//Enable Interrupt to receive response from Wi-Fi Module 
-	//sei();
+	//enable Receive Interrupt
+	receiveFlag = 0;  
+	UCSR1B |= (1<<RXCIE1);
 	return 0;
 }
 
 int uart_sendChar(unsigned char data)
 {
+	UCSR1B |= (1<<RXCIE1);
 	while(!(UCSR1A & (1<<UDRE1)));
 	UDR1 = data; 
+	return 0; 
 }
 
-unsigned char uart_receive(unsigned char *data, unsigned char size)
+unsigned char uart_receive(unsigned char* data, unsigned char size)
 {
 	uint16_t i = 0;
  
@@ -67,17 +75,98 @@ unsigned char uart_receive(unsigned char *data, unsigned char size)
 
 unsigned char uart_receiveChar()
 {
+	//printf("Receiving...\n");
 	while (!(UCSR1A & (1<<RXC1)));
+	//printf("Returning...\n");
 	return UDR1; 
 }
 
+unsigned char* getReceiveBuffer()
+{
+	printf("Waiting for Receive to Complete...\n");
+	//Wait for receiving to be completed
+	//sendFlag accounts for the delay between sending and receiving 
+	while(!receiveFlag & 1)
+	{
+		//While loop does not work correctly without a delay 
+		//An issue with the compiler or the stack pointer when invoking the interrupt 
+		_delay_us(100);
+		//printf("Loop\n");
+	}
+	//_delay_ms(500);
+	//begin receiving
+	printf("Received Data: %s\n", receiveBuffer);
+	return receiveBuffer; 
+}
+
+unsigned int getTransmissionLength()
+{
+	unsigned int transLength = 0;
+	transLength += (receiveBuffer[ones] & 0x0F);
+	transLength += (receiveBuffer[tens] & 0x0F) * 10; 
+	transLength += (receiveBuffer[hundreds] & 0x0F) * 100; 
+	transLength += (receiveBuffer[thousands] & 0x0F) * 1000; 
+	transLength += (receiveBuffer[tenThousands] & 0x0F) * 10000; 
+	if(transLength < MaxRecSize)
+		return transLength; 
+	else
+		return MaxRecSize; 
+}
+
+unsigned int sendCommand(uint8_t set, char command[])
+{
+	char* fullCommand; 
+	if(set == 1){
+		fullCommand = SET; 
+	}
+	else{
+		fullCommand = GET; 
+	}
+		
+	strcat(fullCommand, command);
+	//strcat(fullCommand, ENDCOMMAND);
+	
+	//unsigned int length = sizeof(fullCommand)/sizeof(char);
+	unsigned char test[9] = "get bus\r\n";
+	uart_send(test, 9);
+	
+	return 1; 
+}
 
 ISR(USART1_RX_vect)
 {
-	cli(); 
-	printf("Starting RX0 Interrupt...\n");
-	unsigned char receivedData[] = ""; 
-	uart_receive(receivedData, 100);
-	printf("Received Data: %s\n", receivedData);
-	//uart_send(receivedData);
+	cli();
+	//Grab Receive Header
+	if(i < endHeader)
+		receiveBuffer[i] = uart_receiveChar();
+	else if(i == endHeader)
+	{
+		transLength = getTransmissionLength(); 
+		//printf("Transmission Length: %d\n", transLength);
+	}
+	else
+	{
+		if(i < transLength + 6)
+		{
+			receiveBuffer[i] = uart_receiveChar();
+			//printf("Writing...\n");
+			//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+		}
+
+		else
+		{
+			//printf("End of String!\n");
+			receiveBuffer[i] = 0;
+			UCSR1B &= ~(1<<RXCIE1);
+			//cli();
+			i = 0;
+			//done receiving
+			receiveFlag = 1;
+			printf("Transmission Length: %d\n", transLength);
+			printf("Done Receiving!\n");
+		}
+	}
+	i++; 
+	//printf("%d\n", i);
+	sei(); 
 }
