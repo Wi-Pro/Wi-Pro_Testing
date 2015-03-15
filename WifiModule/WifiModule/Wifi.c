@@ -23,11 +23,16 @@ void WifiInit()
 
 void setMachineMode()
 {
-	sendCommand(SET, SYSTEM_PRINT_LEVEL, ZERO);
+	disableReceiveINT(); 
+	sendCommand(SET, SYSTEM_PRINT_LEVEL, ZERO); 
+	sendCommand(GET, SYSTEM_CMD_PROMPT, NOVAL);
+	sendCommand(GET, "wlan", NOVAL);
+	//sendCommand(GET, "system.cmd.prompt_enabled 1", NOVAL);
+	//sendCommand(SET, "system.print_level", ZERO);
 	//while(!waitForReceive());
 	//sendCommand(SET, SYSTEM_CMD_HEADER, ONE);
 	//while(waitForReceive());
-	sendCommand(SET, SYSTEM_CMD_PROMPT, ZERO);
+	//sendCommand(SET, "system.cmd.prompt_enabled", ZERO);
 	//while(waitForReceive());
 	//sendCommand(SET, SYSTEM_CMD_ECHO, OFF);
 	//while(waitForReceive());

@@ -40,7 +40,7 @@ int getStringLen(unsigned char* p)
 
 int uart_send(unsigned char* data, unsigned int length)
 {
-	//printf("Uart Send Function: %s\n", data);
+	printf("Uart Send Function: %s\n", data);
 	uint8_t i = 0;
 	while(i <= length){
 		while(!(UCSR1A & (1<<UDRE1)));
@@ -50,7 +50,7 @@ int uart_send(unsigned char* data, unsigned int length)
 	}
 	//enable Receive Interrupt
 	receiveFlag = 0;  
-	UCSR1B |= (1<<RXCIE1);
+	//UCSR1B |= (1<<RXCIE1);
 	return 0;
 }
 
@@ -83,6 +83,18 @@ unsigned char uart_receiveChar()
 	return UDR1; 
 }
 
+int enableReceiveINT()
+{
+	UCSR1B |= (1<<RXCIE1);
+	return 1; 
+}
+
+int disableReceiveINT()
+{
+	UCSR1B &= ~(1<<RXCIE1);
+	return 1; 
+}
+
 unsigned char* getReceiveBuffer()
 {
 	printf("Waiting for Receive to Complete...\n");
@@ -99,19 +111,6 @@ unsigned char* getReceiveBuffer()
 	//begin receiving
 	printf("Received Data: %s\n", receiveBuffer);
 	return receiveBuffer; 
-}
-
-int waitForReceive() 
-{
-	while(!receiveFlag & 1)
-	{
-		//While loop does not work correctly without a delay
-		//An issue with the compiler or the stack pointer when invoking the interrupt
-		_delay_us(100);
-		printf("Loop\n");
-	}
-	
-	return 1; 
 }
 
 unsigned int getTransmissionLength()
@@ -138,14 +137,17 @@ unsigned int sendCommand(int8_t prefix, unsigned char* command, unsigned char* v
 			break; 
 		case GET: 
 			fullCommand = "get ";
+			printf("fullCommand: %s\n", fullCommand);
 			break; 
 		case SET: 
 			fullCommand = "set ";
+			printf("fullCommand: %s\n", fullCommand);
 			break; 
 		default:
 			return 0; 
 			break; 
 	}
+
 	strcat(fullCommand, command);
 	
 	if(value != NOVAL)
@@ -154,17 +156,32 @@ unsigned int sendCommand(int8_t prefix, unsigned char* command, unsigned char* v
 		strcat(fullCommand, value);
 	}
 	
+	
+	printf("fullCommand: %s\n", fullCommand);
 	strcat(fullCommand, ENDCOMMAND);
 	uint16_t length = getStringLen(fullCommand);
 	printf("Command: %s Length: %d\n", fullCommand, length);
 	uart_send(fullCommand, length);
-	while(!receiveFlag & 1)
-	{
-		//While loop does not work correctly without a delay
-		//An issue with the compiler or the stack pointer when invoking the interrupt
-		_delay_us(100);
-		//printf("Loop\n");
-	}
+	
+	memset(fullCommand, 0x00, length);
+	//memset(command, 0x00, length);
+	
+	//uart_send("set system.print_level 0\r\n\0", getStringLen("set system.print_level 0\r\n\0"));
+	//uart_send("set system.cmd.prompt_enabled 1\r\n\0", getStringLen("set system.cmd.prompt_enabled 1\r\n\0"));
+	//unsigned char* test = "set system.print_level 0\r\n\0";
+	//length = getStringLen(test);
+	//uart_send(test, length);
+	//test = "set system.cmd.prompt_enabled 1\r\n\0";
+	//length = getStringLen(test);
+	//uart_send(test, length);
+	
+	//while(!receiveFlag & 1)
+	//{
+		////While loop does not work correctly without a delay
+		////An issue with the compiler or the stack pointer when invoking the interrupt
+		//_delay_us(100);
+		////printf("Loop\n");
+	//}
 	return 1; 
 }
 
