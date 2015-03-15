@@ -15,10 +15,11 @@
 #define MaxRecSize 1000
 
 //Wi-Fi Commands
-#define GET "get "
-#define SET "set "
-#define ENDCOMMAND "/r/n" 
-#define SCAN "scan"
+#define NOPREFIX -1
+#define GET 1 
+#define SET 2
+#define NOVAL ""
+#define ENDCOMMAND "\r\n\0" 
 
 //Wi-Fi Receive Header File 
 #define response 0
@@ -31,11 +32,13 @@
 #define endHeader 7
 
 void uart_init();
-int uart_send(unsigned char data[], unsigned int length);
+int uart_send(unsigned char* data, unsigned int length);
 int uart_sendChar(unsigned char data);
 unsigned char uart_receive(unsigned char *data, unsigned char size);
 unsigned char uart_receiveChar();
 unsigned char* getReceiveBuffer();
-unsigned int sendCommand(uint8_t set, char* command);
+unsigned int sendCommand(int8_t prefix, unsigned char* command, unsigned char* value);
+int getStringLen(unsigned char* p);
+int waitForReceive();
 
 #endif /* WIFIDRIVER_H_ */

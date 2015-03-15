@@ -36,6 +36,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Wifi.c \
 ../WifiModule.c \
 ../PrintDriver.c \
 ../WifiDriver.c
@@ -48,21 +49,25 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Wifi.o \
 WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 OBJS_AS_ARGS +=  \
+Wifi.o \
 WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 C_DEPS +=  \
+Wifi.d \
 WifiModule.d \
 PrintDriver.d \
 WifiDriver.d
 
 C_DEPS_AS_ARGS +=  \
+Wifi.d \
 WifiModule.d \
 PrintDriver.d \
 WifiDriver.d
@@ -78,6 +83,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

@@ -106,6 +106,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Wifi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Wifi.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="WifiModule.c">
       <SubType>compile</SubType>
     </Compile>

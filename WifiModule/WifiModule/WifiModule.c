@@ -12,31 +12,30 @@
 #include <avr/interrupt.h>
 #include "PrintDriver.h"
 #include "WifiDriver.h"
+#include "Wifi.h"
 
-unsigned char size = 10;
-//unsigned char* string = "Super Duper Long String!";
-//unsigned char* command = "get wlan.mac\n\r";
-
-//string[24] = "\0";  
 
 int main(void)
 {
-	cli(); 
+	//cli(); 
 	uart_init();
 	uart0_init(); 
 	//printf("%s\n", string);
 	sei(); 
-	unsigned char command[6] = "scan\n\r";
+	//unsigned char* command = "scan";
 	//uart_send(command, 6);
 	//printf("Sending!\n");
-	sendCommand(0, "bus");
-	unsigned const char* data = getReceiveBuffer(); 
+	setMachineMode();
+	//sendCommand(NOPREFIX, SCAN, NOVAL);
+	//unsigned const char* data = getReceiveBuffer(); 
 	//printf("Found Receive!\n");
-	printf("Received Data: %s\n", data);
-	for(int i = 0; i < 200; i++)
-	{
-		printf("%c", data[i]);
-	}
+	//printf("Received Data: %s\n", data);
+	
+	//for(int i = 0; i < 200; i++)
+	//{
+		//printf("%c", data[i]);
+	//}
+	printf("\n");
 
 	printf("Done!\n");
 }
