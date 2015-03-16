@@ -12,7 +12,8 @@
 #define BAUD_RATE 4800
 #define F_CPU 1000000UL
 
-#define MaxRecSize 1000
+#define MaxRecSize 750
+#define MaxSendSize 50
 
 //Wi-Fi Commands
 #define NOPREFIX -1
@@ -34,11 +35,14 @@
 void uart_init();
 int uart_send(unsigned char* data, unsigned int length);
 int uart_sendChar(unsigned char data);
+int enableReceiveINT();
+int disableReceiveINT();
 unsigned char uart_receive(unsigned char *data, unsigned char size);
 unsigned char uart_receiveChar();
 unsigned char* getReceiveBuffer();
-unsigned int sendCommand(int8_t prefix, unsigned char* command, unsigned char* value);
-int getStringLen(unsigned char* p);
+char* getMessageHeader();
+unsigned int sendCommand(int8_t prefix, char* command, char* value);
+uint16_t getStringLen(unsigned char* p);
 int waitForReceive();
 
 #endif /* WIFIDRIVER_H_ */

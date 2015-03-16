@@ -16,26 +16,20 @@
 #include "WifiDriver.h"
 #include "Wifi.h"
 
+//connStatus wifiModule; 
+
 void WifiInit()
 {
 	
-}
+} 
 
 void setMachineMode()
 {
-	disableReceiveINT(); 
+	//disableReceiveINT(); 
 	sendCommand(SET, SYSTEM_PRINT_LEVEL, ZERO); 
-	sendCommand(GET, SYSTEM_CMD_PROMPT, NOVAL);
-	sendCommand(GET, "wlan", NOVAL);
-	//sendCommand(GET, "system.cmd.prompt_enabled 1", NOVAL);
-	//sendCommand(SET, "system.print_level", ZERO);
-	//while(!waitForReceive());
-	//sendCommand(SET, SYSTEM_CMD_HEADER, ONE);
-	//while(waitForReceive());
-	//sendCommand(SET, "system.cmd.prompt_enabled", ZERO);
-	//while(waitForReceive());
-	//sendCommand(SET, SYSTEM_CMD_ECHO, OFF);
-	//while(waitForReceive());
+	sendCommand(SET, SYSTEM_CMD_HEADER, ONE);
+	sendCommand(SET, SYSTEM_CMD_PROMPT, ZERO);
+	sendCommand(SET, SYSTEM_CMD_ECHO, OFF);
 }
 
 void setHumanMode()
@@ -44,4 +38,26 @@ void setHumanMode()
 	sendCommand(SET, SYSTEM_CMD_PROMPT, ONE);
 	sendCommand(SET, SYSTEM_CMD_HEADER, ZERO);
 	sendCommand(SET, SYSTEM_PRINT_LEVEL, ONE);
+}
+
+char* networkScan()
+{
+	//enableReceiveINT();
+	sendCommand(NOPREFIX, SCAN, NOVAL);
+	char* networks = getReceiveBuffer(); 
+	return networks; 
+}
+
+int networkConnect(char* SSID, char* password)
+{
+	sendCommand(SET, WLAN_SSID, SSID);
+	sendCommand(SET, WLAN_PWD, password);
+	enableReceiveINT();
+	sendCommand(NOPREFIX, HTTP_GET, "www.wi-pro.us");
+	return 1; 
+}
+
+int serverConnect()
+{
+	return 1; 
 }

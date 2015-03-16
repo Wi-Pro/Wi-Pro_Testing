@@ -7,6 +7,7 @@
 
 #include <avr/io.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -27,7 +28,7 @@ void uart_init()
 	UCSR1B |= (1<<RXCIE1);	//Enable Receive Interrupt 
 }
 
-int getStringLen(unsigned char* p)
+uint16_t getStringLen(unsigned char* p)
 {
 	uint16_t count = 0; 
 	while(*p != '\0')
@@ -40,7 +41,7 @@ int getStringLen(unsigned char* p)
 
 int uart_send(unsigned char* data, unsigned int length)
 {
-	printf("Uart Send Function: %s\n", data);
+	printf("Uart Send Function: %s\nAddress: %p", data, data);
 	uint8_t i = 0;
 	while(i <= length){
 		while(!(UCSR1A & (1<<UDRE1)));
@@ -50,7 +51,8 @@ int uart_send(unsigned char* data, unsigned int length)
 	}
 	//enable Receive Interrupt
 	receiveFlag = 0;  
-	//UCSR1B |= (1<<RXCIE1);
+	memset(receiveBuffer, 0x00, receiveBuffer);
+	UCSR1B |= (1<<RXCIE1);
 	return 0;
 }
 
@@ -86,6 +88,7 @@ unsigned char uart_receiveChar()
 int enableReceiveINT()
 {
 	UCSR1B |= (1<<RXCIE1);
+	sei(); 
 	return 1; 
 }
 
@@ -105,7 +108,7 @@ unsigned char* getReceiveBuffer()
 		//While loop does not work correctly without a delay 
 		//An issue with the compiler or the stack pointer when invoking the interrupt 
 		_delay_us(100);
-		//printf("Loop\n");
+		//printf("Receive Flag: %d\n", receiveFlag);
 	}
 	//_delay_ms(500);
 	//begin receiving
@@ -115,6 +118,11 @@ unsigned char* getReceiveBuffer()
 
 unsigned int getTransmissionLength()
 {
+	for(int i = 0; i < endHeader; i++)
+	{
+		printf("%c", receiveBuffer[i]);
+	}
+		printf("\n");
 	unsigned int transLength = 0;
 	transLength += (receiveBuffer[ones] & 0x0F);
 	transLength += (receiveBuffer[tens] & 0x0F) * 10; 
@@ -127,66 +135,66 @@ unsigned int getTransmissionLength()
 		return MaxRecSize; 
 }
 
-unsigned int sendCommand(int8_t prefix, unsigned char* command, unsigned char* value)
+char* getMessageHeader()
+{
+	char* header = ""; 
+	
+	while(!receiveFlag & 1)
+	{
+		//While loop does not work correctly without a delay
+		//An issue with the compiler or the stack pointer when invoking the interrupt
+		_delay_us(100);
+		//printf("Loop\n");
+	}
+	
+	for(int i = 0; i < endHeader; i++)
+	{
+		*(header + i) = receiveBuffer[i]; 
+	}
+	
+	return header; 
+}
+
+unsigned int sendCommand(int8_t prefix, char* command, char* value)
 {	
-	char* fullCommand = ""; 
+	char* fullCommand = (char *)malloc(MaxSendSize);
 	switch(prefix)
 	{
 		case NOPREFIX: 
-			fullCommand = "";
 			break; 
 		case GET: 
-			fullCommand = "get ";
-			printf("fullCommand: %s\n", fullCommand);
+			strcat(fullCommand, "get ");
 			break; 
 		case SET: 
-			fullCommand = "set ";
-			printf("fullCommand: %s\n", fullCommand);
+			strcat(fullCommand, "set ");
 			break; 
 		default:
 			return 0; 
 			break; 
 	}
-
+	printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
+	printf("Command: %s Length: %d, Address: %p\n", command, strlen(command),  command);
 	strcat(fullCommand, command);
-	
+	//printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
 	if(value != NOVAL)
 	{
 		strcat(fullCommand, " ");
 		strcat(fullCommand, value);
 	}
 	
-	
-	printf("fullCommand: %s\n", fullCommand);
+	//printf("fullCommand: %s\n", fullCommand);
 	strcat(fullCommand, ENDCOMMAND);
 	uint16_t length = getStringLen(fullCommand);
-	printf("Command: %s Length: %d\n", fullCommand, length);
+	printf("Command: %s Length: %d, Address: %p\n", fullCommand, length, fullCommand);
 	uart_send(fullCommand, length);
+	free(fullCommand);
 	
-	memset(fullCommand, 0x00, length);
-	//memset(command, 0x00, length);
-	
-	//uart_send("set system.print_level 0\r\n\0", getStringLen("set system.print_level 0\r\n\0"));
-	//uart_send("set system.cmd.prompt_enabled 1\r\n\0", getStringLen("set system.cmd.prompt_enabled 1\r\n\0"));
-	//unsigned char* test = "set system.print_level 0\r\n\0";
-	//length = getStringLen(test);
-	//uart_send(test, length);
-	//test = "set system.cmd.prompt_enabled 1\r\n\0";
-	//length = getStringLen(test);
-	//uart_send(test, length);
-	
-	//while(!receiveFlag & 1)
-	//{
-		////While loop does not work correctly without a delay
-		////An issue with the compiler or the stack pointer when invoking the interrupt
-		//_delay_us(100);
-		////printf("Loop\n");
-	//}
 	return 1; 
 }
 
 ISR(USART1_RX_vect)
 {
+	//printf("Receive Interrupt!\n");
 	cli();
 	//Grab Receive Header
 	if(i < endHeader)
@@ -194,11 +202,11 @@ ISR(USART1_RX_vect)
 	else if(i == endHeader)
 	{
 		transLength = getTransmissionLength(); 
-		//printf("Transmission Length: %d\n", transLength);
+		printf("Transmission Length: %d\n", transLength);
 	}
 	else
 	{
-		if(i < transLength + 6)
+		if(i < 176)
 		{
 			receiveBuffer[i] = uart_receiveChar();
 			//printf("Writing...\n");
@@ -222,11 +230,3 @@ ISR(USART1_RX_vect)
 	//printf("%d\n", i);
 	sei(); 
 }
-
-//int uart_sendChar(unsigned char data)
-//{
-//UCSR1B |= (1<<RXCIE1);
-//while(!(UCSR1A & (1<<UDRE1)));
-//UDR1 = data;
-//return 0;
-//}

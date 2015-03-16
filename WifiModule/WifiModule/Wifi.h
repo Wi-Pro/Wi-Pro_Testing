@@ -10,15 +10,24 @@
 #define WIFI_H_
 
 //Initialization Commands 
-
+//structs
+struct connStatus{
+	int networkUp; 
+	int machineMode; 
+	char* SSID; 
+	char* password; 
+	};
 //commands 
 #define SCAN "scan"
+#define HTTP_GET "http_get"
 
 //variables
 #define SYSTEM_PRINT_LEVEL "system.print_level"
 #define SYSTEM_CMD_HEADER "system.cmd.header_enabled"
 #define SYSTEM_CMD_PROMPT "system.cmd.prompt_enabled"
 #define SYSTEM_CMD_ECHO "system.cmd.echo"
+#define WLAN_SSID "wlan.ssid"
+#define WLAN_PWD "wlan.passkey"
 
 //values
 #define ONE "1" 
@@ -29,5 +38,9 @@
 void WifiInit(); 
 void setMachineMode(); 
 void setHumanMode(); 
+char* networkScan(); 
+int networkConnect(char* SSID, char* password); 
+int serverConnect(); 
+
 
 #endif /* WIFI_H_ */
