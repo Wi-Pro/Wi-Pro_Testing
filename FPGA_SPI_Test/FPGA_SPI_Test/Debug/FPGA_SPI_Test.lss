@@ -1,0 +1,161 @@
+
+FPGA_SPI_Test.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  000000e4  00000158  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000000e4  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  00000158  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000030  00000000  00000000  00000188  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   000001af  00000000  00000000  000001b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 00000134  00000000  00000000  00000367  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   00000178  00000000  00000000  0000049b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  00000044  00000000  00000000  00000614  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    0000019f  00000000  00000000  00000658  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000020  00000000  00000000  000007f7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__ctors_end>
+   4:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+   8:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+   c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  10:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  14:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  18:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  1c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  20:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  24:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  28:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  2c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  30:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  34:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  38:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  3c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  40:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  44:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  48:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  4c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  50:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  54:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  58:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  5c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  60:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  64:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  68:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  6c:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  70:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  74:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+  78:	0c 94 48 00 	jmp	0x90	; 0x90 <__bad_interrupt>
+
+0000007c <__ctors_end>:
+  7c:	11 24       	eor	r1, r1
+  7e:	1f be       	out	0x3f, r1	; 63
+  80:	cf ef       	ldi	r28, 0xFF	; 255
+  82:	d8 e0       	ldi	r29, 0x08	; 8
+  84:	de bf       	out	0x3e, r29	; 62
+  86:	cd bf       	out	0x3d, r28	; 61
+  88:	0e 94 58 00 	call	0xb0	; 0xb0 <main>
+  8c:	0c 94 70 00 	jmp	0xe0	; 0xe0 <_exit>
+
+00000090 <__bad_interrupt>:
+  90:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000094 <SPI_Init>:
+}
+
+void SPI_Init(void)
+{
+	// Set MOSI ,SCK, and SS as output, others as input
+	SPI_DDR = (1<<MOSI)|(1<<SCK)|(1<<SS);
+  94:	80 eb       	ldi	r24, 0xB0	; 176
+  96:	84 b9       	out	0x04, r24	; 4
+	DDRD |= 1<<4;
+  98:	54 9a       	sbi	0x0a, 4	; 10
+	// CS pin is not active
+	CS_PORT |= (1<<SPI_CS);
+  9a:	5c 9a       	sbi	0x0b, 4	; 11
+	// Enable SPI, Master Mode 0, set the clock rate fck/4
+	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+  9c:	80 e5       	ldi	r24, 0x50	; 80
+  9e:	8c bd       	out	0x2c, r24	; 44
+  a0:	08 95       	ret
+
+000000a2 <SPI_Write>:
+}
+
+void SPI_Write(unsigned char SPI_Data)
+{
+	// Start Write transmission
+	CS_PORT &= ~(1<<SPI_CS);
+  a2:	5c 98       	cbi	0x0b, 4	; 11
+	SPDR0 = SPI_Data;
+  a4:	8e bd       	out	0x2e, r24	; 46
+	// Wait for transmission complete
+	while(!(SPSR0 & (1<<SPIF0)));
+  a6:	0d b4       	in	r0, 0x2d	; 45
+  a8:	07 fe       	sbrs	r0, 7
+  aa:	fd cf       	rjmp	.-6      	; 0xa6 <SPI_Write+0x4>
+	CS_PORT |= (1<<SPI_CS);
+  ac:	5c 9a       	sbi	0x0b, 4	; 11
+  ae:	08 95       	ret
+
+000000b0 <main>:
+void SPI_Init(void);
+void SPI_Write(unsigned char SPI_Data);
+
+int main(void)
+{
+	DDRA |= 1<<0;
+  b0:	08 9a       	sbi	0x01, 0	; 1
+	SPI_Init();
+  b2:	0e 94 4a 00 	call	0x94	; 0x94 <SPI_Init>
+	SPI_Write(0x55);
+  b6:	85 e5       	ldi	r24, 0x55	; 85
+  b8:	0e 94 51 00 	call	0xa2	; 0xa2 <SPI_Write>
+	SPI_Write(0x00);
+  bc:	80 e0       	ldi	r24, 0x00	; 0
+  be:	0e 94 51 00 	call	0xa2	; 0xa2 <SPI_Write>
+    while(1)
+    {
+        PORTA |= 1<<0;
+  c2:	10 9a       	sbi	0x02, 0	; 2
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  c4:	83 ec       	ldi	r24, 0xC3	; 195
+  c6:	99 e0       	ldi	r25, 0x09	; 9
+  c8:	01 97       	sbiw	r24, 0x01	; 1
+  ca:	f1 f7       	brne	.-4      	; 0xc8 <main+0x18>
+  cc:	00 c0       	rjmp	.+0      	; 0xce <main+0x1e>
+  ce:	00 00       	nop
+		_delay_ms(10);
+		PORTA &= ~(1<<0);
+  d0:	10 98       	cbi	0x02, 0	; 2
+  d2:	83 ec       	ldi	r24, 0xC3	; 195
+  d4:	99 e0       	ldi	r25, 0x09	; 9
+  d6:	01 97       	sbiw	r24, 0x01	; 1
+  d8:	f1 f7       	brne	.-4      	; 0xd6 <main+0x26>
+  da:	00 c0       	rjmp	.+0      	; 0xdc <main+0x2c>
+  dc:	00 00       	nop
+  de:	f1 cf       	rjmp	.-30     	; 0xc2 <main+0x12>
+
+000000e0 <_exit>:
+  e0:	f8 94       	cli
+
+000000e2 <__stop_program>:
+  e2:	ff cf       	rjmp	.-2      	; 0xe2 <__stop_program>

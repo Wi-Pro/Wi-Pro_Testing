@@ -6,7 +6,7 @@
  */ 
 
 
-#define F_CPU 1000000UL
+#define F_CPU 8000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -78,7 +78,7 @@ int main(void)
 	
 	EnterParallelProgrammingMode();
 	ReadSignatureBytes();
-	//ExitParallelProgrammingMode();
+	ExitParallelProgrammingMode();
 	
 	while (1)
 	{
@@ -88,31 +88,74 @@ int main(void)
 
 
 void EnterParallelProgrammingMode(void)
-{
-	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
-	SPI_Write(0x00);
-	SPI_Write(0xFF);
-	SPI_Write(0xFF);
-	// CS pin is not active
-	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
-	
+{	
 	ControlPort &= ~(1<<XA1_BS2 | 1<<XA0 | 1<<BS1_PAGEL | 1<<WR);
 	
-	// Activate the CS pin
 	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
-	SPI_Write(0x06);
-	SPI_Write(0xFF);
-	SPI_Write(0xFF);
-	// CS pin is not active
+	SPI_Write(0x00); //Pull Downs
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //GND
+	SPI_Write(0x00);
+	SPI_Write(0x08);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //Pull Ups
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //VCC
+	SPI_Write(0x20);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //VPP
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
 	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 	
 	//_delay_us(25);
 	//PORTD |= 1<<2;
 	
 	 Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
-	 SPI_Write(0x07);
-	 SPI_Write(0xFF);
-	 SPI_Write(0xFF);
+	SPI_Write(0x00); //Pull Downs
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //GND
+	SPI_Write(0x00);
+	SPI_Write(0x08);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //Pull Ups
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //VCC
+	SPI_Write(0x20);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	
+	SPI_Write(0x00); //VPP
+	SPI_Write(0x00);
+	SPI_Write(0x00);
+	SPI_Write(0x04);
+	SPI_Write(0x00);
 	 Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 	_delay_us(15);
 	ControlPort |= (1<<WR | 1<<OE);
@@ -324,12 +367,37 @@ void ProgramFlash(void)
 void ExitParallelProgrammingMode(void)
 {
 	PORTD &= ~(1<<2);
-	// Activate the CS pin
+
 	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
-	SPI_Write(0x00);
-	SPI_Write(0x00);
-	SPI_Write(0x00);
-	// CS pin is not active
+		SPI_Write(0x00); //Pull Downs
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //GND
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //Pull Ups
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //VCC
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //VPP
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
 	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 }
 
