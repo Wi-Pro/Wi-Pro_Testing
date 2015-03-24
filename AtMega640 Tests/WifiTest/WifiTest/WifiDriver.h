@@ -9,7 +9,7 @@
 #ifndef WIFIDRIVER_H_
 #define WIFIDRIVER_H_
 
-#define BAUD_RATE 250000
+#define BAUD_RATE 115200
 #define F_CPU 8000000UL
 
 #define MaxRecSize 750

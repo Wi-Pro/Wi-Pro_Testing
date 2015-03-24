@@ -215,7 +215,7 @@ char* networkScan()
 		return 0; 
 }
  130:	10 92 c5 00 	sts	0x00C5, r1
- 134:	81 e0       	ldi	r24, 0x01	; 1
+ 134:	83 e0       	ldi	r24, 0x03	; 3
  136:	80 93 c4 00 	sts	0x00C4, r24
  13a:	e1 ec       	ldi	r30, 0xC1	; 193
  13c:	f0 e0       	ldi	r31, 0x00	; 0
