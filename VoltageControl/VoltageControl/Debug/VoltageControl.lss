@@ -3,78 +3,303 @@ VoltageControl.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000003a  00000000  00000000  00000074  2**1
-                  CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  0000003a  000000ae  2**0
+  0 .data         00000000  00800200  00000180  000001f4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  000000ae  2**0
+  1 .text         00000180  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  000001f4  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000058  00000000  00000000  000000de  2**0
+  3 .debug_aranges 000000a0  00000000  00000000  00000224  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   000000fa  00000000  00000000  00000136  2**0
+  4 .debug_info   0000034d  00000000  00000000  000002c4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000072  00000000  00000000  00000230  2**0
+  5 .debug_abbrev 00000180  00000000  00000000  00000611  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000000b7  00000000  00000000  000002a2  2**0
+  6 .debug_line   00000267  00000000  00000000  00000791  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000078  00000000  00000000  0000035c  2**2
+  7 .debug_frame  00000108  00000000  00000000  000009f8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000001a5  00000000  00000000  000003d4  2**0
+  8 .debug_str    00000219  00000000  00000000  00000b00  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000038  00000000  00000000  00000579  2**0
+  9 .debug_loc    00000063  00000000  00000000  00000d19  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000080  00000000  00000000  00000d7c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
-{
-	
-}
+   0:	0c 94 72 00 	jmp	0xe4	; 0xe4 <__ctors_end>
+   4:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+   8:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+   c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  10:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  14:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  18:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  1c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  20:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  24:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  28:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  2c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  30:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  34:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  38:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  3c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  40:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  44:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  48:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  4c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  50:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  54:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  58:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  5c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  60:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  64:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  68:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  6c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  70:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  74:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  78:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  7c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  80:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  84:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  88:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  8c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  90:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  94:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  98:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  9c:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  a0:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  a4:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  a8:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  ac:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  b0:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  b4:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  b8:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  bc:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  c0:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  c4:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  c8:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  cc:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  d0:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  d4:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  d8:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  dc:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
+  e0:	0c 94 7c 00 	jmp	0xf8	; 0xf8 <__bad_interrupt>
 
-void enableVCCReglator() 
-{
-   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
-   2:	17 c0       	rjmp	.+46     	; 0x32 <__bad_interrupt>
-   4:	16 c0       	rjmp	.+44     	; 0x32 <__bad_interrupt>
-   6:	15 c0       	rjmp	.+42     	; 0x32 <__bad_interrupt>
-   8:	14 c0       	rjmp	.+40     	; 0x32 <__bad_interrupt>
-   a:	13 c0       	rjmp	.+38     	; 0x32 <__bad_interrupt>
-   c:	12 c0       	rjmp	.+36     	; 0x32 <__bad_interrupt>
-   e:	11 c0       	rjmp	.+34     	; 0x32 <__bad_interrupt>
-  10:	10 c0       	rjmp	.+32     	; 0x32 <__bad_interrupt>
-  12:	0f c0       	rjmp	.+30     	; 0x32 <__bad_interrupt>
-  14:	0e c0       	rjmp	.+28     	; 0x32 <__bad_interrupt>
-  16:	0d c0       	rjmp	.+26     	; 0x32 <__bad_interrupt>
-  18:	0c c0       	rjmp	.+24     	; 0x32 <__bad_interrupt>
-  1a:	0b c0       	rjmp	.+22     	; 0x32 <__bad_interrupt>
-  1c:	0a c0       	rjmp	.+20     	; 0x32 <__bad_interrupt>
-  1e:	09 c0       	rjmp	.+18     	; 0x32 <__bad_interrupt>
-  20:	08 c0       	rjmp	.+16     	; 0x32 <__bad_interrupt>
-  22:	07 c0       	rjmp	.+14     	; 0x32 <__bad_interrupt>
-  24:	06 c0       	rjmp	.+12     	; 0x32 <__bad_interrupt>
+000000e4 <__ctors_end>:
+  e4:	11 24       	eor	r1, r1
+  e6:	1f be       	out	0x3f, r1	; 63
+  e8:	cf ef       	ldi	r28, 0xFF	; 255
+  ea:	d1 e2       	ldi	r29, 0x21	; 33
+  ec:	de bf       	out	0x3e, r29	; 62
+  ee:	cd bf       	out	0x3d, r28	; 61
+  f0:	0e 94 7e 00 	call	0xfc	; 0xfc <main>
+  f4:	0c 94 be 00 	jmp	0x17c	; 0x17c <_exit>
 
-00000026 <__ctors_end>:
-  26:	11 24       	eor	r1, r1
-  28:	1f be       	out	0x3f, r1	; 63
-  2a:	cf ed       	ldi	r28, 0xDF	; 223
-  2c:	cd bf       	out	0x3d, r28	; 61
-  2e:	02 d0       	rcall	.+4      	; 0x34 <main>
-  30:	02 c0       	rjmp	.+4      	; 0x36 <_exit>
+000000f8 <__bad_interrupt>:
+  f8:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000032 <__bad_interrupt>:
-  32:	e6 cf       	rjmp	.-52     	; 0x0 <__vectors>
-
-00000034 <main>:
-
-
+000000fc <main>:
 #include <avr/io.h>
+#include "VoltageControlDriver.h"
 
 int main(void)
 {
-  34:	ff cf       	rjmp	.-2      	; 0x34 <main>
+	voltageControlInit(); 
+  fc:	0e 94 94 00 	call	0x128	; 0x128 <voltageControlInit>
+	enableVccRegulator();
+ 100:	0e 94 a6 00 	call	0x14c	; 0x14c <enableVccRegulator>
+	setVcc(VCC_3_3V);
+ 104:	82 e0       	ldi	r24, 0x02	; 2
+ 106:	0e 94 aa 00 	call	0x154	; 0x154 <setVcc>
+	enableVppRegulator();
+ 10a:	0e 94 9e 00 	call	0x13c	; 0x13c <enableVppRegulator>
+	setVpp(VPP_12V);
+ 10e:	86 e0       	ldi	r24, 0x06	; 6
+ 110:	0e 94 b0 00 	call	0x160	; 0x160 <setVpp>
+	enableVLogic();
+ 114:	0e 94 b6 00 	call	0x16c	; 0x16c <enableVLogic>
+	setVLogic(VL_3_3V);
+ 118:	80 e0       	ldi	r24, 0x00	; 0
+ 11a:	0e 94 b8 00 	call	0x170	; 0x170 <setVLogic>
+ 11e:	ff cf       	rjmp	.-2      	; 0x11e <main+0x22>
 
-00000036 <_exit>:
-  36:	f8 94       	cli
+00000120 <VppClear>:
+#include "VoltageControlDriver.h"
 
-00000038 <__stop_program>:
-  38:	ff cf       	rjmp	.-2      	; 0x38 <__stop_program>
+//Sets output of Vpp Voltage Regulator to 0V
+void VppClear()
+{
+	VCNTRL_PORT &= ~((1<<VPP_9V) | (1<<VPP_12V) | (1<VPP_13V));
+ 120:	81 b3       	in	r24, 0x11	; 17
+ 122:	8e 79       	andi	r24, 0x9E	; 158
+ 124:	81 bb       	out	0x11, r24	; 17
+ 126:	08 95       	ret
+
+00000128 <voltageControlInit>:
+}
+
+void voltageControlInit()
+{
+	VCNTRL_DDR = 0xFF;
+ 128:	8f ef       	ldi	r24, 0xFF	; 255
+ 12a:	80 bb       	out	0x10, r24	; 16
+	VCNTRL_PORT = 0x00;
+ 12c:	11 ba       	out	0x11, r1	; 17
+	
+	VEN_DDR |= (1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE);
+ 12e:	84 b1       	in	r24, 0x04	; 4
+ 130:	80 67       	ori	r24, 0x70	; 112
+ 132:	84 b9       	out	0x04, r24	; 4
+	VEN_PORT &= ~((1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE));
+ 134:	85 b1       	in	r24, 0x05	; 5
+ 136:	8f 78       	andi	r24, 0x8F	; 143
+ 138:	85 b9       	out	0x05, r24	; 5
+ 13a:	08 95       	ret
+
+0000013c <enableVppRegulator>:
+}
+
+void enableVppRegulator()
+{
+	//Ensure all voltage levels are disabled before enabling 
+	VppClear(); 
+ 13c:	0e 94 90 00 	call	0x120	; 0x120 <VppClear>
+	VCNTRL_PORT |= (1<<VPPENABLE); 
+ 140:	8e 9a       	sbi	0x11, 6	; 17
+ 142:	08 95       	ret
+
+00000144 <VccClear>:
+}
+
+//Sets output of Vcc Voltage Regulator to 0V
+void VccClear()
+{
+	VCNTRL_PORT &= ~((1<<VCC_3_3V) | (1<<VCC_5V) | (1<<VCC_6_5V));
+ 144:	81 b3       	in	r24, 0x11	; 17
+ 146:	83 7e       	andi	r24, 0xE3	; 227
+ 148:	81 bb       	out	0x11, r24	; 17
+ 14a:	08 95       	ret
+
+0000014c <enableVccRegulator>:
+}
+
+void enableVccRegulator() 
+{
+	VccClear(); 
+ 14c:	0e 94 a2 00 	call	0x144	; 0x144 <VccClear>
+	VEN_PORT |= (1<<VCCENABLE);
+ 150:	2d 9a       	sbi	0x05, 5	; 5
+ 152:	08 95       	ret
+
+00000154 <setVcc>:
+}
+
+uint8_t setVcc(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator 
+	if(voltageLevel != (VCC_3_3V || VCC_5V || VCC_6_5V))
+ 154:	81 30       	cpi	r24, 0x01	; 1
+ 156:	11 f4       	brne	.+4      	; 0x15c <setVcc+0x8>
+		return 0; 
+	else
+	{
+		//enableVccReglator();
+		VCNTRL_PORT |= (1<<voltageLevel);
+ 158:	89 9a       	sbi	0x11, 1	; 17
+		return 1; 
+ 15a:	08 95       	ret
+
+uint8_t setVcc(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator 
+	if(voltageLevel != (VCC_3_3V || VCC_5V || VCC_6_5V))
+		return 0; 
+ 15c:	80 e0       	ldi	r24, 0x00	; 0
+	{
+		//enableVccReglator();
+		VCNTRL_PORT |= (1<<voltageLevel);
+		return 1; 
+	}
+}
+ 15e:	08 95       	ret
+
+00000160 <setVpp>:
+
+uint8_t setVpp(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator 
+	if(voltageLevel != (VPP_9V || VPP_12V || VPP_13V))
+ 160:	81 30       	cpi	r24, 0x01	; 1
+ 162:	11 f4       	brne	.+4      	; 0x168 <setVpp+0x8>
+		return 0; 
+	else
+	{
+		//enableVppRegulator(); 
+		VCNTRL_PORT |= (1<<voltageLevel);
+ 164:	89 9a       	sbi	0x11, 1	; 17
+		return 1; 
+ 166:	08 95       	ret
+
+uint8_t setVpp(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator 
+	if(voltageLevel != (VPP_9V || VPP_12V || VPP_13V))
+		return 0; 
+ 168:	80 e0       	ldi	r24, 0x00	; 0
+	{
+		//enableVppRegulator(); 
+		VCNTRL_PORT |= (1<<voltageLevel);
+		return 1; 
+	}
+}
+ 16a:	08 95       	ret
+
+0000016c <enableVLogic>:
+	VCNTRL_PORT &= ~((1<<VL_3_3V) | (1<<VL_5V));
+}
+
+void enableVLogic()
+{
+	VEN_PORT |= (1<<VLENABLE);
+ 16c:	2c 9a       	sbi	0x05, 4	; 5
+ 16e:	08 95       	ret
+
+00000170 <setVLogic>:
+}
+
+uint8_t setVLogic(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator
+	if(voltageLevel != (VL_3_3V || VL_5V))
+ 170:	81 30       	cpi	r24, 0x01	; 1
+ 172:	11 f4       	brne	.+4      	; 0x178 <setVLogic+0x8>
+	return 0;
+	else
+	{
+		//enableVLogic();
+		VCNTRL_PORT |= (1<<voltageLevel);
+ 174:	89 9a       	sbi	0x11, 1	; 17
+		return 1;
+ 176:	08 95       	ret
+
+uint8_t setVLogic(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator
+	if(voltageLevel != (VL_3_3V || VL_5V))
+	return 0;
+ 178:	80 e0       	ldi	r24, 0x00	; 0
+	{
+		//enableVLogic();
+		VCNTRL_PORT |= (1<<voltageLevel);
+		return 1;
+	}
+}
+ 17a:	08 95       	ret
+
+0000017c <_exit>:
+ 17c:	f8 94       	cli
+
+0000017e <__stop_program>:
+ 17e:	ff cf       	rjmp	.-2      	; 0x17e <__stop_program>

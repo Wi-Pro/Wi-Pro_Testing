@@ -11,7 +11,13 @@
 
 int main(void)
 {
-	setVcc(VCC_6_8V);
+	voltageControlInit(); 
+	enableVccRegulator();
+	setVcc(VCC_3_3V);
+	enableVppRegulator();
+	setVpp(VPP_12V);
+	enableVLogic();
+	setVLogic(VL_3_3V);
     while(1)
     {
         //TODO:: Please write your application code 

@@ -6,7 +6,7 @@
  * Description: Allows control of the Vpp and Vcc voltage regulators for programming the targeted microcontroller. 
  * A typical use for this library would simply involve calling the setVcc() or setVpp() functions and passing the correct
  * voltage level, as defined in the header file 
- * Example: Set Vcc Regulator to 3.3V		setVcc(VCC_3_6V); 
+ * Example: Set Vcc Regulator to 3.3V		setVcc(VCC_3_3V); 
  */ 
 #include <avr/io.h>
 #include <stdio.h>
@@ -21,7 +21,10 @@ void VppClear()
 void voltageControlInit()
 {
 	VCNTRL_DDR = 0xFF;
-	VCNTRL_PORT = 0x00; 
+	VCNTRL_PORT = 0x00;
+	
+	VEN_DDR |= (1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE);
+	VEN_PORT &= ~((1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE));
 }
 
 void enableVppRegulator()
@@ -33,34 +36,36 @@ void enableVppRegulator()
 
 void disableVppRegulator()
 {
-	VCNTRL_PORT &= ~((1<<VPP_9V) | (1<<VPP_12V) | (1<VPP_13V) | (1<<VPPENABLE));
+	VEN_PORT &= ~((1<<VPPENABLE));
+	VCNTRL_PORT &= ~((1<<VPP_9V) | (1<<VPP_12V) | (1<VPP_13V));
 }
 
 //Sets output of Vcc Voltage Regulator to 0V
 void VccClear()
 {
-	VCNTRL_PORT &= ~((1<<VCC_3_6V) | (1<<VCC_5_3V) | (1<<VCC_6_8V));
+	VCNTRL_PORT &= ~((1<<VCC_3_3V) | (1<<VCC_5V) | (1<<VCC_6_5V));
 }
 
-void enableVccReglator() 
+void enableVccRegulator() 
 {
 	VccClear(); 
-	VCNTRL_PORT |= (1<<VCCENABLE);
+	VEN_PORT |= (1<<VCCENABLE);
 }
 
-void disbaleVccReglator()
+void disbaleVccRegulator()
 {
-	VCNTRL_PORT &= ~((1<<VCC_3_6V) | (1<<VCC_5_3V) | (1<<VCC_6_8V) | (1<<VCCENABLE));
+	VEN_PORT &= ~(1<<VCCENABLE);
+	VCNTRL_PORT &= ~((1<<VCC_3_3V) | (1<<VCC_5V) | (1<<VCC_6_5V));
 }
 
 uint8_t setVcc(uint8_t voltageLevel)
 {
 	//prevents accidental triggering of the wrong regulator 
-	if(voltageLevel != (VCC_3_6V || VCC_5_3V || VCC_6_8V))
+	if(voltageLevel != (VCC_3_3V || VCC_5V || VCC_6_5V))
 		return 0; 
 	else
 	{
-		enableVccReglator();
+		//enableVccReglator();
 		VCNTRL_PORT |= (1<<voltageLevel);
 		return 1; 
 	}
@@ -73,9 +78,38 @@ uint8_t setVpp(uint8_t voltageLevel)
 		return 0; 
 	else
 	{
-		enableVppRegulator(); 
+		//enableVppRegulator(); 
 		VCNTRL_PORT |= (1<<voltageLevel);
 		return 1; 
+	}
+}
+
+void VLogicClear()
+{
+	VCNTRL_PORT &= ~((1<<VL_3_3V) | (1<<VL_5V));
+}
+
+void enableVLogic()
+{
+	VEN_PORT |= (1<<VLENABLE);
+}
+
+void disableVLogic()
+{
+	VEN_PORT &= ~(1<<VLENABLE);
+	VCNTRL_PORT &= ~((1<<VL_3_3V) | (1<<VL_5V));
+}
+
+uint8_t setVLogic(uint8_t voltageLevel)
+{
+	//prevents accidental triggering of the wrong regulator
+	if(voltageLevel != (VL_3_3V || VL_5V))
+	return 0;
+	else
+	{
+		//enableVLogic();
+		VCNTRL_PORT |= (1<<voltageLevel);
+		return 1;
 	}
 }
 

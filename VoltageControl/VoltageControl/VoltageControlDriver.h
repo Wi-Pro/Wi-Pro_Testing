@@ -9,18 +9,24 @@
 #ifndef VOLTAGECONTROLDRIVER_H_
 #define VOLTAGECONTROLDRIVER_H_
 
-#define VCNTRL_PORT PORTB 
-#define VCNTRL_DDR DDRB 
- 
-#define VCCENABLE 0
-#define VCC_3_6V 1
-#define VCC_5_3V 2
-#define VCC_6_8V 3
+#define VCNTRL_PORT PORTF 
+#define VCNTRL_DDR DDRF
+#define VEN_PORT PORTB 
+#define VEN_DDR DDRB  
 
-#define VPPENABLE 4
+#define VCCENABLE 5
+#define VCC_3_3V 2
+#define VCC_5V 3
+#define VCC_6_5V 4 
+
+#define VPPENABLE 6
 #define VPP_9V 5 
-#define VPP_12V 6
-#define VPP_13V 7 
+#define VPP_12V 6 
+#define VPP_13V 7
+
+#define VLENABLE 4
+#define VL_3_3V 0
+#define VL_5V 1
 
 void voltageControlInit();
 void VppClear();
@@ -29,8 +35,12 @@ void disableVppRegulator();
 void VccClear();
 void enableVccRegulator(); 
 void disbaleVccReglator();
+void VLogicClear(); 
+void enableVLogic(); 
+void disableVLogic(); 
 uint8_t setVcc(uint8_t voltageLevel);
 uint8_t setVpp(uint8_t voltageLevel);
+uint8_t setVLogic(uint8_t voltageLevel);
 
 
 #endif /* VOLTAGECONTROLDRIVER_H_ */
