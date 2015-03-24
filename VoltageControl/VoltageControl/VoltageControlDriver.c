@@ -65,8 +65,8 @@ uint8_t setVcc(uint8_t voltageLevel)
 		return 0; 
 	else
 	{
-		//enableVccReglator();
 		VCNTRL_PORT |= (1<<voltageLevel);
+		enableVccReglator();
 		return 1; 
 	}
 }
@@ -78,8 +78,8 @@ uint8_t setVpp(uint8_t voltageLevel)
 		return 0; 
 	else
 	{
-		//enableVppRegulator(); 
 		VCNTRL_PORT |= (1<<voltageLevel);
+		enableVppRegulator();
 		return 1; 
 	}
 }
@@ -104,11 +104,11 @@ uint8_t setVLogic(uint8_t voltageLevel)
 {
 	//prevents accidental triggering of the wrong regulator
 	if(voltageLevel != (VL_3_3V || VL_5V))
-	return 0;
+		return 0;
 	else
 	{
-		//enableVLogic();
 		VCNTRL_PORT |= (1<<voltageLevel);
+		enableVLogic();
 		return 1;
 	}
 }

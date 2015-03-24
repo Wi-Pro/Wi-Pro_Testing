@@ -12,12 +12,9 @@
 int main(void)
 {
 	voltageControlInit(); 
-	enableVccRegulator();
-	setVcc(VCC_3_3V);
-	enableVppRegulator();
+	setVcc(VCC_5V);
 	setVpp(VPP_12V);
-	enableVLogic();
-	setVLogic(VL_3_3V);
+	setVLogic(VL_5V);
     while(1)
     {
         //TODO:: Please write your application code 
