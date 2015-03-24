@@ -20,7 +20,7 @@
 #define GET 1 
 #define SET 2
 #define NOVAL ""
-#define ENDCOMMAND "\r\n\0" 
+#define ENDCOMMAND "\r\n\0"
 
 //Wi-Fi Receive Header File 
 #define response 0
@@ -32,6 +32,11 @@
 #define ones 6
 #define endHeader 7
 
+//I/Os 
+#define RTS PORTD4
+#define CTS PORTD5 
+
+void setTestPrint(); 
 void uart_init();
 int uart_send(unsigned char* data, unsigned int length);
 int uart_sendChar(unsigned char data);
@@ -44,5 +49,6 @@ char* getMessageHeader();
 unsigned int sendCommand(int8_t prefix, char* command, char* value);
 uint16_t getStringLen(unsigned char* p);
 int waitForReceive();
+int errorCheck();
 
 #endif /* WIFIDRIVER_H_ */

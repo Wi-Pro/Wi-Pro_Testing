@@ -25,18 +25,20 @@ int main(void)
 	//unsigned char* command = "scan";
 	//uart_send(command, 6);
 	//printf("Sending!\n");
-	//setMachineMode();
-	//sendCommand(NOPREFIX, SCAN, NOVAL); 
-	uart_send("scan\r\n\0", 7);
-	char* data = getReceiveBuffer(); 
+	wifiInit(); 
+	setMachineMode();
+	//sendCommand(GET, "wlan", NOVAL); 
+	//uart_send("scan\r\n\0", 7);
+	//char* data = getReceiveBuffer();
 	//networkScan(); 
 	//because fuck encryption
-	//networkConnect("Wi-Pro", "password");
+	networkConnect("Wi-Pro", "brightshoe902");
 	//setHumanMode();
-	//unsigned const char* data = getReceiveBuffer(); 
-	printf("Found Receive!\n");
-	printf("Received Data: %s\n", data);
+	unsigned const char* data = getReceiveBuffer(); 
+	//printf("Found Receive!\n");
+	//printf("Received Data: %s\n", data);
 	//int length = strlen(data);
+	//printf("Message: ");
 	for(int i = 0; i < 176; i++)
 	{
 		printf("%c", data[i]);

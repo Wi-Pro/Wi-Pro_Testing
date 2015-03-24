@@ -20,6 +20,7 @@ struct connStatus{
 //commands 
 #define SCAN "scan"
 #define HTTP_GET "http_get"
+#define TCP_CLIENT "tcp_client"
 
 //variables
 #define SYSTEM_PRINT_LEVEL "system.print_level"
@@ -35,7 +36,7 @@ struct connStatus{
 #define ON "on"
 #define OFF "off"
 
-void WifiInit(); 
+void wifiInit(); 
 void setMachineMode(); 
 void setHumanMode(); 
 char* networkScan(); 

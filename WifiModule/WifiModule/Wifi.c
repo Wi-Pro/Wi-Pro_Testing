@@ -18,9 +18,10 @@
 
 //connStatus wifiModule; 
 
-void WifiInit()
+void wifiInit()
 {
-	
+	DDRD |= (1<<RTS); 
+	DDRD &= ~(1<<CTS);
 } 
 
 void setMachineMode()
@@ -51,13 +52,26 @@ char* networkScan()
 int networkConnect(char* SSID, char* password)
 {
 	sendCommand(SET, WLAN_SSID, SSID);
+	setTestPrint();
 	sendCommand(SET, WLAN_PWD, password);
-	enableReceiveINT();
+	//getReceiveBuffer();
+	//enableReceiveINT();
 	sendCommand(NOPREFIX, HTTP_GET, "www.wi-pro.us");
+	//getReceiveBuffer();
+	//printf("Error Checking\n"); 
+	//char* message = getReceiveBuffer();
+	//int isError = errorCheck(); 
+	//if(isError)
+		//printf("Error!\n");
+	//else
+		//printf("Success!\n");
 	return 1; 
 }
 
-int serverConnect()
+int serverConnect(char* serverDNS, unsigned char* port)
 {
+	strcat(serverDNS, " ");
+	strcat(serverDNS, port); 
+	sendCommand(NOPREFIX, TCP_CLIENT, serverDNS);
 	return 1; 
 }

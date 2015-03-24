@@ -18,6 +18,12 @@ unsigned char receiveBuffer[MaxRecSize];
 unsigned int  i = 0;
 uint8_t receiveFlag = 0; 
 unsigned int transLength = 0;
+int testPrint = 0; 
+
+void setTestPrint()
+{
+	testPrint = 1; 
+}
 
 void uart_init()
 {
@@ -26,6 +32,8 @@ void uart_init()
 	UCSR1B = (1<<RXEN1)|(1<<TXEN1); // enable Rx & Tx
 	UCSR1C =  (1<<UCSZ11)|(1<<UCSZ10); // config USART; 8N1
 	UCSR1B |= (1<<RXCIE1);	//Enable Receive Interrupt 
+	
+	DDRA |= (1<<PORTA1);
 }
 
 uint16_t getStringLen(unsigned char* p)
@@ -41,18 +49,20 @@ uint16_t getStringLen(unsigned char* p)
 
 int uart_send(unsigned char* data, unsigned int length)
 {
-	printf("Uart Send Function: %s\nAddress: %p", data, data);
+	//printf("Uart Send Function: %s\nAddress: %p", data, data);
 	uint8_t i = 0;
-	while(i <= length){
+	UCSR1B |= (1<<RXCIE1);
+	receiveFlag = 0;
+	memset(receiveBuffer, 0x00, receiveBuffer);
+	PORTD |= (1<<RTS);
+	while(PORTD & (1<<CTS)){_delay_us(100);} 
+	while(i < length){
 		while(!(UCSR1A & (1<<UDRE1)));
 		UDR1 = data[i];
 		//while(!(UCSR1A & (1<<TXC1))); //wait for transmit to complete
 		i++;
 	}
-	//enable Receive Interrupt
-	receiveFlag = 0;  
-	memset(receiveBuffer, 0x00, receiveBuffer);
-	UCSR1B |= (1<<RXCIE1);
+	while(PORTD & (1<<CTS)){_delay_us(100);}
 	return 0;
 }
 
@@ -81,7 +91,7 @@ unsigned char uart_receiveChar()
 {
 	//printf("Receiving...\n");
 	while (!(UCSR1A & (1<<RXC1)));
-	//printf("Returning...\n");
+	PORTA ^= 0xFF; 
 	return UDR1; 
 }
 
@@ -100,7 +110,7 @@ int disableReceiveINT()
 
 unsigned char* getReceiveBuffer()
 {
-	printf("Waiting for Receive to Complete...\n");
+	//printf("Waiting for Receive to Complete...\n");
 	//Wait for receiving to be completed
 	//sendFlag accounts for the delay between sending and receiving 
 	while(!receiveFlag & 1)
@@ -118,11 +128,16 @@ unsigned char* getReceiveBuffer()
 
 unsigned int getTransmissionLength()
 {
-	for(int i = 0; i < endHeader; i++)
+	if(testPrint)
 	{
-		printf("%c", receiveBuffer[i]);
-	}
+		printf("Header: ");
+		for(int i = 0; i < endHeader; i++)
+		{
+			printf("0x%02x ", receiveBuffer[i]);
+		}
 		printf("\n");
+	}
+	
 	unsigned int transLength = 0;
 	transLength += (receiveBuffer[ones] & 0x0F);
 	transLength += (receiveBuffer[tens] & 0x0F) * 10; 
@@ -132,20 +147,13 @@ unsigned int getTransmissionLength()
 	if(transLength < MaxRecSize)
 		return transLength; 
 	else
-		return MaxRecSize; 
+		//8 is the length of the header 
+		return MaxRecSize - 8; 
 }
 
 char* getMessageHeader()
 {
 	char* header = ""; 
-	
-	while(!receiveFlag & 1)
-	{
-		//While loop does not work correctly without a delay
-		//An issue with the compiler or the stack pointer when invoking the interrupt
-		_delay_us(100);
-		//printf("Loop\n");
-	}
 	
 	for(int i = 0; i < endHeader; i++)
 	{
@@ -153,6 +161,23 @@ char* getMessageHeader()
 	}
 	
 	return header; 
+}
+
+int errorCheck() 
+{
+	while(!receiveFlag & 1)
+	{
+		//While loop does not work correctly without a delay
+		//An issue with the compiler or the stack pointer when invoking the interrupt
+		_delay_us(100);
+	}
+	
+	char* header = getMessageHeader();
+	//0 denotes a successful command 
+	if(header[errorCode] != 0)
+		return 1; 
+	else 
+		return 0; 
 }
 
 unsigned int sendCommand(int8_t prefix, char* command, char* value)
@@ -172,8 +197,8 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 			return 0; 
 			break; 
 	}
-	printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
-	printf("Command: %s Length: %d, Address: %p\n", command, strlen(command),  command);
+	//printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
+	//printf("Command: %s Length: %d, Address: %p\n", command, strlen(command),  command);
 	strcat(fullCommand, command);
 	//printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
 	if(value != NOVAL)
@@ -187,8 +212,15 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	uint16_t length = getStringLen(fullCommand);
 	printf("Command: %s Length: %d, Address: %p\n", fullCommand, length, fullCommand);
 	uart_send(fullCommand, length);
+	PORTD |= (1<<RTS);
+	while(!receiveFlag & 1)
+	{
+		//While loop does not work correctly without a delay
+		//An issue with the compiler or the stack pointer when invoking the interrupt
+		_delay_us(10);
+		//printf("Loop\n");
+	}
 	free(fullCommand);
-	
 	return 1; 
 }
 
@@ -201,12 +233,13 @@ ISR(USART1_RX_vect)
 		receiveBuffer[i] = uart_receiveChar();
 	else if(i == endHeader)
 	{
-		transLength = getTransmissionLength(); 
-		printf("Transmission Length: %d\n", transLength);
+		//transLength = getTransmissionLength(); 
+		//if(testPrint)
+			//printf("Transmission Length: %d\n", transLength);
 	}
 	else
 	{
-		if(i < 176)
+		if(i < 8 + 8)
 		{
 			receiveBuffer[i] = uart_receiveChar();
 			//printf("Writing...\n");
@@ -222,7 +255,7 @@ ISR(USART1_RX_vect)
 			i = 0;
 			//done receiving
 			receiveFlag = 1;
-			printf("Transmission Length: %d\n", transLength);
+			printf("Transmission Length: %d\n", getTransmissionLength());
 			printf("Done Receiving!\n");
 		}
 	}
