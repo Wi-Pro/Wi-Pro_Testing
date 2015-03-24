@@ -9,8 +9,8 @@
 #ifndef PRINTDRIVER_H_
 #define PRINTDRIVER_H_
 
-#define BAUD_RATE 4800 
-#define F_CPU 1000000UL
+#define BAUD_RATE 250000 
+#define F_CPU 8000000UL
 
 #define CTS PORTD4
 #define RTS PORTD5 

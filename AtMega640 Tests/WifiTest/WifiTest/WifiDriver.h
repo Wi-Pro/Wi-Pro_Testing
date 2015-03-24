@@ -33,8 +33,8 @@
 #define endHeader 7
 
 //I/Os 
-#define RTS PORTD4
-#define CTS PORTD5 
+//#define RTS PORTD4
+//#define CTS PORTD5 
 
 void setTestPrint(); 
 void uart_init();
