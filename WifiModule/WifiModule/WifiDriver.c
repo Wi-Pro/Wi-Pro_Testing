@@ -14,7 +14,8 @@
 #include "PrintDriver.h"
 #include "WifiDriver.h"
 
-unsigned char receiveBuffer[MaxRecSize];
+char receiveBuffer[100];
+char receiveBuffer2[100];
 unsigned int  i = 0;
 uint8_t receiveFlag = 0; 
 unsigned int transLength = 0;
@@ -55,14 +56,16 @@ int uart_send(unsigned char* data, unsigned int length)
 	receiveFlag = 0;
 	memset(receiveBuffer, 0x00, MaxRecSize);
 	PORTD |= (1<<RTS);
-	while(PORTD & (1<<CTS)){_delay_us(100);} 
+	//while(!(PIND & (1<<CTS))){
+		//_delay_us(100);
+		//printf("Waiting..\n");
+	//} 
 	while(i < length){
 		while(!(UCSR1A & (1<<UDRE1)));
 		UDR1 = data[i];
-		//while(!(UCSR1A & (1<<TXC1))); //wait for transmit to complete
 		i++;
 	}
-	while(PORTD & (1<<CTS)){_delay_us(100);}
+	//while(!(PIND & (1<<CTS))){_delay_us(100);}
 	return 0;
 }
 
@@ -131,9 +134,9 @@ unsigned int getTransmissionLength()
 	if(testPrint)
 	{
 		//printf("Header: ");
-		for(int i = 0; i < endHeader; i++)
+		for(int i = -5; i < endHeader; i++)
 		{
-			printf("Value: 0x%02x, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
+			printf("Value: %c, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
 		}
 		printf("\n");
@@ -234,9 +237,9 @@ ISR(USART1_RX_vect)
 		receiveBuffer[i] = uart_receiveChar();
 	else if(i == endHeader)
 	{
-		//transLength = getTransmissionLength(); 
+		//transLength = getTransmissionLength();
 		//if(testPrint)
-			//printf("Transmission Length: %d\n", transLength);
+		//printf("Transmission Length: %d\n", transLength);
 	}
 	else
 	{
@@ -259,7 +262,7 @@ ISR(USART1_RX_vect)
 			printf("Transmission Length: %d\n", getTransmissionLength());
 			printf("Done Receiving!\n");
 		}
-	}
+	}	
 	i++; 
 	//printf("%d\n", i);
 	sei(); 

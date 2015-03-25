@@ -215,7 +215,7 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	return 1; 
 }
 
-ISR(USART1_RX_vect)
+ISR(USART0_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();

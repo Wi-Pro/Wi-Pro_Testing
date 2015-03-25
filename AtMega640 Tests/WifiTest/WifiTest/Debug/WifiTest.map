@@ -68,8 +68,6 @@ Discarded input sections
                 0x00000000        0x2 WifiDriver.o
  .bss.transLength
                 0x00000000        0x2 WifiDriver.o
- .text          0x00000000        0x0 WifiModule.o
- .bss           0x00000000        0x0 WifiModule.o
  .text          0x00000000        0x0 WifiTest.o
  .bss           0x00000000        0x0 WifiTest.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
@@ -171,7 +169,6 @@ Address of section .data set to 0x800200
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
 LOAD Wifi.o
 LOAD WifiDriver.o
-LOAD WifiModule.o
 LOAD WifiTest.o
 START GROUP
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a
@@ -348,7 +345,6 @@ END GROUP
                 0x0000011e                __vector_23
                 0x0000011e                __vector_30
                 0x0000011e                __vector_45
-                0x0000011e                __vector_25
                 0x0000011e                __vector_11
                 0x0000011e                __vector_54
                 0x0000011e                __vector_13
@@ -372,6 +368,7 @@ END GROUP
                 0x0000011e                __vector_2
                 0x0000011e                __vector_21
                 0x0000011e                __vector_15
+                0x0000011e                __vector_36
                 0x0000011e                __vector_29
                 0x0000011e                __vector_40
                 0x0000011e                __vector_8
@@ -408,9 +405,9 @@ END GROUP
  .text.sendCommand
                 0x000001fc       0xde WifiDriver.o
                 0x000001fc                sendCommand
- .text.__vector_36
+ .text.__vector_25
                 0x000002da       0xb6 WifiDriver.o
-                0x000002da                __vector_36
+                0x000002da                __vector_25
  .text.main     0x00000390        0xc WifiTest.o
                 0x00000390                main
  .text.avr-libc
@@ -453,7 +450,6 @@ END GROUP
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
  .data          0x00800200        0x0 Wifi.o
  .data          0x00800200        0x0 WifiDriver.o
- .data          0x00800200        0x0 WifiModule.o
  .data          0x00800200        0x0 WifiTest.o
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_copy_data.o)
@@ -554,7 +550,6 @@ END GROUP
  .comment       0x00000000       0x30 Wifi.o
                                  0x31 (size before relaxing)
  .comment       0x00000000       0x31 WifiDriver.o
- .comment       0x00000000       0x31 WifiModule.o
  .comment       0x00000000       0x31 WifiTest.o
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(malloc.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(printf.o)
@@ -607,7 +602,6 @@ END GROUP
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x17e Wifi.o
  .debug_line    0x0000017e      0x530 WifiDriver.o
- .debug_line    0x000006ae        0x0 WifiModule.o
  .debug_line    0x000006ae       0x6f WifiTest.o
 
 .debug_frame    0x00000000      0x25c
@@ -622,7 +616,6 @@ END GROUP
                                 0x210 (size before relaxing)
  .debug_str     0x000001d0      0x1b2 WifiDriver.o
                                 0x353 (size before relaxing)
- .debug_str     0x00000382        0x0 WifiModule.o
  .debug_str     0x00000382       0x15 WifiTest.o
                                 0x18c (size before relaxing)
 

@@ -38,7 +38,6 @@ SUBDIRS :=
 C_SRCS +=  \
 ../Wifi.c \
 ../WifiDriver.c \
-../WifiModule.c \
 ../WifiTest.c
 
 
@@ -51,25 +50,21 @@ ASM_SRCS +=
 OBJS +=  \
 Wifi.o \
 WifiDriver.o \
-WifiModule.o \
 WifiTest.o
 
 OBJS_AS_ARGS +=  \
 Wifi.o \
 WifiDriver.o \
-WifiModule.o \
 WifiTest.o
 
 C_DEPS +=  \
 Wifi.d \
 WifiDriver.d \
-WifiModule.d \
 WifiTest.d
 
 C_DEPS_AS_ARGS +=  \
 Wifi.d \
 WifiDriver.d \
-WifiModule.d \
 WifiTest.d
 
 OUTPUT_FILE_PATH +=WifiTest.elf
@@ -83,8 +78,6 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
-
-
 
 
 

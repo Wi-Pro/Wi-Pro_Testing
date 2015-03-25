@@ -109,9 +109,6 @@
     <Compile Include="WifiDriver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="WifiModule.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="WifiTest.c">
       <SubType>compile</SubType>
     </Compile>

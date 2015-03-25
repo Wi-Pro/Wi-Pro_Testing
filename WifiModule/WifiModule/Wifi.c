@@ -46,6 +46,11 @@ char* networkScan()
 	//enableReceiveINT();
 	sendCommand(NOPREFIX, SCAN, NOVAL);
 	char* networks = getReceiveBuffer(); 
+	for(int i = 0; i < 100; i++)
+	{
+		printf("%c", networks[i]);
+	}
+	printf("\n");
 	return networks; 
 }
 
@@ -54,11 +59,8 @@ int networkConnect(char* SSID, char* password)
 	sendCommand(SET, WLAN_SSID, SSID);
 	setTestPrint();
 	sendCommand(SET, WLAN_PWD, password);
-	//getReceiveBuffer();
 	//enableReceiveINT();
-	sendCommand(NOPREFIX, HTTP_GET, "www.wi-pro.us");
-	//getReceiveBuffer();
-	//printf("Error Checking\n"); 
+	sendCommand(NOPREFIX, HTTP_GET, "www.wi-pro.us"); 
 	//char* message = getReceiveBuffer();
 	//int isError = errorCheck(); 
 	//if(isError)
