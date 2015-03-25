@@ -14,8 +14,7 @@
 #include "PrintDriver.h"
 #include "WifiDriver.h"
 
-char receiveBuffer[100];
-char receiveBuffer2[100];
+char receiveBuffer[MaxRecSize];
 unsigned int  i = 0;
 uint8_t receiveFlag = 0; 
 unsigned int transLength = 0;

@@ -31,18 +31,18 @@ int main(void)
 	//uart_send("scan\r\n\0", 7);
 	//char* data = getReceiveBuffer();
 	//networkScan();
-	setTestPrint(); 
+	//setTestPrint(); 
 	//networkScan(); 
 	//because fuck encryption
-	//networkConnect("Wi-Pro", "brightshoe902");
+	networkConnect("Wi-Pro", "brightshoe902");
+	_delay_ms(3100);
+	serverConnect("www.wi-pro.us", "80"); 
 	//setHumanMode();
 	unsigned const char* data = getReceiveBuffer(); 
 	//printf("Found Receive!\n");
 	//printf("Received Data: %s\n", data);
 	//int length = strlen(data);
 	//printf("Message: ");
-
-
 	printf("Done!\n");
 }
 
