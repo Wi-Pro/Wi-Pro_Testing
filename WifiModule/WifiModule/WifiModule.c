@@ -25,8 +25,10 @@ int main(void)
 	//unsigned char* command = "scan";
 	//uart_send(command, 6);
 	//printf("Sending!\n");
-	wifiInit(); 
-	setMachineMode();
+	//setTestPrint(); 
+	//wifiInit(); 
+	//setTestPrint(); 
+	//setMachineMode();
 	//sendCommand(GET, "wlan", NOVAL); 
 	//uart_send("scan\r\n\0", 7);
 	//char* data = getReceiveBuffer();
@@ -34,10 +36,11 @@ int main(void)
 	//setTestPrint(); 
 	//networkScan(); 
 	//because fuck encryption
-	networkConnect("Wi-Pro", "brightshoe902");
-	_delay_ms(3100);
-	serverConnect("www.wi-pro.us", "80"); 
-	//setHumanMode();
+	printf("Begin Main\n");
+	//networkConnect("Wi-Pro", "brightshoe902");
+	//_delay_ms(3100);
+	//serverConnect("www.wi-pro.us", "80"); 
+	setHumanMode();
 	unsigned const char* data = getReceiveBuffer(); 
 	//printf("Found Receive!\n");
 	//printf("Received Data: %s\n", data);

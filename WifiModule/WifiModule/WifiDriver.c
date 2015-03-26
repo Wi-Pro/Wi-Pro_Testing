@@ -16,6 +16,7 @@
 
 char receiveBuffer[MaxRecSize];
 unsigned int  i = 0;
+unsigned int bufferStart = 0; 
 uint8_t receiveFlag = 0; 
 unsigned int transLength = 0;
 int testPrint = 0; 
@@ -133,9 +134,9 @@ unsigned int getTransmissionLength()
 	if(testPrint)
 	{
 		//printf("Header: ");
-		for(int i = -5; i < endHeader; i++)
+		for(int i = 0; i < endHeader; i++)
 		{
-			printf("Value: %c, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
+			printf("Value: %d, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
 		}
 		printf("\n");
@@ -177,7 +178,7 @@ int errorCheck()
 	
 	char* header = getMessageHeader();
 	//0 denotes a successful command 
-	if(header[errorCode] != 0)
+	if(header[errorCode] != '0')
 		return 1; 
 	else 
 		return 0; 
@@ -185,6 +186,7 @@ int errorCheck()
 
 unsigned int sendCommand(int8_t prefix, char* command, char* value)
 {	
+	printf("Begin Send Command\n");
 	char* fullCommand = (char *)malloc(MaxSendSize);
 	switch(prefix)
 	{
@@ -231,38 +233,60 @@ ISR(USART1_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();
-	//Grab Receive Header
-	if(i < endHeader)
+	if(!bufferStart && testPrint)
+	{
 		receiveBuffer[i] = uart_receiveChar();
-	else if(i == endHeader)
-	{
-		//transLength = getTransmissionLength();
-		//if(testPrint)
-		//printf("Transmission Length: %d\n", transLength);
-	}
-	else
-	{
-		if(i < 8 + 8)
+		if(receiveBuffer[i] == 'R')
 		{
-			receiveBuffer[i] = uart_receiveChar();
-			//printf("Writing...\n");
-			//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+			//printf("Found Beginning!\n");
+			bufferStart = 1;
 		}
-
 		else
 		{
-			//printf("End of String!\n");
-			receiveBuffer[i] = 0;
-			UCSR1B &= ~(1<<RXCIE1);
-			//cli();
-			i = 0;
-			//done receiving
-			receiveFlag = 1;
-			printf("Transmission Length: %d\n", getTransmissionLength());
-			printf("Done Receiving!\n");
+			//printf("Not found.\n");
+			//reti();
 		}
-	}	
-	i++; 
-	//printf("%d\n", i);
+	}
+	
+	else
+	{
+		//printf("Beginning of buffer.\n");
+		//Grab Receive Header
+		if(i < endHeader)
+		{
+			receiveBuffer[i] = uart_receiveChar();
+		}
+		else if(i == endHeader)
+		{
+			//transLength = getTransmissionLength();
+			//if(testPrint)
+			//printf("Transmission Length: %d\n", transLength);
+		}
+		else
+		{
+			if(i < transLength + 8)
+			{
+				receiveBuffer[i] = uart_receiveChar();
+				//printf("Writing...\n");
+				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+			}
+
+			else
+			{
+				//printf("End of String!\n");
+				receiveBuffer[i] = 0;
+				UCSR1B &= ~(1<<RXCIE1);
+				//cli();
+				i = 0;
+				bufferStart = 0;
+				//done receiving
+				receiveFlag = 1;
+				printf("Transmission Length: %d\n", getTransmissionLength());
+				printf("Done Receiving!\n");
+			}
+		}
+		i++;
+		//printf("%d\n", i);
+	}
 	sei(); 
 }
