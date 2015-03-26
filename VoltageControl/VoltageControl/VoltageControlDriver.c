@@ -66,7 +66,7 @@ uint8_t setVcc(uint8_t voltageLevel)
 	else
 	{
 		VCNTRL_PORT |= (1<<voltageLevel);
-		enableVccReglator();
+		enableVccRegulator();
 		return 1; 
 	}
 }
