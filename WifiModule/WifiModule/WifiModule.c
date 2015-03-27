@@ -5,7 +5,7 @@
  *  Author: Brandon
  */ 
 
-#define F_CPU 1000000UL
+#define F_CPU 8000000UL
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -25,24 +25,24 @@ int main(void)
 	//unsigned char* command = "scan";
 	//uart_send(command, 6);
 	//printf("Sending!\n");
-	//setMachineMode();
-	//sendCommand(NOPREFIX, SCAN, NOVAL); 
-	uart_send("scan\r\n\0", 7);
-	char* data = getReceiveBuffer(); 
+	wifiInit(); 
+	setMachineMode();
+	//sendCommand(GET, "wlan", NOVAL); 
+	//uart_send("scan\r\n\0", 7);
+	//char* data = getReceiveBuffer();
+	//networkScan();
+	//setTestPrint(); 
 	//networkScan(); 
 	//because fuck encryption
-	//networkConnect("Wi-Pro", "password");
+	networkConnect("Wi-Pro", "brightshoe902");
+	_delay_ms(3100);
+	serverConnect("www.wi-pro.us", "80"); 
 	//setHumanMode();
-	//unsigned const char* data = getReceiveBuffer(); 
-	printf("Found Receive!\n");
-	printf("Received Data: %s\n", data);
+	unsigned const char* data = getReceiveBuffer(); 
+	//printf("Found Receive!\n");
+	//printf("Received Data: %s\n", data);
 	//int length = strlen(data);
-	for(int i = 0; i < 176; i++)
-	{
-		printf("%c", data[i]);
-	}
-	printf("\n");
-
+	//printf("Message: ");
 	printf("Done!\n");
 }
 
