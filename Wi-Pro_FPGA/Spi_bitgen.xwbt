@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Users\Adam Vogel\Desktop\spi\SPIII\Spi.ncd
+OUTFILE=C:\Users\Adam Vogel\Desktop\spi\SPIII\Spi.bit
+FAMILY=Spartan3E
+PART=xc3s500e-4fg320
+WORKINGDIR=C:\Users\Adam Vogel\Desktop\spi\SPIII
+LICENSE=WebPack
+USER_INFO=210790417_0_0_771
