@@ -235,7 +235,8 @@ END GROUP
                 0x00000090                __vector_20
                 0x00000094                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x00000094        0x2 SPI.o
+ .text.startup.main
+                0x00000094        0x2 SPI.o
                 0x00000094                main
                 0x00000096                . = ALIGN (0x2)
  *(.fini9)
@@ -353,46 +354,29 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x50
+.debug_aranges
  *(.debug_aranges)
- .debug_aranges
-                0x00000000       0x20 SPI.o
- .debug_aranges
-                0x00000020       0x30 SPIDriver.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x183
+.debug_info
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000       0x7c SPI.o
- .debug_info    0x0000007c      0x107 SPIDriver.o
 
-.debug_abbrev   0x00000000       0xe7
+.debug_abbrev
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0x46 SPI.o
- .debug_abbrev  0x00000046       0xa1 SPIDriver.o
 
-.debug_line     0x00000000      0x13c
+.debug_line
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0x37 SPI.o
- .debug_line    0x00000037      0x105 SPIDriver.o
 
-.debug_frame    0x00000000       0x68
+.debug_frame
  *(.debug_frame)
- .debug_frame   0x00000000       0x24 SPI.o
- .debug_frame   0x00000024       0x44 SPIDriver.o
 
-.debug_str      0x00000000      0x17b
+.debug_str
  *(.debug_str)
- .debug_str     0x00000000      0x125 SPI.o
-                                0x159 (size before relaxing)
- .debug_str     0x00000125       0x56 SPIDriver.o
-                                0x1a4 (size before relaxing)
 
-.debug_loc      0x00000000       0x26
+.debug_loc
  *(.debug_loc)
- .debug_loc     0x00000000       0x26 SPIDriver.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -412,10 +396,8 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x30
+.debug_ranges
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x10 SPI.o
- .debug_ranges  0x00000010       0x20 SPIDriver.o
 
 .debug_macro
  *(.debug_macro)

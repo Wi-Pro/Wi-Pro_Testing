@@ -48,11 +48,11 @@ char* networkScan()
 	//enableReceiveINT();
 	sendCommand(NOPREFIX, SCAN, NOVAL);
 	char* networks = getReceiveBuffer(); 
-	for(int i = 0; i < 100; i++)
-	{
-		printf("%c", networks[i]);
-	}
-	printf("\n");
+	//for(int i = 0; i < 100; i++)
+	//{
+		//printf("%c", networks[i]);
+	//}
+	//printf("\n");
 	return networks; 
 }
 
@@ -79,3 +79,4 @@ int serverConnect(char* serverDNS, unsigned char* port)
 	else
 		return 1; 
 }
+
