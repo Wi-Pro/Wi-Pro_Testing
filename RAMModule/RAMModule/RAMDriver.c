@@ -7,6 +7,9 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "RAMDriver.h"
 
 
@@ -125,11 +128,24 @@ char* RAMRead(uint16_t startAddress, uint16_t length)
 	setRAMStatus(SEQ);
 	RAM_PORT &= ~(1<<RAM_CS);
 	SPI_ReadAddress(startAddress);
-	for(int i=0; i<length; i++)
+	int i; 
+	for(i=0; i<length+10; i++)
 	{
-		*(data + i) = SPI_ReadData();
+		//printf("Writing %d\n", i);
+		//*(data + i) = SPI_ReadData();
+		if(i > 10)
+			printf("%c", SPI_ReadData()); 
 	}
 	RAM_PORT |= (1<<RAM_CS); 
+	printf("\n\nPosition: %d", i); 
 	
 	return data; 
+}
+
+void RAMWriteByte(char data, uint16_t address)
+{
+	RAM_PORT &= ~(1<<RAM_CS);
+	SPI_WriteAddress(address);
+	SPI_WriteData(data);
+	RAM_PORT |= (1<<RAM_CS);
 }

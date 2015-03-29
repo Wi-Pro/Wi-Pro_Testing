@@ -31,11 +31,13 @@
 
 void SPI_Init();
 int getRAMStatus(); 
+void setRAMStatus(char mode);
 uint8_t SPI_Read(uint16_t address);
 void SPI_Write(uint16_t address, char data);
 void SPI_WriteAddress(uint16_t address);
 void SPI_WriteData(char data);
-int RAMWrite(char* data, uint16_t startAddress, uint16_t length);
+uint16_t RAMWrite(char* data, uint16_t startAddress, uint16_t length);
+void RAMWriteByte(char data, uint16_t address);
 char* RAMRead(uint16_t startAddress, uint16_t length);
 
 
