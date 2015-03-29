@@ -10,9 +10,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <string.h>
 #include "PrintDriver.h"
 #include "WifiDriver.h"
 #include "Wifi.h"
+#include "RAMDriver.h"
 
 
 int main(void)
@@ -22,31 +24,53 @@ int main(void)
 	uart0_init(); 
 	//printf("%s\n", string);
 	sei(); 
-	//unsigned char* command = "scan";
-	//uart_send(command, 6);
+	SPI_Init(); 
+	//char* hello = "Hello!";
+	//RAMWrite(hello, 0x0001, 6);
+	//_delay_ms(10);
+	//RAMRead(0x0001, 6);
 	//printf("Sending!\n");
-	//setTestPrint(); 
 	//wifiInit(); 
-	//setTestPrint(); 
 	//setMachineMode();
 	//sendCommand(GET, "wlan", NOVAL); 
 	//uart_send("scan\r\n\0", 7);
 	//char* data = getReceiveBuffer();
 	//networkScan();
 	//setTestPrint(); 
-	//networkScan(); 
+	setRAMStatus(BYTE);
+	RAMWriteByte(0x00, 0x0000); 
+	char* networks = networkScan(); 
+	//printf("Length: %d\n", strlen(networks));
+	//printf("Done Scanning!\n");
+	//printf("Networks: \n");
+	//for(int j = 0; j<strlen(networks); j++)
+	//{
+		//printf("%c", networks[j]);
+	//}
+
+	//printf("\n");
+	//RAMWrite(networks, 0x0000, 20);
+	//RAMRead(0x0000, 20);
 	//because fuck encryption
-	printf("Begin Main\n");
+	//printf("Begin Main\n");
 	//networkConnect("Wi-Pro", "brightshoe902");
 	//_delay_ms(3100);
 	//serverConnect("www.wi-pro.us", "80"); 
-	setHumanMode();
-	unsigned const char* data = getReceiveBuffer(); 
+	//setHumanMode();
+	//char* data = getReceiveBuffer(); 
+	int length = getTransmissionLength();
+	printf("Length: %d", length);
+	//RAMWrite(data, 0x0000, length);
+	RAMRead(0x0000, length);
+	//for(int i = 0; i < length; i++)
+	//{
+		//printf("%c", networks[i]);
+	//}
 	//printf("Found Receive!\n");
 	//printf("Received Data: %s\n", data);
 	//int length = strlen(data);
 	//printf("Message: ");
-	printf("Done!\n");
+	printf("\nDone!\n");
 }
 
 

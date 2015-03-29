@@ -12,7 +12,7 @@
 #define BAUD_RATE 250000
 #define F_CPU 8000000UL
 
-#define MaxRecSize 750
+#define MaxRecSize 25
 #define MaxSendSize 50
 
 //Wi-Fi Commands
@@ -33,22 +33,23 @@
 #define endHeader 7
 
 //I/Os 
-#define RTS PORTD4
-#define CTS PORTD5 
+//#define RTS PORTD4
+//#define CTS PORTD5 
 
 void setTestPrint(); 
 void uart_init();
-int uart_send(unsigned char* data, unsigned int length);
+int uart_send(char* data, unsigned int length);
 int uart_sendChar(unsigned char data);
 int enableReceiveINT();
 int disableReceiveINT();
 unsigned char uart_receive(unsigned char *data, unsigned char size);
 unsigned char uart_receiveChar();
-unsigned char* getReceiveBuffer();
+char* getReceiveBuffer();
 char* getMessageHeader();
 unsigned int sendCommand(int8_t prefix, char* command, char* value);
 uint16_t getStringLen(unsigned char* p);
 int waitForReceive();
 int errorCheck();
+unsigned int getTransmissionLength();
 
 #endif /* WIFIDRIVER_H_ */

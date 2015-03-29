@@ -20,8 +20,8 @@
 
 void wifiInit()
 {
-	DDRD |= (1<<RTS); 
-	DDRD &= ~(1<<CTS);
+	//DDRD |= (1<<RTS); 
+	//DDRD &= ~(1<<CTS);
 } 
 
 void setMachineMode()

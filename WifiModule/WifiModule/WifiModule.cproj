@@ -106,6 +106,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="RAMDriver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RAMDriver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Wifi.c">
       <SubType>compile</SubType>
     </Compile>

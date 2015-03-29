@@ -13,8 +13,9 @@
 #include <util/delay.h>
 #include "PrintDriver.h"
 #include "WifiDriver.h"
+#include "RAMDriver.h"
 
-char receiveBuffer[MaxRecSize];
+unsigned char receiveBuffer[MaxRecSize];
 unsigned int  i = 0;
 unsigned int bufferStart = 0; 
 uint8_t receiveFlag = 0; 
@@ -48,11 +49,11 @@ uint16_t getStringLen(unsigned char* p)
 	return count; 
 }
 
-int uart_send(unsigned char* data, unsigned int length)
+int uart_send(char* data, unsigned int length)
 {
 	//printf("Uart Send Function: %s\nAddress: %p", data, data);
 	uint8_t i = 0;
-	UCSR1B |= (1<<RXCIE1);
+	//UCSR1B |= (1<<RXCIE1);
 	receiveFlag = 0;
 	memset(receiveBuffer, 0x00, MaxRecSize);
 	PORTD |= (1<<RTS);
@@ -94,7 +95,6 @@ unsigned char uart_receiveChar()
 {
 	//printf("Receiving...\n");
 	while (!(UCSR1A & (1<<RXC1)));
-	PORTA ^= 0xFF; 
 	return UDR1; 
 }
 
@@ -111,7 +111,7 @@ int disableReceiveINT()
 	return 1; 
 }
 
-unsigned char* getReceiveBuffer()
+char* getReceiveBuffer()
 {
 	//printf("Waiting for Receive to Complete...\n");
 	//Wait for receiving to be completed
@@ -125,7 +125,7 @@ unsigned char* getReceiveBuffer()
 	}
 	//_delay_ms(500);
 	//begin receiving
-	printf("Received Data: %s\n", receiveBuffer);
+	//printf("Received Data: %s\n", receiveBuffer);
 	return receiveBuffer; 
 }
 
@@ -136,7 +136,7 @@ unsigned int getTransmissionLength()
 		//printf("Header: ");
 		for(int i = 0; i < endHeader; i++)
 		{
-			printf("Value: %d, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
+			printf("Value: 0x%02x, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
 		}
 		printf("\n");
@@ -148,11 +148,11 @@ unsigned int getTransmissionLength()
 	transLength += (receiveBuffer[hundreds] & 0x0F) * 100; 
 	transLength += (receiveBuffer[thousands] & 0x0F) * 1000; 
 	transLength += (receiveBuffer[tenThousands] & 0x0F) * 10000; 
-	if(transLength < MaxRecSize)
-		return transLength; 
-	else
-		//8 is the length of the header 
-		return MaxRecSize - 8; 
+	//if(transLength < MaxRecSize)
+	return transLength; 
+	//else
+		////8 is the length of the header 
+		//return MaxRecSize - 8; 
 }
 
 char* getMessageHeader()
@@ -226,6 +226,7 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 		//printf("Loop\n");
 	}
 	free(fullCommand);
+	free(command);
 	return 1; 
 }
 
@@ -255,10 +256,11 @@ ISR(USART1_RX_vect)
 		if(i < endHeader)
 		{
 			receiveBuffer[i] = uart_receiveChar();
+			//RAMWriteByte(uart_receiveChar(), i);
 		}
 		else if(i == endHeader)
 		{
-			//transLength = getTransmissionLength();
+			transLength = getTransmissionLength();
 			//if(testPrint)
 			//printf("Transmission Length: %d\n", transLength);
 		}
@@ -266,7 +268,9 @@ ISR(USART1_RX_vect)
 		{
 			if(i < transLength + 8)
 			{
-				receiveBuffer[i] = uart_receiveChar();
+				//receiveBuffer[i] = uart_receiveChar();
+				while (!(UCSR1A & (1<<RXC1)));
+				RAMWriteByte(UDR1, i);
 				//printf("Writing...\n");
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
 			}
@@ -274,7 +278,8 @@ ISR(USART1_RX_vect)
 			else
 			{
 				//printf("End of String!\n");
-				receiveBuffer[i] = 0;
+				//receiveBuffer[i] = 0;
+				RAMWriteByte(0x00, i);
 				UCSR1B &= ~(1<<RXCIE1);
 				//cli();
 				i = 0;

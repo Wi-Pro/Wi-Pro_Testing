@@ -18,5 +18,6 @@ int main(void)
 {
 	uart_init();
 	sei(); 
+	setMachineMode();
 	networkScan();
 }

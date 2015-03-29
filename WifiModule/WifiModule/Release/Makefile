@@ -36,6 +36,7 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../RAMDriver.c \
 ../Wifi.c \
 ../WifiModule.c \
 ../PrintDriver.c \
@@ -49,24 +50,28 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+RAMDriver.o \
 Wifi.o \
 WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 OBJS_AS_ARGS +=  \
+RAMDriver.o \
 Wifi.o \
 WifiModule.o \
 PrintDriver.o \
 WifiDriver.o
 
 C_DEPS +=  \
+RAMDriver.d \
 Wifi.d \
 WifiModule.d \
 PrintDriver.d \
 WifiDriver.d
 
 C_DEPS_AS_ARGS +=  \
+RAMDriver.d \
 Wifi.d \
 WifiModule.d \
 PrintDriver.d \
@@ -83,6 +88,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
