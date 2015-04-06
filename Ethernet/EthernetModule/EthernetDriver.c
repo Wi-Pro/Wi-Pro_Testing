@@ -6,6 +6,8 @@
  * Note: This driver is based off of code published online by the Author 'rwb' on his blog, located at http://www.ermicro.com/blog/?p=1773
  */ 
 
+#define F_CPU 8000000UL
+
 #include <stdio.h>
 #include <avr/io.h>
 #include <string.h>
@@ -13,8 +15,6 @@
 #include <avr/interrupt.h>
 #include "EthernetDriver.h"
 #include "RAMDriver.h"
-
-#define F_CPU 8000000UL
 	
 unsigned int S0_RX_BASE;
 unsigned int S0_RX_MASK;
@@ -147,10 +147,10 @@ void NetworkSetup(uint8_t *mac_addr, uint8_t *local_ip_addr, uint8_t *sub_mask, 
 	// Setting the Wiznet W5100 Mode Register: 0x0000
 	SPI_EthernetWrite(MR,0x80); 
 	_delay_ms(1);
-	//printf("Reading MR: %d\n\n",SPI_EthernetRead(MR));
+	/*printf("Reading MR: %d\n\n",SPI_EthernetRead(MR));
 	// Setting the Wiznet W5100 Gateway Address
 	//printf("Setting Gateway Address %d.%d.%d.%d\n",gtw_addr[0],gtw_addr[1],\
-	gtw_addr[2],gtw_addr[3]);
+	gtw_addr[2],gtw_addr[3]);*/
 	SPI_EthernetWrite(GAR + 0,gtw_addr[0]);
 	SPI_EthernetWrite(GAR + 1,gtw_addr[1]);
 	SPI_EthernetWrite(GAR + 2,gtw_addr[2]);
@@ -215,7 +215,7 @@ int Server_Connect(uint8_t socketMode, uint8_t *server_ip_addr, uint8_t *server_
 		SPI_EthernetWrite(S0_CR, OPEN);
 		printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
 		
-	} while (SPI_EthernetRead(S0_SR) != SOCK_INIT && SPI_EthernetRead(S0_SR) != SOCK_IPRAW);
+	} while (SPI_EthernetRead(S0_SR) != SOCK_INIT);
 	
 	//Write Server IP to Socket 0 IP Register
 	printf("Setting Server IP Address %d.%d.%d.%d\n",server_ip_addr[0],server_ip_addr[1],\
@@ -226,43 +226,52 @@ int Server_Connect(uint8_t socketMode, uint8_t *server_ip_addr, uint8_t *server_
 	SPI_EthernetWrite(S0_DIPR + 3, server_ip_addr[3]);
 	printf("Reading S0_DIPR: %d.%d.%d.%d\n\n",SPI_EthernetRead(S0_DIPR + 0),SPI_EthernetRead(S0_DIPR + 1),\
 	SPI_EthernetRead(S0_DIPR + 2),SPI_EthernetRead(S0_DIPR + 3));
-	printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
+	printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
 	
 	//Write Server Port to Socket 0 IP Register 
 	printf("Setting Server Port\n");
 	SPI_EthernetWrite(S0_DPORT + 0, server_port[0]); 
 	SPI_EthernetWrite(S0_DPORT + 1, server_port[1]);
 	printf("Reading S0_DPORT: %d%d\n\n",SPI_EthernetRead(S0_DPORT + 0),SPI_EthernetRead(S0_DPORT + 1)); 
-	printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
+	printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
 	
 	//Try to connect 
 	SPI_EthernetWrite(S0_CR, CONNECT);
-	while((SPI_EthernetRead(S0_IR) & 0x1F) != 0); 
+	//while((SPI_EthernetRead(S0_IR) & 0x1F) != 0); 
+	//while((SPI_EthernetRead(S0_SR) != SOCK_ESTABLISHED)); 
+
 	//Check to see if connection has been established 
 	unsigned int delayCount = 0; 
-	while(SPI_EthernetRead(S0_SR) == SOCK_SYNSENT)
+	while(SPI_EthernetRead(S0_SR) != SOCK_ESTABLISHED)
 	{
 		_delay_ms(3);
 		delayCount += 1; 
 		//Every 3 seconds
-		if(delayCount == 1000)
+		if(delayCount%1000 == 0)
 		{
 			printf("Trying to Establish Connection...\n");
-			delayCount = 0; 
+			//delayCount = 0; 
+			//15 seconds
+			if(delayCount > 5000)
+			{
+				printf("Timeout, disconnecting!\n"); 
+				SPI_EthernetWrite(S0_CR, CLOSE); 
+				return 0; 
+			}
 		}
 	}
 	
-	printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
-	if(SPI_EthernetRead(S0_SR) == SOCK_ESTABLISHED)
+	uint8_t sr_status = SPI_EthernetRead(S0_SR);
+	if(sr_status == SOCK_ESTABLISHED)
 	{
-		printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
+		printf("SPI SR Status: 0x%02x\n", sr_status);
 		printf("Connection Succeeded!\n\n");
 		return 1; 
 	}
 	//Connection Failed 
 	else
 	{
-		printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
+		printf("SPI SR Status: 0x%02x\n", sr_status);
 		printf("Could not connect. Exiting...\n\n");
 		return 0; 
 	}
@@ -329,10 +338,7 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 	unsigned int realRR = S0_TX_BASE + (startaddr & S0_TX_MASK);
 	printf("Real WR: %d\n", realWR);
 	printf("Real RR: %d\n", realRR); 
-	//#endif
-	unsigned int bufferLTemp = bufferLength;
-	unsigned int bufferTemp = buffer; 
-	unsigned int offaddrTemp = offaddr;  
+	//#endif 
 	
 	while(bufferLength) {
 		bufferLength--;
@@ -346,26 +352,26 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 	}
 		SPI_EthernetWrite(realaddr + 1, 0x00);
 
-	// Increase the S0_TX_WR value, so it point to the next transmit
-	printf("Offset After: %d\n", offaddr);
+	// Increase the S0_TX_WR value, so it points to the next transmit
+	//printf("Offset After: %d\n", offaddr);
 	ptr = SPI_EthernetRead(S0_TX_WR);
-	printf("WR Low: %d\n", SPI_EthernetRead(S0_TX_WR)); 
-	printf("WR High: %d\n", SPI_EthernetRead(S0_TX_WR + 1)); 
+	//printf("WR Low: %d\n", SPI_EthernetRead(S0_TX_WR)); 
+	//printf("WR High: %d\n", SPI_EthernetRead(S0_TX_WR + 1)); 
 	//offaddr = (((ptr & 0x00FF) << 8 ) + SPI_Read(S0_TX_WR + 1));
 	//realWR = S0_TX_BASE + (offaddr & S0_TX_MASK);
 	//printf("Real WR: %d\n", realWR);
-	printf("%d\n", (offaddr & 0xFF00) >> 8);
-	printf("%d\n", (offaddr & 0x00FF));
+	//printf("%d\n", (offaddr & 0xFF00) >> 8);
+	//printf("%d\n", (offaddr & 0x00FF));
 	//SPI_Write(S0_TX_WR,(offaddr & 0xFF00) >> 8 );
 	SPI_EthernetWrite(S0_TX_WR, 0xFF);
 	SPI_EthernetWrite(S0_TX_WR + 1,(offaddr & 0x00FF));
-	printf("%d\n", (offaddr & 0xFF00) >> 8);
-	printf("%d\n", (offaddr & 0x00FF));
+	//printf("%d\n", (offaddr & 0xFF00) >> 8);
+	//printf("%d\n", (offaddr & 0x00FF));
 	//ptr = SPI_Read(S0_TX_WR);
 	
 	//Debug 
-	printf("WR Low: %d\n", SPI_EthernetRead(S0_TX_WR));
-	printf("WR High: %d\n", SPI_EthernetRead(S0_TX_WR + 1));
+	//printf("WR Low: %d\n", SPI_EthernetRead(S0_TX_WR));
+	//printf("WR High: %d\n", SPI_EthernetRead(S0_TX_WR + 1));
 	//offaddr = (((ptr & 0x00FF) << 8 ) + SPI_Read(S0_TX_WR + 1));
 	//startaddr = (((SPI_Read(S0_TX_RR) << 8) + SPI_Read(S0_TX_RR + 1)));
 	//realWR = S0_TX_BASE + (offaddr & S0_TX_MASK);
@@ -383,41 +389,77 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 	return 1;
 }
 
-int ReceiveData(uint8_t *buffer,uint16_t bufferLength)
+int ReceiveData(uint16_t dataLength, uint16_t RAMAddress)
 {
 	uint16_t ptr,offaddr,realaddr;
-	uint16_t RAMAddress = 0; 
+	//uint16_t RAMAddress = 0; 
 	char tempvar; 
+	uint8_t header = 1; 
+	uint8_t headerCount = 0; 
+	uint16_t timeCount = 0; 
 	// If the request size > MAX_BUF,just truncate it
-	if (bufferLength > MAX_BUFF)
-	bufferLength = MAX_BUFF - 2;
-	// Read the Rx Read Pointer
-	ptr = SPI_EthernetRead(S0_RX_RD);
-	//printf("RX Read Pointer: %d\n", ptr);
-	offaddr = (((ptr & 0x00FF) << 8 ) + SPI_EthernetRead(S0_RX_RD + 1));
-	//#if _DEBUG_MODE
-	//printf("RX Buffer: %x\n",offaddr);
-	//#endif
+	if (dataLength > MAX_BUFF)
+		dataLength = MAX_BUFF - 2;
+		
+		
+	while(1)
+	{
+		if(SPI_EthernetRead(S0_SR) == SOCK_ESTABLISHED)
+		{
+			// Read the Rx Read Pointer
+			ptr = SPI_EthernetRead(S0_RX_RD);
+			//printf("RX Read Pointer: %d\n", ptr);
+			offaddr = (((ptr & 0x00FF) << 8 ) + SPI_EthernetRead(S0_RX_RD + 1));
+			//#if _DEBUG_MODE
+			//printf("RX Buffer: %x\n",offaddr);
+			//#endif
+			//RAMWriteByte(0x32, 0000);
+			while(dataLength) {
+				realaddr = S0_RX_BASE + (offaddr & S0_RX_MASK);
+				//printf("Real Address: %d\n", realaddr);
+				tempvar = SPI_EthernetRead(realaddr);
+				printf("Buffer: %c\n", tempvar);
+				if(tempvar == '\n' && header)
+				{
+					//printf("Found New Line!\n");
+					headerCount++; 
+					if(headerCount >= 10)
+						header = 0; 
+				}
+				else if(!header)
+				{
+					//printf("Write to RAM!\n");
+					printf("Writing to RAM: %c @ address %d\n", tempvar, RAMAddress); 
+					RAMWriteByte(tempvar, RAMAddress);
+					RAMAddress++;
+					dataLength--;
+				}
+				offaddr++;
+				//buffer++;
+			}
+			//*buffer='\0';        // String terminated character
 
-	while(bufferLength) {
-		bufferLength--;
-		realaddr = S0_RX_BASE + (offaddr & S0_RX_MASK);
-		//printf("Real Address: %d\n", realaddr);
-		tempvar = SPI_EthernetRead(realaddr);
-		RAMWriteByte(tempvar, RAMAddress);
-		RAMAddress++;
-		offaddr++;
-		//buffer++;
-	}
-	//*buffer='\0';        // String terminated character
+			// Increase the S0_RX_RD value, so it point to the next receive
+			SPI_EthernetWrite(S0_RX_RD,(offaddr & 0xFF00) >> 8 );
+			SPI_EthernetWrite(S0_RX_RD + 1,(offaddr & 0x00FF));
 
-	// Increase the S0_RX_RD value, so it point to the next receive
-	SPI_EthernetWrite(S0_RX_RD,(offaddr & 0xFF00) >> 8 );
-	SPI_EthernetWrite(S0_RX_RD + 1,(offaddr & 0x00FF));
-
-	// Now Send the RECV command
-	SocketCommand(RECV);
-	_delay_us(5);    // Wait for Receive Process
+			// Now Send the RECV command
+			SocketCommand(RECV);
+			_delay_us(5);    // Wait for Receive Process
+			break; 
+		}
+		else if(timeCount > MAX_TIME_COUNT)
+		{
+			printf("This shit is broken\n");
+			break; 
+		}
+		else
+		{
+			timeCount++; 
+			_delay_ms(10);
+		}
+		
+	}	
 
 	return 1;
 }
@@ -489,7 +531,8 @@ int getReceiveFlag()
 ISR(INT0_vect)
 {
 	cli(); 
-	char* dummyBuffer; 
+	//ReceiveData(8000);
+	//char* dummyBuffer; 
 	//check the status of the interrupt register 
 	printf("Mask Register Value: %d\n", SPI_EthernetRead(IMR));
 	unsigned char error = SPI_EthernetRead(INTR);
@@ -513,7 +556,8 @@ ISR(INT0_vect)
 			printf("Timeout Occurred on Socket 0!\n");
 		}
 		else if((socketInt & (1<<SIR_RECV))){
-			ReceiveData(dummyBuffer, 8191);
+			ReceiveData(8000);
+			SocketDisconnect();
 			receiveFlag = 1; 
 			printf("Receiving Data...\n");
 		}

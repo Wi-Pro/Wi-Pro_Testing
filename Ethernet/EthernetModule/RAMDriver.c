@@ -21,6 +21,7 @@ void SPI_Init()
 	RAM_DDR |= (1<<RAM_CS);
 	// Enable SPI, Master Mode 0, set the clock rate fck/4
 	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+	RAMWriteByte(0x32, 0000);
 }
 
 int getRAMStatus()
@@ -134,7 +135,7 @@ char* RAMRead(uint16_t startAddress, uint16_t length)
 		//printf("Writing %d\n", i);
 		//*(data + i) = SPI_ReadData();
 		//if(i > 10)
-		printf("%c", SPI_ReadData()); 
+		printf("Data: 0x%02x Address: %d\n", SPI_ReadData(), i); 
 	}
 	RAM_PORT |= (1<<RAM_CS); 
 	printf("\n\nPosition: %d", i); 

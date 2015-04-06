@@ -16,6 +16,7 @@
 #include "RAMDriver.h"
 
 unsigned char receiveBuffer[MaxRecSize];
+char fullCommand[100]; 
 unsigned int  i = 0;
 unsigned int bufferStart = 0; 
 uint8_t receiveFlag = 0; 
@@ -67,6 +68,7 @@ int uart_send(char* data, unsigned int length)
 		i++;
 	}
 	//while(!(PIND & (1<<CTS))){_delay_us(100);}
+	printf("Sent!\n");
 	return 0;
 }
 
@@ -187,13 +189,15 @@ int errorCheck()
 unsigned int sendCommand(int8_t prefix, char* command, char* value)
 {	
 	printf("Begin Send Command\n");
-	char* fullCommand = (char *)malloc(MaxSendSize);
+
+	//char* fullCommand = (char *)malloc(MaxSendSize);
 	switch(prefix)
 	{
 		case NOPREFIX: 
 			break; 
-		case GET: 
-			strcat(fullCommand, "get ");
+		case GET:
+			strcpy(fullCommand, "get "); 
+			//strcat(fullCommand, "get ");
 			break; 
 		case SET: 
 			strcat(fullCommand, "set ");
@@ -214,19 +218,23 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	
 	//printf("fullCommand: %s\n", fullCommand);
 	strcat(fullCommand, ENDCOMMAND);
-	uint16_t length = getStringLen(fullCommand);
+	uint16_t length = strlen(fullCommand);
 	printf("Command: %s Length: %d, Address: %p\n", fullCommand, length, fullCommand);
 	uart_send(fullCommand, length);
-	PORTD |= (1<<RTS);
-	while(!receiveFlag & 1)
-	{
-		//While loop does not work correctly without a delay
-		//An issue with the compiler or the stack pointer when invoking the interrupt
-		_delay_us(10);
+	memset(fullCommand, 0x00, 100);
+	//PORTD |= (1<<RTS);
+	//while(!receiveFlag & 1)
+	//{
+		////While loop does not work correctly without a delay
+		////An issue with the compiler or the stack pointer when invoking the interrupt
+		//_delay_us(10);
 		//printf("Loop\n");
-	}
-	free(fullCommand);
-	free(command);
+	//}
+	//free(fullCommand);
+	//printf("Freed!\n");
+	//free(command);
+	printf("Freed!\n");
+	printf("Returning!\n");
 	return 1; 
 }
 

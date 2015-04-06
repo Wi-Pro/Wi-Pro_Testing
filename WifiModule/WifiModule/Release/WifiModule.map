@@ -6,10 +6,10 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-t
                               RAMDriver.o (__do_copy_data)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
                               WifiDriver.o (__do_clear_bss)
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
-                              WifiDriver.o (malloc)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
                               Wifi.o (strcat)
+c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
+                              WifiDriver.o (strcpy)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
                               PrintDriver.o (__iob)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
@@ -36,10 +36,9 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-t
 Allocating common symbols
 Common symbol       size              file
 
-__brkval            0x2               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
-__flp               0x2               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
 receiveBuffer       0x19              WifiDriver.o
 __iob               0x6               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
+fullCommand         0x64              WifiDriver.o
 
 Discarded input sections
 
@@ -48,16 +47,25 @@ Discarded input sections
  .bss           0x00000000        0x0 RAMDriver.o
  .text.getRAMStatus
                 0x00000000       0x1c RAMDriver.o
+ .text.setRAMStatus
+                0x00000000       0x18 RAMDriver.o
+ .text.SPI_ReadAddress
+                0x00000000       0x1c RAMDriver.o
+ .text.SPI_ReadData
+                0x00000000        0xc RAMDriver.o
  .text.RAMWrite
                 0x00000000       0x62 RAMDriver.o
+ .rodata.str1.1
+                0x00000000       0x10 RAMDriver.o
+ .text.RAMRead  0x00000000       0x64 RAMDriver.o
  .text          0x00000000        0x0 Wifi.o
  .bss           0x00000000        0x0 Wifi.o
  .text.wifiInit
                 0x00000000        0x2 Wifi.o
- .text.setMachineMode
-                0x00000000       0x40 Wifi.o
  .text.setHumanMode
                 0x00000000       0x3c Wifi.o
+ .text.networkScan
+                0x00000000       0x12 Wifi.o
  .text.networkConnect
                 0x00000000       0x44 Wifi.o
  .text.serverConnect
@@ -72,12 +80,12 @@ Discarded input sections
  .bss           0x00000000        0x0 WifiDriver.o
  .text.setTestPrint
                 0x00000000        0xe WifiDriver.o
+ .text.getStringLen
+                0x00000000       0x12 WifiDriver.o
  .text.uart_receive
                 0x00000000       0x80 WifiDriver.o
- .text.enableReceiveINT
-                0x00000000       0x12 WifiDriver.o
- .text.disableReceiveINT
-                0x00000000       0x10 WifiDriver.o
+ .text.getReceiveBuffer
+                0x00000000       0x18 WifiDriver.o
  .text.getMessageHeader
                 0x00000000        0x6 WifiDriver.o
  .text.errorCheck
@@ -127,10 +135,10 @@ Discarded input sections
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
@@ -296,7 +304,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0xe6e
+.text           0x00000000      0xb72
  *(.vectors)
  .vectors       0x00000000       0x7c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324p.o
                 0x00000000                __vector_default
@@ -388,107 +396,95 @@ END GROUP
  .text.SPI_Init
                 0x000000ba        0xc RAMDriver.o
                 0x000000ba                SPI_Init
- .text.setRAMStatus
-                0x000000c6       0x18 RAMDriver.o
-                0x000000c6                setRAMStatus
  .text.SPI_WriteAddress
-                0x000000de       0x1c RAMDriver.o
-                0x000000de                SPI_WriteAddress
+                0x000000c6       0x1c RAMDriver.o
+                0x000000c6                SPI_WriteAddress
  .text.SPI_WriteData
-                0x000000fa        0xa RAMDriver.o
-                0x000000fa                SPI_WriteData
- .text.SPI_ReadAddress
-                0x00000104       0x1c RAMDriver.o
-                0x00000104                SPI_ReadAddress
- .text.SPI_ReadData
-                0x00000120        0xc RAMDriver.o
-                0x00000120                SPI_ReadData
- .text.RAMRead  0x0000012c       0x64 RAMDriver.o
-                0x0000012c                RAMRead
+                0x000000e2        0xa RAMDriver.o
+                0x000000e2                SPI_WriteData
  .text.RAMWriteByte
-                0x00000190       0x18 RAMDriver.o
-                0x00000190                RAMWriteByte
- .text.networkScan
-                0x000001a8       0x12 Wifi.o
-                0x000001a8                networkScan
+                0x000000ec       0x18 RAMDriver.o
+                0x000000ec                RAMWriteByte
+ .text.setMachineMode
+                0x00000104       0x40 Wifi.o
+                0x00000104                setMachineMode
  .text.startup.main
-                0x000001ba       0x70 WifiModule.o
-                0x000001ba                main
+                0x00000144       0x20 WifiModule.o
+                0x00000144                main
  .text.uart_sendStream
-                0x0000022a       0x22 PrintDriver.o
-                0x0000022a                uart_sendStream
+                0x00000164       0x22 PrintDriver.o
+                0x00000164                uart_sendStream
  .text.uart_receiveStream
-                0x0000024c       0x1e PrintDriver.o
-                0x0000024c                uart_receiveStream
+                0x00000186       0x1e PrintDriver.o
+                0x00000186                uart_receiveStream
  .text.uart0_init
-                0x0000026a       0x2c PrintDriver.o
-                0x0000026a                uart0_init
+                0x000001a4       0x2c PrintDriver.o
+                0x000001a4                uart0_init
  .text.uart_init
-                0x00000296       0x22 WifiDriver.o
-                0x00000296                uart_init
- .text.getStringLen
-                0x000002b8       0x12 WifiDriver.o
-                0x000002b8                getStringLen
+                0x000001d0       0x22 WifiDriver.o
+                0x000001d0                uart_init
  .text.uart_send
-                0x000002ca       0x3e WifiDriver.o
-                0x000002ca                uart_send
+                0x000001f2       0x46 WifiDriver.o
+                0x000001f2                uart_send
  .text.uart_receiveChar
-                0x00000308        0xe WifiDriver.o
-                0x00000308                uart_receiveChar
- .text.getReceiveBuffer
-                0x00000316       0x18 WifiDriver.o
-                0x00000316                getReceiveBuffer
+                0x00000238        0xe WifiDriver.o
+                0x00000238                uart_receiveChar
+ .text.enableReceiveINT
+                0x00000246       0x12 WifiDriver.o
+                0x00000246                enableReceiveINT
+ .text.disableReceiveINT
+                0x00000258       0x10 WifiDriver.o
+                0x00000258                disableReceiveINT
  .text.getTransmissionLength
-                0x0000032e       0xb0 WifiDriver.o
-                0x0000032e                getTransmissionLength
+                0x00000268       0xb0 WifiDriver.o
+                0x00000268                getTransmissionLength
  .text.sendCommand
-                0x000003de       0xf6 WifiDriver.o
-                0x000003de                sendCommand
+                0x00000318      0x100 WifiDriver.o
+                0x00000318                sendCommand
  .text.__vector_28
-                0x000004d4      0x144 WifiDriver.o
-                0x000004d4                __vector_28
+                0x00000418      0x144 WifiDriver.o
+                0x00000418                __vector_28
  .text.avr-libc
-                0x00000618      0x24e c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x00000618                malloc
-                0x00000748                free
+                0x0000055c       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
+                0x0000055c                strcat
  .text.avr-libc
-                0x00000866       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
-                0x00000866                strcat
+                0x00000572        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
+                0x00000572                strcpy
  .text.avr-libc
-                0x0000087c       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
-                0x0000087c                printf
+                0x00000580       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
+                0x00000580                printf
  .text.avr-libc
-                0x000008a4        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
-                0x000008a4                putchar
+                0x000005a8        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+                0x000005a8                putchar
  .text.avr-libc
-                0x000008b2       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
-                0x000008b2                puts
+                0x000005b6       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+                0x000005b6                puts
  .text.avr-libc
-                0x0000090c      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
-                0x0000090c                vfprintf
+                0x00000610      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
+                0x00000610                vfprintf
  .text.avr-libc
-                0x00000cb0       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
-                0x00000cb0                strnlen_P
+                0x000009b4       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
+                0x000009b4                strnlen_P
  .text.avr-libc
-                0x00000cc6       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
-                0x00000cc6                strnlen
+                0x000009ca       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
+                0x000009ca                strnlen
  .text.avr-libc
-                0x00000cdc       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
-                0x00000cdc                fputc
+                0x000009e0       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
+                0x000009e0                fputc
  .text.avr-libc
-                0x00000d40       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
-                0x00000d40                __ultoa_invert
+                0x00000a44       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
+                0x00000a44                __ultoa_invert
  .text.libgcc.prologue
-                0x00000dfc       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
-                0x00000dfc                __prologue_saves__
+                0x00000b00       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
+                0x00000b00                __prologue_saves__
  .text.libgcc.prologue
-                0x00000e34       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
-                0x00000e34                __epilogue_restores__
-                0x00000e6a                . = ALIGN (0x2)
+                0x00000b38       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
+                0x00000b38                __epilogue_restores__
+                0x00000b6e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000e6a        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
-                0x00000e6a                _exit
-                0x00000e6a                exit
+ .fini9         0x00000b6e        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+                0x00000b6e                _exit
+                0x00000b6e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -507,11 +503,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000e6a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000b6e        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000e6e                _etext = .
+                0x00000b72                _etext = .
 
-.data           0x00800100      0x164 load address 0x00000e6e
+.data           0x00800100      0x15c load address 0x00000b72
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324p.o
@@ -523,82 +519,74 @@ END GROUP
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_copy_data.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
- .data          0x00800100        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x00800100                __malloc_heap_end
-                0x00800102                __malloc_heap_start
-                0x00800104                __malloc_margin
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
- .data          0x00800106        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
+ .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  *(.data*)
  .data.uart_stream
-                0x00800106        0xe PrintDriver.o
-                0x00800106                uart_stream
+                0x00800100        0xe PrintDriver.o
+                0x00800100                uart_stream
  *(.rodata)
- .rodata        0x00800114        0x4 WifiDriver.o
+ .rodata        0x0080010e        0x4 WifiDriver.o
  *(.rodata*)
  .rodata.str1.1
-                0x00800118        0xf RAMDriver.o
-                                 0x10 (size before relaxing)
- .rodata.str1.1
-                0x00800127       0xa0 Wifi.o
+                0x00800112       0xa0 Wifi.o
                                  0xa3 (size before relaxing)
  .rodata.str1.1
-                0x008001c7       0x12 WifiModule.o
+                0x008001b2        0x7 WifiModule.o
  .rodata.str1.1
-                0x008001d9       0x8a WifiDriver.o
-                                 0x8d (size before relaxing)
+                0x008001b9       0xa2 WifiDriver.o
+                                 0xa5 (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x00800264                . = ALIGN (0x2)
- *fill*         0x00800263        0x1 
-                0x00800264                _edata = .
-                0x00800264                PROVIDE (__data_end, .)
+                0x0080025c                . = ALIGN (0x2)
+ *fill*         0x0080025b        0x1 
+                0x0080025c                _edata = .
+                0x0080025c                PROVIDE (__data_end, .)
 
-.bss            0x00800264       0x2c
-                0x00800264                PROVIDE (__bss_start, .)
+.bss            0x0080025c       0x8c
+                0x0080025c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.testPrint
-                0x00800264        0x2 WifiDriver.o
-                0x00800264                testPrint
+                0x0080025c        0x2 WifiDriver.o
+                0x0080025c                testPrint
  .bss.transLength
-                0x00800266        0x2 WifiDriver.o
-                0x00800266                transLength
+                0x0080025e        0x2 WifiDriver.o
+                0x0080025e                transLength
  .bss.receiveFlag
-                0x00800268        0x1 WifiDriver.o
-                0x00800268                receiveFlag
+                0x00800260        0x1 WifiDriver.o
+                0x00800260                receiveFlag
  .bss.bufferStart
-                0x00800269        0x2 WifiDriver.o
-                0x00800269                bufferStart
- .bss.i         0x0080026b        0x2 WifiDriver.o
-                0x0080026b                i
+                0x00800261        0x2 WifiDriver.o
+                0x00800261                bufferStart
+ .bss.i         0x00800263        0x2 WifiDriver.o
+                0x00800263                i
  *(COMMON)
- COMMON         0x0080026d       0x19 WifiDriver.o
-                0x0080026d                receiveBuffer
- COMMON         0x00800286        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
-                0x00800286                __brkval
-                0x00800288                __flp
- COMMON         0x0080028a        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
-                0x0080028a                __iob
-                0x00800290                PROVIDE (__bss_end, .)
-                0x00000e6e                __data_load_start = LOADADDR (.data)
-                0x00000fd2                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800265       0x7d WifiDriver.o
+                0x00800265                receiveBuffer
+                0x0080027e                fullCommand
+ COMMON         0x008002e2        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
+                0x008002e2                __iob
+                0x008002e8                PROVIDE (__bss_end, .)
+                0x00000b72                __data_load_start = LOADADDR (.data)
+                0x00000cce                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800290        0x0
-                0x00800290                PROVIDE (__noinit_start, .)
+.noinit         0x008002e8        0x0
+                0x008002e8                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800290                PROVIDE (__noinit_end, .)
-                0x00800290                _end = .
-                0x00800290                PROVIDE (__heap_start, .)
+                0x008002e8                PROVIDE (__noinit_end, .)
+                0x008002e8                _end = .
+                0x008002e8                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -645,7 +633,6 @@ END GROUP
  .comment       0x00000000       0x31 WifiModule.o
  .comment       0x00000000       0x31 PrintDriver.o
  .comment       0x00000000       0x31 WifiDriver.o
- .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(malloc.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)

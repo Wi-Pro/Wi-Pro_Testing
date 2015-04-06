@@ -30,19 +30,25 @@ struct network currentNetwork;
 void ethernetInit()
 {
 	NetworkSetup(mac_addr, local_ip_addr, sub_mask, gtw_addr);
-	Server_Connect(TCP_MODE, server_ip_addr, server_port, source_port);
+	while(!Server_Connect(TCP_MODE, server_ip_addr, server_port, source_port));
 	//8KB Send and Receive Buffers 
 	MemoryInit(); 
 }
 
 unsigned char* getRequestEthernet(char* filepath)
 { 
+	//char request[110]; 
+	//char host[40]; 
+	//strncpy(request, "GET ", 4); 
+	//strncpy(host, " HTTP/1.1 \nHost: www.wi-pro.us \n\n", 40); 
 	//char* request = "GET "; 
+	//char* host = " HTTP/1.1 \nHost: www.wi-pro.us \n\n";
 	//strcat(request, filepath);
-	//strcat(request, " HTTP/1.1 \nHost: www.wi-pro.us \n\n"); 
-	printf("Sent: %s", filepath);
-	EnableEthernetInterrupt(); 
+	//strcat(request, host); 
+	printf("Sent: %s\n", filepath);
+	//EnableEthernetInterrupt(); 
 	SendData(filepath, strlen(filepath)); 
+	return 1; 
 }
 
 void postRequestEthernet(char* filepath, char* data)
