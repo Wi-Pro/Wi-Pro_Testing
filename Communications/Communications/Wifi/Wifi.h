@@ -42,6 +42,7 @@ void setHumanMode();
 char* networkScan(); 
 int networkConnect(char* SSID, char* password); 
 int serverConnect(char* serverDNS, unsigned char* port);
+void networkQueryString();
 
 
 #endif /* WIFI_H_ */

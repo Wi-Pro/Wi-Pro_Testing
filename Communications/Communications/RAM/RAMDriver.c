@@ -140,7 +140,7 @@ char* RAMRead(uint32_t startAddress, uint16_t length)
 		printf("%c", SPI_ReadData());
 	}
 	RAM_PORT |= (1<<RAM_CS); 
-	printf("\n\nPosition: %d", i); 
+	printf("\nSize: %d\n", i); 
 	
 	return data; 
 }
@@ -151,4 +151,13 @@ void RAMWriteByte(char data, uint16_t address)
 	SPI_WriteAddress(address);
 	SPI_WriteData(data);
 	RAM_PORT |= (1<<RAM_CS);
+}
+
+char RAMReadByte(uint16_t address)
+{
+	RAM_PORT &= ~(1<<RAM_CS);
+	SPI_ReadAddress(address);
+	char data = SPI_ReadData();
+	RAM_PORT |= (1<<RAM_CS);
+	return data; 
 }

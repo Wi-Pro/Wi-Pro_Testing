@@ -5,6 +5,7 @@
  *  Author: Brandon
  */ 
 
+#define F_CPU 8000000UL 
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -15,6 +16,7 @@
 #include "RAM/RAMDriver.h"
 #include "Wifi/Wifi.h"
 #include "RAM/MemoryMap.h"
+#include "ClientController.h"
 
 int main(void)
 {
@@ -27,10 +29,12 @@ int main(void)
 	//getRequestEthernet("GET http://www.wi-pro.us/uploads/hex/1000000000/flagfile.txt HTTP/1.1 \nHost: www.wi-pro.us \n\n");
 	//getRequestEthernet("http://www.wi-pro.us/uploads/hex/1000000000/flagfile.txt ");  
 	//sendRequestEthernet("", 0);
-	networkScan(); 
+	//networkScan(); 
+	sendAvailableNetworks(); 
 	//ReceiveData(5, 0);
 	printf("Reading from RAM...\n");
 	RAMRead(WIFI_RAW_ADDRESS, 200);
+	RAMRead(WIFI_QSTRING_ADDRESS, 200);
 	printf("Done!\n");
     while(1)
     {

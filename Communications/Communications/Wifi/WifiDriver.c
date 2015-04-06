@@ -19,10 +19,11 @@ unsigned char receiveBuffer[MaxRecSize];
 char fullCommand[100]; 
 unsigned int  i = 0;
 unsigned int bufferStart = 0; 
-uint8_t receiveWifiFlag = 0; 
-unsigned int transLength = 0;
 int testPrint = 0; 
-uint32_t RAMAddress = 0; 
+
+volatile uint8_t receiveWifiFlag = 0; 
+volatile uint16_t transLength = 0;
+volatile uint32_t RAMAddress = 0; 
 
 void setTestPrint()
 {
@@ -124,12 +125,26 @@ char* getReceiveBuffer()
 		//While loop does not work correctly without a delay 
 		//An issue with the compiler or the stack pointer when invoking the interrupt 
 		_delay_us(100);
-		//printf("Receive Flag: %d\n", receiveFlag);
+		//printf("Receive Flag: %d\n", receiveWifiFlag);
 	}
 	//_delay_ms(500);
 	//begin receiving
 	//printf("Received Data: %s\n", receiveBuffer);
-	return receiveBuffer; 
+	return ""; 
+}
+
+int receiveStatus()
+{
+	while(receiveWifiFlag == 0)
+	{
+		//While loop does not work correctly without a delay
+		//An issue with the compiler or the stack pointer when invoking the interrupt
+		_delay_us(100);
+		//printf("Receive Flag: %d\n", receiveWifiFlag);
+		//printf("Loooop\n");
+	}
+	
+	return 1; 
 }
 
 unsigned int getTransmissionLength()
@@ -261,6 +276,7 @@ ISR(USART1_RX_vect)
 			//printf("Not found.\n");
 			//reti();
 		}
+		//i++; 
 	}
 	
 	else
@@ -270,30 +286,33 @@ ISR(USART1_RX_vect)
 		if(i < endHeader)
 		{
 			receiveBuffer[i] = uart_receiveChar();
+			//i++; 
 			//RAMWriteByte(uart_receiveChar(), i);
 		}
 		else if(i == endHeader)
 		{
 			transLength = getTransmissionLength();
+			//i++; 
 			//if(testPrint)
-			//printf("Transmission Length: %d\n", transLength);
+			printf("Transmission Length: %d\n", transLength);
 		}
 		else
 		{
-			if(i < transLength + 8)
+			if(i < transLength - 100)
 			{
 				//receiveBuffer[i] = uart_receiveChar();
 				while (!(UCSR1A & (1<<RXC1)));
-				RAMWriteByte(UDR1, RAMAddress + i);
+				RAMWriteByte(UDR1, RAMAddress + i - endHeader -1);
 				//printf("Writing...\n");
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+				//i++;
 			}
 
 			else
 			{
 				//printf("End of String!\n");
 				//receiveBuffer[i] = 0;
-				RAMWriteByte(0x00, RAMAddress + i);
+				RAMWriteByte(0x00, RAMAddress + i - endHeader -1);
 				UCSR1B &= ~(1<<RXCIE1);
 				//cli();
 				i = 0;
@@ -304,8 +323,8 @@ ISR(USART1_RX_vect)
 				printf("Done Receiving!\n");
 			}
 		}
-		i++;
 		//printf("%d\n", i);
 	}
+	i++; 
 	sei(); 
 }

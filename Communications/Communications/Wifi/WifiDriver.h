@@ -52,5 +52,6 @@ int waitForReceive();
 int errorCheck();
 unsigned int getTransmissionLength();
 void updateRAMAddress(uint32_t address);
+int receiveStatus();
 
 #endif /* WIFIDRIVER_H_ */

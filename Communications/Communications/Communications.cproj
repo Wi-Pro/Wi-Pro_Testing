@@ -95,6 +95,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ClientController.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ClientController.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Communications.c">
       <SubType>compile</SubType>
     </Compile>

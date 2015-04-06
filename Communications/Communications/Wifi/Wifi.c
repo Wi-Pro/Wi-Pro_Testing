@@ -7,6 +7,8 @@
  *  with the WiFi module 
  */ 
 
+#define F_CPU 8000000UL
+
 #include <avr/io.h>
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +52,8 @@ char* networkScan()
 	updateRAMAddress(WIFI_RAW_ADDRESS);
 	enableReceiveINT();
 	sendCommand(NOPREFIX, SCAN, NOVAL);
-	getReceiveBuffer(); 
+	receiveStatus(); 
+	//_delay_ms(6000);
 	//for(int i = 0; i < 100; i++)
 	//{
 		//printf("%c", networks[i]);
@@ -81,5 +84,60 @@ int serverConnect(char* serverDNS, unsigned char* port)
 		return 0; 
 	else
 		return 1; 
+}
+
+void networkQueryString()
+{
+	printf("Network Query String!\n");
+	char data; 
+	uint16_t i = 0;
+	uint16_t j = 0;  
+	uint8_t lineNum = 0; 
+	do 
+	{
+		data = RAMReadByte(WIFI_RAW_ADDRESS + i);
+		//throw out a specified number of lines before recording 
+		if(lineNum <= 2)
+		{
+			if(data == '\n')
+				lineNum++;
+			i++;  
+		}
+		//printf("RAW: %c Add: 0x%04x\n", data, WIFI_RAW_ADDRESS + i);
+		else
+		{
+			switch(data)
+			{
+				case ' ':
+				//printf("Found a space!\n");
+				RAMWriteByte('%', WIFI_QSTRING_ADDRESS + j);
+				RAMWriteByte('2', WIFI_QSTRING_ADDRESS + j+1);
+				RAMWriteByte('0', WIFI_QSTRING_ADDRESS + j+2);
+				i++;
+				j+=3;
+				break;
+				case '#':
+				//printf("Found a #!\n");
+				//Skip this character
+				i++;
+				break;
+				case '\n':
+				//printf("Found a new line!\n");
+				i++;
+				break;
+				case '\r':
+				//printf("Found a carriage return!\n");
+				i++;
+				break;
+				default:
+				RAMWriteByte(data, WIFI_QSTRING_ADDRESS + j);
+				//printf("Query: %c Add: 0x%04x\n", RAMReadByte(WIFI_QSTRING_ADDRESS + j), WIFI_QSTRING_ADDRESS +j);
+				i++;
+				j++;
+				break;
+			}	
+		}
+
+	} while (data != 0x00);
 }
 

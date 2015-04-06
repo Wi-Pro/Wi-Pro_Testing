@@ -40,6 +40,7 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../ClientController.c \
 ../Communications.c \
 ../Ethernet/Ethernet.c \
 ../Ethernet/EthernetDriver.c \
@@ -56,6 +57,7 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+ClientController.o \
 Communications.o \
 Ethernet/Ethernet.o \
 Ethernet/EthernetDriver.o \
@@ -65,6 +67,7 @@ Wifi/Wifi.o \
 Wifi/WifiDriver.o
 
 OBJS_AS_ARGS +=  \
+ClientController.o \
 Communications.o \
 Ethernet/Ethernet.o \
 Ethernet/EthernetDriver.o \
@@ -74,6 +77,7 @@ Wifi/Wifi.o \
 Wifi/WifiDriver.o
 
 C_DEPS +=  \
+ClientController.d \
 Communications.d \
 Ethernet/Ethernet.d \
 Ethernet/EthernetDriver.d \
@@ -83,6 +87,7 @@ Wifi/Wifi.d \
 Wifi/WifiDriver.d
 
 C_DEPS_AS_ARGS +=  \
+ClientController.d \
 Communications.d \
 Ethernet/Ethernet.d \
 Ethernet/EthernetDriver.d \
@@ -102,6 +107,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
