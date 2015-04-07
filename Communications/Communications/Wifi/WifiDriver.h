@@ -12,7 +12,7 @@
 #define BAUD_RATE 250000
 #define F_CPU 8000000UL
 
-#define MaxRecSize 25
+#define MaxRecSize 600
 #define MaxSendSize 50
 
 //Wi-Fi Commands

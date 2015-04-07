@@ -17,10 +17,10 @@
 
 unsigned char receiveBuffer[MaxRecSize];
 char fullCommand[100]; 
-unsigned int  i = 0;
-unsigned int bufferStart = 0; 
-int testPrint = 0; 
+volatile unsigned int bufferStart = 0; 
+volatile int testPrint = 0; 
 
+volatile uint16_t i = 0;
 volatile uint8_t receiveWifiFlag = 0; 
 volatile uint16_t transLength = 0;
 volatile uint32_t RAMAddress = 0; 
@@ -263,6 +263,7 @@ ISR(USART1_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();
+	PORTD &= ~(1<<CTS);
 	if(!bufferStart && testPrint)
 	{
 		receiveBuffer[i] = uart_receiveChar();
@@ -271,12 +272,6 @@ ISR(USART1_RX_vect)
 			//printf("Found Beginning!\n");
 			bufferStart = 1;
 		}
-		else
-		{
-			//printf("Not found.\n");
-			//reti();
-		}
-		//i++; 
 	}
 	
 	else
@@ -294,15 +289,18 @@ ISR(USART1_RX_vect)
 			transLength = getTransmissionLength();
 			//i++; 
 			//if(testPrint)
-			printf("Transmission Length: %d\n", transLength);
+			//printf("Transmission Length: %d\n", transLength);
 		}
 		else
 		{
-			if(i < transLength - 100)
+			//uint16_t temp = transLength; 
+			if(i < transLength + endHeader)
 			{
-				//receiveBuffer[i] = uart_receiveChar();
-				while (!(UCSR1A & (1<<RXC1)));
-				RAMWriteByte(UDR1, RAMAddress + i - endHeader -1);
+				//printf("Translength: %d", transLength);
+				//_delay_ms(5);
+				receiveBuffer[i] = uart_receiveChar();
+				//while (!(UCSR1A & (1<<RXC1)));
+				//RAMWriteByte('0', RAMAddress + i - endHeader -1);
 				//printf("Writing...\n");
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
 				//i++;
@@ -311,9 +309,9 @@ ISR(USART1_RX_vect)
 			else
 			{
 				//printf("End of String!\n");
-				//receiveBuffer[i] = 0;
-				RAMWriteByte(0x00, RAMAddress + i - endHeader -1);
-				UCSR1B &= ~(1<<RXCIE1);
+				receiveBuffer[i] = 0;
+				//RAMWriteByte(0x00, RAMAddress + i - endHeader -1);
+				//UCSR1B &= ~(1<<RXCIE1);
 				//cli();
 				i = 0;
 				bufferStart = 0;
@@ -326,5 +324,6 @@ ISR(USART1_RX_vect)
 		//printf("%d\n", i);
 	}
 	i++; 
+	PORTD |= (1<<CTS);
 	sei(); 
 }

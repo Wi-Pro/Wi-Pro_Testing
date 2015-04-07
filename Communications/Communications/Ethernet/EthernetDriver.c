@@ -159,34 +159,34 @@ int Server_Connect(uint8_t socketMode, uint8_t *server_ip_addr, uint8_t *server_
 		SPI_EthernetWrite(S0_CR, CLOSE);
 		//SPI_Write(S0_MR, TCP_MODE);
 		SPI_EthernetWrite(S0_MR, socketMode);
-		printf("Setting Source Port on Socket 0 %d%d\n",source_port[0],source_port[1]);
+		//printf("Setting Source Port on Socket 0 %d%d\n",source_port[0],source_port[1]);
 		SPI_EthernetWrite(S0_SPORT + 0, source_port[0]);
 		SPI_EthernetWrite(S0_SPORT + 1, source_port[1]);
-		printf("Reading Source Port on Socket 0 %d%d\n\n",SPI_EthernetRead(S0_SPORT),SPI_EthernetRead(S0_SPORT + 1));
+		//printf("Reading Source Port on Socket 0 %d%d\n\n",SPI_EthernetRead(S0_SPORT),SPI_EthernetRead(S0_SPORT + 1));
 		
-		printf("Setting Socket 0 to Open\n\n");
+		//printf("Setting Socket 0 to Open\n\n");
 		SPI_EthernetWrite(S0_CR, OPEN);
-		printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
+		//printf("SPI SR Status: %d\n", SPI_EthernetRead(S0_SR));
 		
 	} while (SPI_EthernetRead(S0_SR) != SOCK_INIT);
 	
 	//Write Server IP to Socket 0 IP Register
-	printf("Setting Server IP Address %d.%d.%d.%d\n",server_ip_addr[0],server_ip_addr[1],\
+	//printf("Setting Server IP Address %d.%d.%d.%d\n",server_ip_addr[0],server_ip_addr[1],\
 	server_ip_addr[2],server_ip_addr[3]); 
 	SPI_EthernetWrite(S0_DIPR + 0,server_ip_addr[0]);
 	SPI_EthernetWrite(S0_DIPR + 1, server_ip_addr[1]);
 	SPI_EthernetWrite(S0_DIPR + 2,server_ip_addr[2]);
 	SPI_EthernetWrite(S0_DIPR + 3, server_ip_addr[3]);
-	printf("Reading S0_DIPR: %d.%d.%d.%d\n\n",SPI_EthernetRead(S0_DIPR + 0),SPI_EthernetRead(S0_DIPR + 1),\
+	//printf("Reading S0_DIPR: %d.%d.%d.%d\n\n",SPI_EthernetRead(S0_DIPR + 0),SPI_EthernetRead(S0_DIPR + 1),\
 	SPI_EthernetRead(S0_DIPR + 2),SPI_EthernetRead(S0_DIPR + 3));
-	printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
+	//printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
 	
 	//Write Server Port to Socket 0 IP Register 
-	printf("Setting Server Port\n");
+	//printf("Setting Server Port\n");
 	SPI_EthernetWrite(S0_DPORT + 0, server_port[0]); 
 	SPI_EthernetWrite(S0_DPORT + 1, server_port[1]);
-	printf("Reading S0_DPORT: %d%d\n\n",SPI_EthernetRead(S0_DPORT + 0),SPI_EthernetRead(S0_DPORT + 1)); 
-	printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
+	//printf("Reading S0_DPORT: %d%d\n\n",SPI_EthernetRead(S0_DPORT + 0),SPI_EthernetRead(S0_DPORT + 1)); 
+	//printf("SPI SR Status: 0x%02x\n", SPI_EthernetRead(S0_SR));
 	
 	//Try to connect 
 	SPI_EthernetWrite(S0_CR, CONNECT);
@@ -217,14 +217,14 @@ int Server_Connect(uint8_t socketMode, uint8_t *server_ip_addr, uint8_t *server_
 	uint8_t sr_status = SPI_EthernetRead(S0_SR);
 	if(sr_status == SOCK_ESTABLISHED)
 	{
-		printf("SPI SR Status: 0x%02x\n", sr_status);
+		//printf("SPI SR Status: 0x%02x\n", sr_status);
 		printf("Connection Succeeded!\n\n");
 		return 1; 
 	}
 	//Connection Failed 
 	else
 	{
-		printf("SPI SR Status: 0x%02x\n", sr_status);
+		//printf("SPI SR Status: 0x%02x\n", sr_status);
 		printf("Could not connect. Exiting...\n\n");
 		return 0; 
 	}
@@ -254,13 +254,13 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 	uint16_t ptr,offaddr,realaddr,txsize,timeout;
 	
 	//#if _DEBUG_MODE
-	printf("Send Size: %d\n",bufferLength);
+	//printf("Send Size: %d\n",bufferLength);
 	//#endif
 	// Make sure the TX Free Size Register is available
 	txsize = SPI_EthernetRead(S0_TX_FSR);
 	txsize = (((txsize & 0x00FF) << 8 ) + SPI_EthernetRead(S0_TX_FSR + 1));
 	//#if _DEBUG_MODE
-	printf("TX Free Size: %d\n",txsize);
+	//printf("TX Free Size: %d\n",txsize);
 	//#endif
 	timeout = 0;
 	//Writing our buffer to the transmit buffer
@@ -272,7 +272,7 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 		// Timeout for approx 1000 ms
 		if (timeout++ > 1000) {
 			//#if _DEBUG_MODE
-			printf("TX Free Size Error!\n");
+			//printf("TX Free Size Error!\n");
 			//#endif
 			// Disconnect the connection
 			SocketCommand(DISCON);
@@ -286,11 +286,11 @@ int SendData(const uint8_t *buffer,uint16_t bufferLength)
 	offaddr = (((ptr & 0x00FF) << 8 ) + SPI_EthernetRead(S0_TX_WR + 1));
 	unsigned int startaddr = (((SPI_EthernetRead(S0_TX_RR) << 8) + SPI_EthernetRead(S0_TX_RR + 1)));
 	//#if _DEBUG_MODE
-	printf("TX Buffer: %x\n",offaddr);
+	//printf("TX Buffer: %x\n",offaddr);
 	unsigned int realWR = S0_TX_BASE + (offaddr & S0_TX_MASK);
 	unsigned int realRR = S0_TX_BASE + (startaddr & S0_TX_MASK);
-	printf("Real WR: %d\n", realWR);
-	printf("Real RR: %d\n", realRR); 
+	//printf("Real WR: %d\n", realWR);
+	//printf("Real RR: %d\n", realRR); 
 	//#endif 
 	
 	while(bufferLength) {

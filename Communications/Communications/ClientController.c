@@ -24,5 +24,4 @@ void sendAvailableNetworks()
 	//_delay_ms(10000);
 	//Convert List of Networks to Query String
 	networkQueryString(); 
-	
 }

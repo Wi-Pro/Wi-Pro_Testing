@@ -24,8 +24,13 @@
 
 void wifiInit()
 {
-	//DDRD |= (1<<RTS); 
+	DDRD |= (1<<RTS) | (1<<CTS);
 	//DDRD &= ~(1<<CTS);
+	//Requesting not to send data
+	PORTD |= (1<<RTS);
+	PORTD |= (1<<CTS);
+	//PUll the CTS line up 
+	//PORTD |= (1<<CTS);
 } 
 
 void setMachineMode()
@@ -50,8 +55,10 @@ void setHumanMode()
 char* networkScan()
 {
 	updateRAMAddress(WIFI_RAW_ADDRESS);
-	enableReceiveINT();
+	enableReceiveINT(); 
 	sendCommand(NOPREFIX, SCAN, NOVAL);
+	//_delay_ms(3000);
+	PORTD &= ~(1<<RTS);
 	receiveStatus(); 
 	//_delay_ms(6000);
 	//for(int i = 0; i < 100; i++)
