@@ -12,16 +12,36 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdio.h>
+#include <string.h>
+#include "ClientController.h"
 #include "Ethernet/Ethernet.h"
 #include "Print/PrintDriver.h"
 #include "RAM/RAMDriver.h"
 #include "Wifi/Wifi.h"
 #include "RAM/MemoryMap.h"
 
+char buffer[700];
+
 void sendAvailableNetworks()
 {
-	networkScan(); 
-	//_delay_ms(10000);
+	networkScan();
+	uint16_t tranLength = getTransmissionLength(); 
+	printf("Tran Length: %d", tranLength);
+	RAMPrint(WIFI_RAW_ADDRESS, tranLength); 
+	//_delay_ms(1000);
+	//Build file path 
+	char filepath[100]; 
+	strcpy(filepath, GET); 
+	strcat(filepath, SSID_UPDATE);
+	strcat(filepath, WIPRO_ID); 
+	strcat(filepath, SSID_ID); 
+	
 	//Convert List of Networks to Query String
-	networkQueryString(); 
+	uint16_t qLength = networkQueryString(filepath); 
+	printf("Query Length: %d\n", qLength);
+	RAMPrint(WIFI_QSTRING_ADDRESS, qLength);
+	RAMRead(WIFI_QSTRING_ADDRESS, qLength, buffer);
+	SendData(buffer, qLength, 0);
+	printf("Sent!");
+	
 }

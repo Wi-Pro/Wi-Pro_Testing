@@ -15,15 +15,17 @@
 #include "WifiDriver.h"
 #include "../RAM/RAMDriver.h"
 
-unsigned char receiveBuffer[MaxRecSize];
+volatile unsigned char receiveBuffer[MaxRecSize];
 char fullCommand[100]; 
 volatile unsigned int bufferStart = 0; 
 volatile int testPrint = 0; 
+//volatile uint16_t transLength = 0;
 
 volatile uint16_t i = 0;
 volatile uint8_t receiveWifiFlag = 0; 
 volatile uint16_t transLength = 0;
 volatile uint32_t RAMAddress = 0; 
+volatile char buff; 
 
 void setTestPrint()
 {
@@ -37,7 +39,6 @@ void uart_init()
 	UCSR1B = (1<<RXEN1)|(1<<TXEN1); // enable Rx & Tx
 	UCSR1C =  (1<<UCSZ11)|(1<<UCSZ10); // config USART; 8N1
 	UCSR1B |= (1<<RXCIE1);	//Enable Receive Interrupt 
-	
 	DDRA |= (1<<PORTA1);
 }
 
@@ -147,20 +148,19 @@ int receiveStatus()
 	return 1; 
 }
 
-unsigned int getTransmissionLength()
+unsigned int buildTransmissionLength()
 {
 	if(testPrint)
 	{
 		//printf("Header: ");
 		for(int i = 0; i < endHeader; i++)
 		{
-			//printf("Value: %c, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
+			printf("Value: %c, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
 		}
 		printf("\n");
 	}
-	
-	unsigned int transLength = 0;
+	transLength = 0; 
 	transLength += (receiveBuffer[ones] & 0x0F);
 	transLength += (receiveBuffer[tens] & 0x0F) * 10; 
 	transLength += (receiveBuffer[hundreds] & 0x0F) * 100; 
@@ -171,6 +171,11 @@ unsigned int getTransmissionLength()
 	//else
 		////8 is the length of the header 
 		//return MaxRecSize - 8; 
+}
+
+uint16_t getTransmissionLength()
+{
+	return transLength; 
 }
 
 char* getMessageHeader()
@@ -263,7 +268,7 @@ ISR(USART1_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();
-	PORTD &= ~(1<<CTS);
+	//PORTD &= ~(1<<CTS);
 	if(!bufferStart && testPrint)
 	{
 		receiveBuffer[i] = uart_receiveChar();
@@ -286,7 +291,7 @@ ISR(USART1_RX_vect)
 		}
 		else if(i == endHeader)
 		{
-			transLength = getTransmissionLength();
+			transLength = buildTransmissionLength();
 			//i++; 
 			//if(testPrint)
 			//printf("Transmission Length: %d\n", transLength);
@@ -298,9 +303,9 @@ ISR(USART1_RX_vect)
 			{
 				//printf("Translength: %d", transLength);
 				//_delay_ms(5);
-				receiveBuffer[i] = uart_receiveChar();
+				buff = uart_receiveChar();
 				//while (!(UCSR1A & (1<<RXC1)));
-				//RAMWriteByte('0', RAMAddress + i - endHeader -1);
+				RAMWriteByte(buff, RAMAddress + i - endHeader -1);
 				//printf("Writing...\n");
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
 				//i++;
@@ -310,20 +315,22 @@ ISR(USART1_RX_vect)
 			{
 				//printf("End of String!\n");
 				receiveBuffer[i] = 0;
-				//RAMWriteByte(0x00, RAMAddress + i - endHeader -1);
+				RAMWriteByte(0x00, RAMAddress + i - endHeader -1);
 				//UCSR1B &= ~(1<<RXCIE1);
 				//cli();
 				i = 0;
 				bufferStart = 0;
 				//done receiving
 				receiveWifiFlag = 1;
-				printf("Transmission Length: %d\n", getTransmissionLength());
+				printf("Transmission Length: %d\n", buildTransmissionLength());
 				printf("Done Receiving!\n");
 			}
 		}
 		//printf("%d\n", i);
 	}
 	i++; 
-	PORTD |= (1<<CTS);
+	//Stop the transmission 
+	//if(i%20 == 0)
+		//PORTD |= (1<<CTS);
 	sei(); 
 }

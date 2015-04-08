@@ -93,58 +93,68 @@ int serverConnect(char* serverDNS, unsigned char* port)
 		return 1; 
 }
 
-void networkQueryString()
+uint16_t networkQueryString(char* filepath)
 {
 	printf("Network Query String!\n");
 	char data; 
 	uint16_t i = 0;
 	uint16_t j = 0;  
 	uint8_t lineNum = 0; 
+	RAMWrite(filepath, WIFI_QSTRING_ADDRESS + j, strlen(filepath));
+	j+=strlen(filepath); 
+	
 	do 
 	{
 		data = RAMReadByte(WIFI_RAW_ADDRESS + i);
 		//throw out a specified number of lines before recording 
+		//printf("RAW: %c, 0x%02x Add: 0x%04x\n", data, data, WIFI_RAW_ADDRESS + i);
 		if(lineNum <= 2)
 		{
 			if(data == '\n')
 				lineNum++;
 			i++;  
 		}
-		//printf("RAW: %c Add: 0x%04x\n", data, WIFI_RAW_ADDRESS + i);
+		
 		else
 		{
 			switch(data)
 			{
 				case ' ':
-				//printf("Found a space!\n");
-				RAMWriteByte('%', WIFI_QSTRING_ADDRESS + j);
-				RAMWriteByte('2', WIFI_QSTRING_ADDRESS + j+1);
-				RAMWriteByte('0', WIFI_QSTRING_ADDRESS + j+2);
-				i++;
-				j+=3;
-				break;
+					//printf("Found a space!\n");
+					RAMWriteByte('%', WIFI_QSTRING_ADDRESS + j);
+					RAMWriteByte('2', WIFI_QSTRING_ADDRESS + j+1);
+					RAMWriteByte('0', WIFI_QSTRING_ADDRESS + j+2);
+					i++;
+					j+=3;
+					break;
 				case '#':
-				//printf("Found a #!\n");
-				//Skip this character
-				i++;
+					//printf("Found a #!\n");
+					//Skip this character
+					i++;
 				break;
 				case '\n':
-				//printf("Found a new line!\n");
-				i++;
+					//printf("Found a new line!\n");
+					i++;
 				break;
 				case '\r':
-				//printf("Found a carriage return!\n");
-				i++;
+					//printf("Found a carriage return!\n");
+					i++;
 				break;
 				default:
-				RAMWriteByte(data, WIFI_QSTRING_ADDRESS + j);
-				//printf("Query: %c Add: 0x%04x\n", RAMReadByte(WIFI_QSTRING_ADDRESS + j), WIFI_QSTRING_ADDRESS +j);
-				i++;
-				j++;
+					RAMWriteByte(data, WIFI_QSTRING_ADDRESS + j);
+					//printf("Query: %c, 0x%02x Add: 0x%04x\n", RAMReadByte(WIFI_QSTRING_ADDRESS + j), RAMReadByte(WIFI_QSTRING_ADDRESS + j), WIFI_QSTRING_ADDRESS +j);
+					i++;
+					j++;
 				break;
 			}	
 		}
 
-	} while (data != 0x00);
+	} while (data != 0x00 && i < WIFI_QSTRING_SIZE - 2);
+	
+	//Overwrite the terminating byte with two new lines for the http request 
+	RAMWrite(" HTTP/1.1\nhost: www.wi-pro.us\n\n", WIFI_QSTRING_ADDRESS + j-1, 31);
+	j+=31; 
+	
+	return j; 
 }
 

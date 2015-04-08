@@ -9,10 +9,10 @@
 #ifndef WIFIDRIVER_H_
 #define WIFIDRIVER_H_
 
-#define BAUD_RATE 250000
+#define BAUD_RATE 125000
 #define F_CPU 8000000UL
 
-#define MaxRecSize 600
+#define MaxRecSize 25
 #define MaxSendSize 50
 
 //Wi-Fi Commands
@@ -50,7 +50,8 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value);
 uint16_t getStringLen(unsigned char* p);
 int waitForReceive();
 int errorCheck();
-unsigned int getTransmissionLength();
+unsigned int buildTransmissionLength();
+uint16_t getTransmissionLength();
 void updateRAMAddress(uint32_t address);
 int receiveStatus();
 
