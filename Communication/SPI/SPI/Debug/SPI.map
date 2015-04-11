@@ -383,12 +383,12 @@ END GROUP
  .debug_frame   0x00000000       0x24 SPI.o
  .debug_frame   0x00000024       0x44 SPIDriver.o
 
-.debug_str      0x00000000      0x16e
+.debug_str      0x00000000      0x17b
  *(.debug_str)
- .debug_str     0x00000000      0x118 SPI.o
-                                0x14c (size before relaxing)
- .debug_str     0x00000118       0x56 SPIDriver.o
-                                0x197 (size before relaxing)
+ .debug_str     0x00000000      0x125 SPI.o
+                                0x159 (size before relaxing)
+ .debug_str     0x00000125       0x56 SPIDriver.o
+                                0x1a4 (size before relaxing)
 
 .debug_loc      0x00000000       0x26
  *(.debug_loc)

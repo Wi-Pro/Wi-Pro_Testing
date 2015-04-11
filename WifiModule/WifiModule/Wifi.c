@@ -20,21 +20,23 @@
 
 void wifiInit()
 {
-	DDRD |= (1<<RTS); 
-	DDRD &= ~(1<<CTS);
+	//DDRD |= (1<<RTS); 
+	//DDRD &= ~(1<<CTS);
 } 
 
 void setMachineMode()
 {
-	//disableReceiveINT(); 
+	disableReceiveINT(); 
 	sendCommand(SET, SYSTEM_PRINT_LEVEL, ZERO); 
 	sendCommand(SET, SYSTEM_CMD_HEADER, ONE);
 	sendCommand(SET, SYSTEM_CMD_PROMPT, ZERO);
 	sendCommand(SET, SYSTEM_CMD_ECHO, OFF);
+	enableReceiveINT(); 
 }
 
 void setHumanMode()
 {
+	disableReceiveINT(); 
 	sendCommand(SET, SYSTEM_CMD_ECHO, ON);
 	sendCommand(SET, SYSTEM_CMD_PROMPT, ONE);
 	sendCommand(SET, SYSTEM_CMD_HEADER, ZERO);
@@ -46,28 +48,25 @@ char* networkScan()
 	//enableReceiveINT();
 	sendCommand(NOPREFIX, SCAN, NOVAL);
 	char* networks = getReceiveBuffer(); 
-	for(int i = 0; i < 100; i++)
-	{
-		printf("%c", networks[i]);
-	}
-	printf("\n");
+	//for(int i = 0; i < 100; i++)
+	//{
+		//printf("%c", networks[i]);
+	//}
+	//printf("\n");
 	return networks; 
 }
 
 int networkConnect(char* SSID, char* password)
 {
+	//printf("Begin Network Connection.\n");
 	sendCommand(SET, WLAN_SSID, SSID);
-	setTestPrint();
+	//printf("Set Password\n");
 	sendCommand(SET, WLAN_PWD, password);
-	//enableReceiveINT();
 	sendCommand(NOPREFIX, HTTP_GET, "www.wi-pro.us"); 
-	//char* message = getReceiveBuffer();
-	//int isError = errorCheck(); 
-	//if(isError)
-		//printf("Error!\n");
-	//else
-		//printf("Success!\n");
-	return 1; 
+	if(errorCheck())
+		return 0; 
+	else
+		return 1; 
 }
 
 int serverConnect(char* serverDNS, unsigned char* port)
@@ -75,5 +74,9 @@ int serverConnect(char* serverDNS, unsigned char* port)
 	strcat(serverDNS, " ");
 	strcat(serverDNS, port); 
 	sendCommand(NOPREFIX, TCP_CLIENT, serverDNS);
-	return 1; 
+	if(errorCheck())
+		return 0; 
+	else
+		return 1; 
 }
+

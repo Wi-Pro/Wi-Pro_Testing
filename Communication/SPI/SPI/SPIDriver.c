@@ -4,6 +4,7 @@
  * Created: 3/1/2015 3:44:11 PM
  *  Author: Brandon
  */ 
+#define F_CPU 8000000UL
 
 #include <stdio.h>
 #include <avr/io.h>

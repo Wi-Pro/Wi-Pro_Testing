@@ -13,9 +13,12 @@
 #include <util/delay.h>
 #include "PrintDriver.h"
 #include "WifiDriver.h"
+#include "RAMDriver.h"
 
-char receiveBuffer[MaxRecSize];
+unsigned char receiveBuffer[MaxRecSize];
+char fullCommand[100]; 
 unsigned int  i = 0;
+unsigned int bufferStart = 0; 
 uint8_t receiveFlag = 0; 
 unsigned int transLength = 0;
 int testPrint = 0; 
@@ -47,11 +50,11 @@ uint16_t getStringLen(unsigned char* p)
 	return count; 
 }
 
-int uart_send(unsigned char* data, unsigned int length)
+int uart_send(char* data, unsigned int length)
 {
 	//printf("Uart Send Function: %s\nAddress: %p", data, data);
 	uint8_t i = 0;
-	UCSR1B |= (1<<RXCIE1);
+	//UCSR1B |= (1<<RXCIE1);
 	receiveFlag = 0;
 	memset(receiveBuffer, 0x00, MaxRecSize);
 	PORTD |= (1<<RTS);
@@ -65,6 +68,7 @@ int uart_send(unsigned char* data, unsigned int length)
 		i++;
 	}
 	//while(!(PIND & (1<<CTS))){_delay_us(100);}
+	printf("Sent!\n");
 	return 0;
 }
 
@@ -93,7 +97,6 @@ unsigned char uart_receiveChar()
 {
 	//printf("Receiving...\n");
 	while (!(UCSR1A & (1<<RXC1)));
-	PORTA ^= 0xFF; 
 	return UDR1; 
 }
 
@@ -110,7 +113,7 @@ int disableReceiveINT()
 	return 1; 
 }
 
-unsigned char* getReceiveBuffer()
+char* getReceiveBuffer()
 {
 	//printf("Waiting for Receive to Complete...\n");
 	//Wait for receiving to be completed
@@ -124,7 +127,7 @@ unsigned char* getReceiveBuffer()
 	}
 	//_delay_ms(500);
 	//begin receiving
-	printf("Received Data: %s\n", receiveBuffer);
+	//printf("Received Data: %s\n", receiveBuffer);
 	return receiveBuffer; 
 }
 
@@ -133,9 +136,9 @@ unsigned int getTransmissionLength()
 	if(testPrint)
 	{
 		//printf("Header: ");
-		for(int i = -5; i < endHeader; i++)
+		for(int i = 0; i < endHeader; i++)
 		{
-			printf("Value: %c, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
+			printf("Value: 0x%02x, Address: %p\n", receiveBuffer[i], receiveBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
 		}
 		printf("\n");
@@ -147,11 +150,11 @@ unsigned int getTransmissionLength()
 	transLength += (receiveBuffer[hundreds] & 0x0F) * 100; 
 	transLength += (receiveBuffer[thousands] & 0x0F) * 1000; 
 	transLength += (receiveBuffer[tenThousands] & 0x0F) * 10000; 
-	if(transLength < MaxRecSize)
-		return transLength; 
-	else
-		//8 is the length of the header 
-		return MaxRecSize - 8; 
+	//if(transLength < MaxRecSize)
+	return transLength; 
+	//else
+		////8 is the length of the header 
+		//return MaxRecSize - 8; 
 }
 
 char* getMessageHeader()
@@ -177,7 +180,7 @@ int errorCheck()
 	
 	char* header = getMessageHeader();
 	//0 denotes a successful command 
-	if(header[errorCode] != 0)
+	if(header[errorCode] != '0')
 		return 1; 
 	else 
 		return 0; 
@@ -185,13 +188,16 @@ int errorCheck()
 
 unsigned int sendCommand(int8_t prefix, char* command, char* value)
 {	
-	char* fullCommand = (char *)malloc(MaxSendSize);
+	printf("Begin Send Command\n");
+
+	//char* fullCommand = (char *)malloc(MaxSendSize);
 	switch(prefix)
 	{
 		case NOPREFIX: 
 			break; 
-		case GET: 
-			strcat(fullCommand, "get ");
+		case GET:
+			strcpy(fullCommand, "get "); 
+			//strcat(fullCommand, "get ");
 			break; 
 		case SET: 
 			strcat(fullCommand, "set ");
@@ -212,18 +218,23 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	
 	//printf("fullCommand: %s\n", fullCommand);
 	strcat(fullCommand, ENDCOMMAND);
-	uint16_t length = getStringLen(fullCommand);
+	uint16_t length = strlen(fullCommand);
 	printf("Command: %s Length: %d, Address: %p\n", fullCommand, length, fullCommand);
 	uart_send(fullCommand, length);
-	PORTD |= (1<<RTS);
-	while(!receiveFlag & 1)
-	{
-		//While loop does not work correctly without a delay
-		//An issue with the compiler or the stack pointer when invoking the interrupt
-		_delay_us(10);
+	memset(fullCommand, 0x00, 100);
+	//PORTD |= (1<<RTS);
+	//while(!receiveFlag & 1)
+	//{
+		////While loop does not work correctly without a delay
+		////An issue with the compiler or the stack pointer when invoking the interrupt
+		//_delay_us(10);
 		//printf("Loop\n");
-	}
-	free(fullCommand);
+	//}
+	//free(fullCommand);
+	//printf("Freed!\n");
+	//free(command);
+	printf("Freed!\n");
+	printf("Returning!\n");
 	return 1; 
 }
 
@@ -231,38 +242,64 @@ ISR(USART1_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();
-	//Grab Receive Header
-	if(i < endHeader)
+	if(!bufferStart && testPrint)
+	{
 		receiveBuffer[i] = uart_receiveChar();
-	else if(i == endHeader)
-	{
-		//transLength = getTransmissionLength();
-		//if(testPrint)
-		//printf("Transmission Length: %d\n", transLength);
-	}
-	else
-	{
-		if(i < 8 + 8)
+		if(receiveBuffer[i] == 'R')
 		{
-			receiveBuffer[i] = uart_receiveChar();
-			//printf("Writing...\n");
-			//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+			//printf("Found Beginning!\n");
+			bufferStart = 1;
 		}
-
 		else
 		{
-			//printf("End of String!\n");
-			receiveBuffer[i] = 0;
-			UCSR1B &= ~(1<<RXCIE1);
-			//cli();
-			i = 0;
-			//done receiving
-			receiveFlag = 1;
-			printf("Transmission Length: %d\n", getTransmissionLength());
-			printf("Done Receiving!\n");
+			//printf("Not found.\n");
+			//reti();
 		}
-	}	
-	i++; 
-	//printf("%d\n", i);
+	}
+	
+	else
+	{
+		//printf("Beginning of buffer.\n");
+		//Grab Receive Header
+		if(i < endHeader)
+		{
+			receiveBuffer[i] = uart_receiveChar();
+			//RAMWriteByte(uart_receiveChar(), i);
+		}
+		else if(i == endHeader)
+		{
+			transLength = getTransmissionLength();
+			//if(testPrint)
+			//printf("Transmission Length: %d\n", transLength);
+		}
+		else
+		{
+			if(i < transLength + 8)
+			{
+				//receiveBuffer[i] = uart_receiveChar();
+				while (!(UCSR1A & (1<<RXC1)));
+				RAMWriteByte(UDR1, i);
+				//printf("Writing...\n");
+				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
+			}
+
+			else
+			{
+				//printf("End of String!\n");
+				//receiveBuffer[i] = 0;
+				RAMWriteByte(0x00, i);
+				UCSR1B &= ~(1<<RXCIE1);
+				//cli();
+				i = 0;
+				bufferStart = 0;
+				//done receiving
+				receiveFlag = 1;
+				printf("Transmission Length: %d\n", getTransmissionLength());
+				printf("Done Receiving!\n");
+			}
+		}
+		i++;
+		//printf("%d\n", i);
+	}
 	sei(); 
 }
