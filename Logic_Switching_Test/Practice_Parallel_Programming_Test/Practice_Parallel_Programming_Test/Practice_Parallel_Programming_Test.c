@@ -54,7 +54,7 @@ void ProgramFlash(void);
 void USB_UART_Initialization(void);
 void USB_UART_Out(unsigned char TransmissionValue);
 unsigned char USB_UART_In(void);
-void HexToASCII(unsigned char DataValue);
+void HexToASCII(unsigned char DataValue); 
 
 unsigned char DataValueIn = 0;
 
@@ -77,11 +77,13 @@ int main(void)
 	DATADirection = 0xFF;
 	
 	EnterParallelProgrammingMode();
-	ReadSignatureBytes();
-	ExitParallelProgrammingMode();
+	//ReadSignatureBytes();
+	//ExitParallelProgrammingMode();
+	
 	
 	while (1)
 	{
+		//SPI_Write(0x55);
 	}
 }
 
