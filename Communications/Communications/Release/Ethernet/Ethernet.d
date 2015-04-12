@@ -18,7 +18,8 @@ Ethernet/Ethernet.d Ethernet/Ethernet.o: ../Ethernet/Ethernet.c \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1056\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1056\avr8-gnu-toolchain\avr\include\math.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1056\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
- ../Ethernet/Ethernet.h ../Ethernet/EthernetDriver.h
+ ../Ethernet/Ethernet.h ../Ethernet/EthernetDriver.h \
+ ../Ethernet/../ClientController.h
 
 c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1056\avr8-gnu-toolchain\avr\include\stdio.h:
 
@@ -61,3 +62,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\avr8\ gcc\native\3.4.1056\avr8-g
 ../Ethernet/Ethernet.h:
 
 ../Ethernet/EthernetDriver.h:
+
+../Ethernet/../ClientController.h:

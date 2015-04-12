@@ -19,9 +19,50 @@ void SPI_Init()
 	SPI_DDR = (1<<MOSI)|(1<<SCK)|(1<<SS);
 	// CS pin is not active
 	RAM_DDR |= (1<<RAM_CS);
-	// Enable SPI, Master Mode 0, set the clock rate fck/4
-	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+	// Enable SPI, Master Mode 0, set the clock rate fck/16
+	SPCR0 = (1<<SPE0)|(1<<MSTR0)|(1<<SPR00);
 	RAMWriteByte(0x32, 0000);
+}
+
+int setSPIClockDiv(uint8_t division)
+{
+	//Still needs to be worked on!!
+	switch(division)
+	{
+		case 2:
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00); 
+			SPSR0 |= (1<<SPI2X0);
+		break; 
+		case 4:
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break; 
+		case 8: 
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break; 
+		case 16: 
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break;
+		case 32: 
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break;
+		case 64:
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break; 
+		case 128:
+			SPCR0 &= ~(1<<SPR10)|(1<<SPR00);
+			SPSR0 |= (1<<SPI2X0);
+		break; 
+		default:
+			return 0; 
+		break;
+	}
+	
+	return 1; 
 }
 
 int getRAMStatus()
@@ -123,9 +164,24 @@ uint16_t RAMWrite(char* data, uint16_t startAddress, uint16_t length)
 	return startAddress; 
 }
 
-char* RAMRead(uint32_t startAddress, uint16_t length)
+char* RAMRead(uint32_t startAddress, uint16_t length, char* buffer)
 {
-	char* data = ""; 
+	setRAMStatus(SEQ);
+	RAM_PORT &= ~(1<<RAM_CS);
+	SPI_ReadAddress(startAddress);
+	int i; 
+	for(i=0; i<length; i++)
+	{
+		*(buffer + i) = SPI_ReadData();
+	}
+	RAM_PORT |= (1<<RAM_CS); 
+	//printf("%d\n", buffer);
+	return buffer; 
+}
+
+void RAMPrint(uint32_t startAddress, uint16_t length)
+{
+	//char* data = ""; 
 	setRAMStatus(SEQ);
 	RAM_PORT &= ~(1<<RAM_CS);
 	SPI_ReadAddress(startAddress);
@@ -133,16 +189,10 @@ char* RAMRead(uint32_t startAddress, uint16_t length)
 	int i; 
 	for(i=0; i<length; i++)
 	{
-		//printf("Writing %d\n", i);
-		//*(data + i) = SPI_ReadData();
-		//if(i > 10)
-		//printf("Data: 0x%02x Address: %d\n", SPI_ReadData(), i); 
 		printf("%c", SPI_ReadData());
 	}
 	RAM_PORT |= (1<<RAM_CS); 
 	printf("\nSize: %d\n", i); 
-	
-	return data; 
 }
 
 void RAMWriteByte(char data, uint16_t address)

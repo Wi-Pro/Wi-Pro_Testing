@@ -213,9 +213,7 @@ void updateRAMAddress(uint32_t address)
 }
 
 unsigned int sendCommand(int8_t prefix, char* command, char* value)
-{	
-	printf("Begin Send Command\n");
-
+{
 	//char* fullCommand = (char *)malloc(MaxSendSize);
 	switch(prefix)
 	{
@@ -235,7 +233,7 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	//printf("Command: %s Length: %d, Address: %p\n", fullCommand, strlen(fullCommand), fullCommand);
 	//printf("Command: %s Length: %d, Address: %p\n", command, strlen(command),  command);
 	strcat(fullCommand, command);
-	
+	//printf("Full Command: %s", fullCommand);	
 	if(value != NOVAL)
 	{
 		strcat(fullCommand, " ");
@@ -268,8 +266,8 @@ ISR(USART1_RX_vect)
 {
 	//printf("Receive Interrupt!\n");
 	cli();
-	//PORTD &= ~(1<<CTS);
-	if(!bufferStart && testPrint)
+	PORTD &= ~(1<<CTS);
+	if(!bufferStart)
 	{
 		receiveBuffer[i] = uart_receiveChar();
 		if(receiveBuffer[i] == 'R')
@@ -292,23 +290,19 @@ ISR(USART1_RX_vect)
 		else if(i == endHeader)
 		{
 			transLength = buildTransmissionLength();
-			//i++; 
-			//if(testPrint)
 			//printf("Transmission Length: %d\n", transLength);
 		}
 		else
 		{
-			//uint16_t temp = transLength; 
 			if(i < transLength + endHeader)
 			{
 				//printf("Translength: %d", transLength);
 				//_delay_ms(5);
 				buff = uart_receiveChar();
 				//while (!(UCSR1A & (1<<RXC1)));
-				RAMWriteByte(buff, RAMAddress + i - endHeader -1);
+				//RAMWriteByte(buff, RAMAddress + i - endHeader -1);
 				//printf("Writing...\n");
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
-				//i++;
 			}
 
 			else
@@ -329,8 +323,6 @@ ISR(USART1_RX_vect)
 		//printf("%d\n", i);
 	}
 	i++; 
-	//Stop the transmission 
-	//if(i%20 == 0)
-		//PORTD |= (1<<CTS);
+	PORTD |= (1<<CTS); 
 	sei(); 
 }

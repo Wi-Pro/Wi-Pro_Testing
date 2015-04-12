@@ -104,8 +104,8 @@ int Server_Connect(uint8_t socketMode, uint8_t *server_ip_addr, uint8_t *server_
 void NetworkSetup(uint8_t *mac_addr, uint8_t *local_ip_addr, uint8_t *sub_mask, uint8_t *gtw_addr);
 void UARTStream_Init();
 void Memory_Init(); 
-int SendData(const uint8_t *buffer,uint16_t bufferLength); 
-int ReceiveData(uint16_t dataLength, uint16_t address);
+int SendData(const uint8_t *buffer,uint16_t bufferLength, int externRAM);
+int ReceiveData(uint16_t RAMAddress, char* buffer, uint16_t dataLength, int header, int externRAM);
 uint16_t ReceiveSize(void);
 int getReceiveFlag();
 void SocketCommand(uint8_t command); 
