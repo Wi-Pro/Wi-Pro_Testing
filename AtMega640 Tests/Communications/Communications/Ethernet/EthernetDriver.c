@@ -115,7 +115,7 @@ void NetworkSetup(uint8_t *mac_addr, uint8_t *local_ip_addr, uint8_t *sub_mask, 
 	SPI_EthernetWrite(GAR + 2,gtw_addr[2]);
 	SPI_EthernetWrite(GAR + 3,gtw_addr[3]);
 	_delay_ms(1);
-	//printf("Reading GAR: %d.%d.%d.%d\n\n",SPI_EthernetRead(GAR + 0),SPI_EthernetRead(GAR + 1),\
+	printf("Reading GAR: %d.%d.%d.%d\n\n",SPI_EthernetRead(GAR + 0),SPI_EthernetRead(GAR + 1),\
 	SPI_EthernetRead(GAR + 2),SPI_EthernetRead(GAR + 3));
 	
 	// Setting the Wiznet W5100 Source Address Register
