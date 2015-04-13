@@ -32,7 +32,7 @@ int main(void)
 	
 	ethernetInit();
 	printf("ethernetInit Done");
-	//pollingInit(); 
+	pollingInit(); 
 	
 
 	printf("Done!\n");

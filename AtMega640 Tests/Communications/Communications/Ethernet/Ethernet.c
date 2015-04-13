@@ -35,9 +35,9 @@ char httpBuff[150];
 void ethernetInit()
 {
 	NetworkSetup(mac_addr, local_ip_addr, sub_mask, gtw_addr);
-	//while(!Server_Connect(TCP_MODE, server_ip_addr, server_port, source_port));
+	while(!Server_Connect(TCP_MODE, server_ip_addr, server_port, source_port));
 	//8KB Send and Receive Buffers 
-	//MemoryInit(); 
+	MemoryInit(); 
 }
 
 //Sends a filepath and retrieves the data contained in the file 

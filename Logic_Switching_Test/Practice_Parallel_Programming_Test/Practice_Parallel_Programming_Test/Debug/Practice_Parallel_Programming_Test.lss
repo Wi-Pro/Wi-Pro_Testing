@@ -3,27 +3,29 @@ Practice_Parallel_Programming_Test.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00000264  000002d8  2**0
+  0 .data         00000000  00800100  0000032a  000003be  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000264  00000000  00000000  00000074  2**1
+  1 .text         0000032a  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000002d8  2**0
+  2 .bss          00000001  00800100  00800100  000003be  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000003be  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000080  00000000  00000000  00000308  2**0
+  4 .debug_aranges 00000080  00000000  00000000  000003ee  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000a10  00000000  00000000  00000388  2**0
+  5 .debug_info   00000a19  00000000  00000000  0000046e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000001f8  00000000  00000000  00000d98  2**0
+  6 .debug_abbrev 000001f8  00000000  00000000  00000e87  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000003ef  00000000  00000000  00000f90  2**0
+  7 .debug_line   000003f0  00000000  00000000  0000107f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000000fc  00000000  00000000  00001380  2**2
+  8 .debug_frame  000000fc  00000000  00000000  00001470  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000002e9  00000000  00000000  0000147c  2**0
+  9 .debug_str    000002e9  00000000  00000000  0000156c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000015d  00000000  00000000  00001765  2**0
+ 10 .debug_loc    0000015d  00000000  00000000  00001855  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000070  00000000  00000000  000018c2  2**0
+ 11 .debug_ranges 00000070  00000000  00000000  000019b2  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -79,11 +81,11 @@ Disassembly of section .text:
   90:	1d 92       	st	X+, r1
 
 00000092 <.do_clear_bss_start>:
-  92:	a0 30       	cpi	r26, 0x00	; 0
+  92:	a1 30       	cpi	r26, 0x01	; 1
   94:	b2 07       	cpc	r27, r18
   96:	e1 f7       	brne	.-8      	; 0x90 <.do_clear_bss_loop>
-  98:	0e 94 1b 01 	call	0x236	; 0x236 <main>
-  9c:	0c 94 30 01 	jmp	0x260	; 0x260 <_exit>
+  98:	0e 94 7c 01 	call	0x2f8	; 0x2f8 <main>
+  9c:	0c 94 93 01 	jmp	0x326	; 0x326 <_exit>
 
 000000a0 <__bad_interrupt>:
   a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -357,50 +359,223 @@ void USB_UART_Initialization(void)
  232:	80 83       	st	Z, r24
  234:	08 95       	ret
 
-00000236 <main>:
+00000236 <USB_UART_Out>:
+	//UCSR0B |= 1<<RXCIE0;	//Interrupt enable
+}
+
+void USB_UART_Out(unsigned char TransmissionValue)
+{
+	while(!(UCSR0A & (1<<UDRE0))); //buffer empty and ready to transmit
+ 236:	e0 ec       	ldi	r30, 0xC0	; 192
+ 238:	f0 e0       	ldi	r31, 0x00	; 0
+ 23a:	90 81       	ld	r25, Z
+ 23c:	95 ff       	sbrs	r25, 5
+ 23e:	fd cf       	rjmp	.-6      	; 0x23a <USB_UART_Out+0x4>
+	UDR0 = TransmissionValue; //start transmitting value
+ 240:	80 93 c6 00 	sts	0x00C6, r24
+	while(!(UCSR0A & (1<<TXC0))); //wait for transmit to complete
+ 244:	e0 ec       	ldi	r30, 0xC0	; 192
+ 246:	f0 e0       	ldi	r31, 0x00	; 0
+ 248:	80 81       	ld	r24, Z
+ 24a:	86 ff       	sbrs	r24, 6
+ 24c:	fd cf       	rjmp	.-6      	; 0x248 <USB_UART_Out+0x12>
+	UCSR0A |= 1<<TXC0; //clear transmit complete flag
+ 24e:	e0 ec       	ldi	r30, 0xC0	; 192
+ 250:	f0 e0       	ldi	r31, 0x00	; 0
+ 252:	80 81       	ld	r24, Z
+ 254:	80 64       	ori	r24, 0x40	; 64
+ 256:	80 83       	st	Z, r24
+ 258:	08 95       	ret
+
+0000025a <ReadSignatureBytes>:
+}
+
+void ReadSignatureBytes(void)
+{
+	//A: Load Command "Read Signature Bytes"
+	ControlPort |= 1<<XA1_BS2;
+ 25a:	46 9a       	sbi	0x08, 6	; 8
+	ControlPort &= ~(1<<XA0);
+ 25c:	45 98       	cbi	0x08, 5	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 25e:	44 98       	cbi	0x08, 4	; 8
+	DATAOut = 0x08;
+ 260:	88 e0       	ldi	r24, 0x08	; 8
+ 262:	82 b9       	out	0x02, r24	; 2
+	ControlPort |= 1<<XTAL1;
+ 264:	40 9a       	sbi	0x08, 0	; 8
+	ControlPort &= ~(1<<XTAL1);
+ 266:	40 98       	cbi	0x08, 0	; 8
+	
+	//B: Load Address Low Byte
+	ControlPort &= ~(1<<XA1_BS2);
+ 268:	46 98       	cbi	0x08, 6	; 8
+	ControlPort &= ~(1<<XA0);
+ 26a:	45 98       	cbi	0x08, 5	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 26c:	44 98       	cbi	0x08, 4	; 8
+	DATAOut = 0x00;
+ 26e:	12 b8       	out	0x02, r1	; 2
+	ControlPort |= 1<<XTAL1;
+ 270:	40 9a       	sbi	0x08, 0	; 8
+	ControlPort &= ~(1<<XTAL1);
+ 272:	40 98       	cbi	0x08, 0	; 8
+	
+	//Read data
+	DATADirection = 0;
+ 274:	11 b8       	out	0x01, r1	; 1
+	ControlPort &= ~(1<<OE);
+ 276:	42 98       	cbi	0x08, 2	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 278:	44 98       	cbi	0x08, 4	; 8
+ 27a:	8f ec       	ldi	r24, 0xCF	; 207
+ 27c:	97 e0       	ldi	r25, 0x07	; 7
+ 27e:	01 97       	sbiw	r24, 0x01	; 1
+ 280:	f1 f7       	brne	.-4      	; 0x27e <ReadSignatureBytes+0x24>
+ 282:	00 c0       	rjmp	.+0      	; 0x284 <ReadSignatureBytes+0x2a>
+ 284:	00 00       	nop
+	_delay_us(1000);
+	DataValueIn = DATAIn;
+ 286:	80 b1       	in	r24, 0x00	; 0
+ 288:	80 93 00 01 	sts	0x0100, r24
+	USB_UART_Out(DataValueIn);
+ 28c:	0e 94 1b 01 	call	0x236	; 0x236 <USB_UART_Out>
+	//HexToASCII(DataValueIn);
+	ControlPort |= 1<<OE;
+ 290:	42 9a       	sbi	0x08, 2	; 8
+	DATADirection = 0xFF;
+ 292:	8f ef       	ldi	r24, 0xFF	; 255
+ 294:	81 b9       	out	0x01, r24	; 1
+	
+	//Load Address Low Byte
+	ControlPort &= ~(1<<XA1_BS2);
+ 296:	46 98       	cbi	0x08, 6	; 8
+	ControlPort &= ~(1<<XA0);
+ 298:	45 98       	cbi	0x08, 5	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 29a:	44 98       	cbi	0x08, 4	; 8
+	DATAOut = 0x01;
+ 29c:	81 e0       	ldi	r24, 0x01	; 1
+ 29e:	82 b9       	out	0x02, r24	; 2
+	ControlPort |= 1<<XTAL1;
+ 2a0:	40 9a       	sbi	0x08, 0	; 8
+	ControlPort &= ~(1<<XTAL1);
+ 2a2:	40 98       	cbi	0x08, 0	; 8
+	
+	//Read data
+	DATADirection = 0;
+ 2a4:	11 b8       	out	0x01, r1	; 1
+	ControlPort &= ~(1<<OE);
+ 2a6:	42 98       	cbi	0x08, 2	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 2a8:	44 98       	cbi	0x08, 4	; 8
+ 2aa:	8f ec       	ldi	r24, 0xCF	; 207
+ 2ac:	97 e0       	ldi	r25, 0x07	; 7
+ 2ae:	01 97       	sbiw	r24, 0x01	; 1
+ 2b0:	f1 f7       	brne	.-4      	; 0x2ae <ReadSignatureBytes+0x54>
+ 2b2:	00 c0       	rjmp	.+0      	; 0x2b4 <ReadSignatureBytes+0x5a>
+ 2b4:	00 00       	nop
+	_delay_us(1000);
+	DataValueIn = DATAIn;
+ 2b6:	80 b1       	in	r24, 0x00	; 0
+ 2b8:	80 93 00 01 	sts	0x0100, r24
+	USB_UART_Out(DataValueIn);
+ 2bc:	0e 94 1b 01 	call	0x236	; 0x236 <USB_UART_Out>
+	//HexToASCII(DataValueIn);
+	ControlPort |= 1<<OE;
+ 2c0:	42 9a       	sbi	0x08, 2	; 8
+	DATADirection = 0xFF;
+ 2c2:	8f ef       	ldi	r24, 0xFF	; 255
+ 2c4:	81 b9       	out	0x01, r24	; 1
+	
+	//Load Address Low Byte
+	ControlPort &= ~(1<<XA1_BS2);
+ 2c6:	46 98       	cbi	0x08, 6	; 8
+	ControlPort &= ~(1<<XA0);
+ 2c8:	45 98       	cbi	0x08, 5	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 2ca:	44 98       	cbi	0x08, 4	; 8
+	DATAOut = 0x02;
+ 2cc:	82 e0       	ldi	r24, 0x02	; 2
+ 2ce:	82 b9       	out	0x02, r24	; 2
+	ControlPort |= 1<<XTAL1;
+ 2d0:	40 9a       	sbi	0x08, 0	; 8
+	ControlPort &= ~(1<<XTAL1);
+ 2d2:	40 98       	cbi	0x08, 0	; 8
+	
+	//Read data
+	DATADirection = 0;
+ 2d4:	11 b8       	out	0x01, r1	; 1
+	ControlPort &= ~(1<<OE);
+ 2d6:	42 98       	cbi	0x08, 2	; 8
+	ControlPort &= ~(1<<BS1_PAGEL);
+ 2d8:	44 98       	cbi	0x08, 4	; 8
+ 2da:	8f ec       	ldi	r24, 0xCF	; 207
+ 2dc:	97 e0       	ldi	r25, 0x07	; 7
+ 2de:	01 97       	sbiw	r24, 0x01	; 1
+ 2e0:	f1 f7       	brne	.-4      	; 0x2de <ReadSignatureBytes+0x84>
+ 2e2:	00 c0       	rjmp	.+0      	; 0x2e4 <ReadSignatureBytes+0x8a>
+ 2e4:	00 00       	nop
+	_delay_us(1000);
+	DataValueIn = DATAIn;
+ 2e6:	80 b1       	in	r24, 0x00	; 0
+ 2e8:	80 93 00 01 	sts	0x0100, r24
+	USB_UART_Out(DataValueIn);
+ 2ec:	0e 94 1b 01 	call	0x236	; 0x236 <USB_UART_Out>
+	//HexToASCII(DataValueIn);
+	ControlPort |= 1<<OE;
+ 2f0:	42 9a       	sbi	0x08, 2	; 8
+	DATADirection = 0xFF;
+ 2f2:	8f ef       	ldi	r24, 0xFF	; 255
+ 2f4:	81 b9       	out	0x01, r24	; 1
+ 2f6:	08 95       	ret
+
+000002f8 <main>:
 
 unsigned char DataValueIn = 0;
 
 int main(void)
 {
 	USB_UART_Initialization();
- 236:	0e 94 07 01 	call	0x20e	; 0x20e <USB_UART_Initialization>
+ 2f8:	0e 94 07 01 	call	0x20e	; 0x20e <USB_UART_Initialization>
 	
 	Shift_Reg_Cntrl_DDR |= (1<<SROE | 1<<Switching_Circuitry_SPI_CS | 1<<SReset | 1<<6);
- 23a:	8a b1       	in	r24, 0x0a	; 10
- 23c:	88 67       	ori	r24, 0x78	; 120
- 23e:	8a b9       	out	0x0a, r24	; 10
+ 2fc:	8a b1       	in	r24, 0x0a	; 10
+ 2fe:	88 67       	ori	r24, 0x78	; 120
+ 300:	8a b9       	out	0x0a, r24	; 10
 	
 	DDRD |= 1<<2;
- 240:	52 9a       	sbi	0x0a, 2	; 10
+ 302:	52 9a       	sbi	0x0a, 2	; 10
 	
 	Shift_Reg_Cntrl_PORT |= 1<<SReset;
- 242:	5d 9a       	sbi	0x0b, 5	; 11
+ 304:	5d 9a       	sbi	0x0b, 5	; 11
 	SPI_Init();
- 244:	0e 94 52 00 	call	0xa4	; 0xa4 <SPI_Init>
+ 306:	0e 94 52 00 	call	0xa4	; 0xa4 <SPI_Init>
 	Shift_Reg_Cntrl_PORT &= ~(1<<SROE);
- 248:	5b 98       	cbi	0x0b, 3	; 11
+ 30a:	5b 98       	cbi	0x0b, 3	; 11
 	PORTD |= 1<<6;
- 24a:	5e 9a       	sbi	0x0b, 6	; 11
+ 30c:	5e 9a       	sbi	0x0b, 6	; 11
 	
 	ControlDirection |= ( 1<<XTAL1 | 1<<OE | 1<<WR | 1<<BS1_PAGEL | 1<<XA0 | 1<<XA1_BS2);
- 24c:	87 b1       	in	r24, 0x07	; 7
- 24e:	8d 67       	ori	r24, 0x7D	; 125
- 250:	87 b9       	out	0x07, r24	; 7
+ 30e:	87 b1       	in	r24, 0x07	; 7
+ 310:	8d 67       	ori	r24, 0x7D	; 125
+ 312:	87 b9       	out	0x07, r24	; 7
 	ControlDirection &= ~(1<<RDY_BSY);
- 252:	39 98       	cbi	0x07, 1	; 7
+ 314:	39 98       	cbi	0x07, 1	; 7
 	ControlPort &= ~(1<<XTAL1);
- 254:	40 98       	cbi	0x08, 0	; 8
+ 316:	40 98       	cbi	0x08, 0	; 8
 	DATADirection = 0xFF;
- 256:	8f ef       	ldi	r24, 0xFF	; 255
- 258:	81 b9       	out	0x01, r24	; 1
+ 318:	8f ef       	ldi	r24, 0xFF	; 255
+ 31a:	81 b9       	out	0x01, r24	; 1
 	
 	EnterParallelProgrammingMode();
- 25a:	0e 94 5d 00 	call	0xba	; 0xba <EnterParallelProgrammingMode>
- 25e:	ff cf       	rjmp	.-2      	; 0x25e <main+0x28>
+ 31c:	0e 94 5d 00 	call	0xba	; 0xba <EnterParallelProgrammingMode>
+	ReadSignatureBytes();
+ 320:	0e 94 2d 01 	call	0x25a	; 0x25a <ReadSignatureBytes>
+ 324:	ff cf       	rjmp	.-2      	; 0x324 <main+0x2c>
 
-00000260 <_exit>:
- 260:	f8 94       	cli
+00000326 <_exit>:
+ 326:	f8 94       	cli
 
-00000262 <__stop_program>:
- 262:	ff cf       	rjmp	.-2      	; 0x262 <__stop_program>
+00000328 <__stop_program>:
+ 328:	ff cf       	rjmp	.-2      	; 0x328 <__stop_program>

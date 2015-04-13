@@ -77,7 +77,7 @@ int main(void)
 	DATADirection = 0xFF;
 	
 	EnterParallelProgrammingMode();
-	//ReadSignatureBytes();
+	ReadSignatureBytes();
 	//ExitParallelProgrammingMode();
 	
 	
