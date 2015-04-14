@@ -76,14 +76,45 @@ int main(void)
 	ControlPort &= ~(1<<XTAL1);
 	DATADirection = 0xFF;
 	
-	EnterParallelProgrammingMode();
+	//EnterParallelProgrammingMode();
 	//ReadSignatureBytes();
 	//ExitParallelProgrammingMode();
 	
 	
 	while (1)
 	{
-		//SPI_Write(0x55);
+		_delay_ms(1000);
+		Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
+		SPI_Write(0x00); //Pull Downs
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //GND
+		SPI_Write(0x00);
+		SPI_Write(0x08);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //Pull Ups
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //VCC
+		SPI_Write(0x20);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //VPP
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		SPI_Write(0x04);
+		SPI_Write(0x00);
+		Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 	}
 }
 
@@ -410,7 +441,7 @@ void SPI_Init(void)
 	// CS pin is not active
 	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
 	// Enable SPI, Master Mode 0, set the clock rate fck/4
-	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+	SPCR0 = (1<<SPE0)|(1<<MSTR0)|(1<<SPR10)|(1<<SPR00);
 }
 
 void SPI_Write(unsigned char SPI_Data)

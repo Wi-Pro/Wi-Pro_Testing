@@ -3,27 +3,27 @@ Practice_Parallel_Programming_Test.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00000264  000002d8  2**0
+  0 .data         00000000  00800100  000001b8  0000022c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000264  00000000  00000000  00000074  2**1
+  1 .text         000001b8  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000002d8  2**0
+  2 .comment      00000030  00000000  00000000  0000022c  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 00000080  00000000  00000000  00000308  2**0
+  3 .debug_aranges 00000080  00000000  00000000  0000025c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00000a10  00000000  00000000  00000388  2**0
+  4 .debug_info   00000c56  00000000  00000000  000002dc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 000001f8  00000000  00000000  00000d98  2**0
+  5 .debug_abbrev 000001d8  00000000  00000000  00000f32  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   000003ef  00000000  00000000  00000f90  2**0
+  6 .debug_line   0000047d  00000000  00000000  0000110a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  000000fc  00000000  00000000  00001380  2**2
+  7 .debug_frame  000000fc  00000000  00000000  00001588  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    000002e9  00000000  00000000  0000147c  2**0
+  8 .debug_str    000002f8  00000000  00000000  00001684  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000015d  00000000  00000000  00001765  2**0
+  9 .debug_loc    0000015d  00000000  00000000  0000197c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000070  00000000  00000000  000018c2  2**0
+ 10 .debug_ranges 00000070  00000000  00000000  00001ad9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -82,325 +82,194 @@ Disassembly of section .text:
   92:	a0 30       	cpi	r26, 0x00	; 0
   94:	b2 07       	cpc	r27, r18
   96:	e1 f7       	brne	.-8      	; 0x90 <.do_clear_bss_loop>
-  98:	0e 94 1b 01 	call	0x236	; 0x236 <main>
-  9c:	0c 94 30 01 	jmp	0x260	; 0x260 <_exit>
+  98:	0e 94 71 00 	call	0xe2	; 0xe2 <main>
+  9c:	0c 94 da 00 	jmp	0x1b4	; 0x1b4 <_exit>
 
 000000a0 <__bad_interrupt>:
   a0:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000a4 <SPI_Init>:
-}
-
-void SPI_Init(void)
-{
-	// Set MOSI ,SCK, and SS as output, others as input
-	SPI_DDR = (1<<MOSI)|(1<<SCK)|(1<<SS);
-  a4:	80 eb       	ldi	r24, 0xB0	; 176
-  a6:	84 b9       	out	0x04, r24	; 4
-	// CS pin is not active
-	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
-  a8:	5c 9a       	sbi	0x0b, 4	; 11
-	// Enable SPI, Master Mode 0, set the clock rate fck/4
-	SPCR0 = (1<<SPE0)|(1<<MSTR0);
-  aa:	80 e5       	ldi	r24, 0x50	; 80
-  ac:	8c bd       	out	0x2c, r24	; 44
-  ae:	08 95       	ret
-
-000000b0 <SPI_Write>:
-}
-
-void SPI_Write(unsigned char SPI_Data)
-{
-	// Start Write transmission
-	SPDR0 = SPI_Data;
-  b0:	8e bd       	out	0x2e, r24	; 46
-	// Wait for transmission complete
-	while(!(SPSR0 & (1<<SPIF0)));
-  b2:	0d b4       	in	r0, 0x2d	; 45
-  b4:	07 fe       	sbrs	r0, 7
-  b6:	fd cf       	rjmp	.-6      	; 0xb2 <SPI_Write+0x2>
-}
-  b8:	08 95       	ret
-
-000000ba <EnterParallelProgrammingMode>:
-
-
-
-void EnterParallelProgrammingMode(void)
-{	
-	ControlPort &= ~(1<<XA1_BS2 | 1<<XA0 | 1<<BS1_PAGEL | 1<<WR);
-  ba:	88 b1       	in	r24, 0x08	; 8
-  bc:	87 78       	andi	r24, 0x87	; 135
-  be:	88 b9       	out	0x08, r24	; 8
-	
-	Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
-  c0:	5c 98       	cbi	0x0b, 4	; 11
-	SPI_Write(0x00); //Pull Downs
-  c2:	80 e0       	ldi	r24, 0x00	; 0
-  c4:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  c8:	80 e0       	ldi	r24, 0x00	; 0
-  ca:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  ce:	80 e0       	ldi	r24, 0x00	; 0
-  d0:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  d4:	80 e0       	ldi	r24, 0x00	; 0
-  d6:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  da:	80 e0       	ldi	r24, 0x00	; 0
-  dc:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	
-	SPI_Write(0x00); //GND
-  e0:	80 e0       	ldi	r24, 0x00	; 0
-  e2:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  e6:	80 e0       	ldi	r24, 0x00	; 0
-  e8:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x08);
-  ec:	88 e0       	ldi	r24, 0x08	; 8
-  ee:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  f2:	80 e0       	ldi	r24, 0x00	; 0
-  f4:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
-  f8:	80 e0       	ldi	r24, 0x00	; 0
-  fa:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	
-	SPI_Write(0x00); //Pull Ups
-  fe:	80 e0       	ldi	r24, 0x00	; 0
- 100:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 104:	80 e0       	ldi	r24, 0x00	; 0
- 106:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 10a:	80 e0       	ldi	r24, 0x00	; 0
- 10c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 110:	80 e0       	ldi	r24, 0x00	; 0
- 112:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 116:	80 e0       	ldi	r24, 0x00	; 0
- 118:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	
-	SPI_Write(0x00); //VCC
- 11c:	80 e0       	ldi	r24, 0x00	; 0
- 11e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x20);
- 122:	80 e2       	ldi	r24, 0x20	; 32
- 124:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 128:	80 e0       	ldi	r24, 0x00	; 0
- 12a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 12e:	80 e0       	ldi	r24, 0x00	; 0
- 130:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 134:	80 e0       	ldi	r24, 0x00	; 0
- 136:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	
-	SPI_Write(0x00); //VPP
- 13a:	80 e0       	ldi	r24, 0x00	; 0
- 13c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 140:	80 e0       	ldi	r24, 0x00	; 0
- 142:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 146:	80 e0       	ldi	r24, 0x00	; 0
- 148:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 14c:	80 e0       	ldi	r24, 0x00	; 0
- 14e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	SPI_Write(0x00);
- 152:	80 e0       	ldi	r24, 0x00	; 0
- 154:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
-	Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
- 158:	5c 9a       	sbi	0x0b, 4	; 11
 	
 	//_delay_us(25);
 	//PORTD |= 1<<2;
 	
 	 Switching_Circuitry_CS_PORT &= ~(1<<Switching_Circuitry_SPI_CS);
- 15a:	5c 98       	cbi	0x0b, 4	; 11
 	SPI_Write(0x00); //Pull Downs
- 15c:	80 e0       	ldi	r24, 0x00	; 0
- 15e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  a4:	80 eb       	ldi	r24, 0xB0	; 176
+  a6:	84 b9       	out	0x04, r24	; 4
 	SPI_Write(0x00);
- 162:	80 e0       	ldi	r24, 0x00	; 0
- 164:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  a8:	5c 9a       	sbi	0x0b, 4	; 11
+  aa:	83 e5       	ldi	r24, 0x53	; 83
+  ac:	8c bd       	out	0x2c, r24	; 44
 	SPI_Write(0x00);
- 168:	80 e0       	ldi	r24, 0x00	; 0
- 16a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  ae:	08 95       	ret
+
+000000b0 <SPI_Write>:
+  b0:	8e bd       	out	0x2e, r24	; 46
+  b2:	0d b4       	in	r0, 0x2d	; 45
 	SPI_Write(0x00);
- 16e:	80 e0       	ldi	r24, 0x00	; 0
- 170:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  b4:	07 fe       	sbrs	r0, 7
+  b6:	fd cf       	rjmp	.-6      	; 0xb2 <SPI_Write+0x2>
+  b8:	08 95       	ret
+
+000000ba <USB_UART_Initialization>:
 	SPI_Write(0x00);
- 174:	80 e0       	ldi	r24, 0x00	; 0
- 176:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  ba:	51 9a       	sbi	0x0a, 1	; 10
+  bc:	50 98       	cbi	0x0a, 0	; 10
+  be:	58 9a       	sbi	0x0b, 0	; 11
 	
 	SPI_Write(0x00); //GND
- 17a:	80 e0       	ldi	r24, 0x00	; 0
- 17c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  c0:	86 e0       	ldi	r24, 0x06	; 6
+  c2:	80 93 c2 00 	sts	0x00C2, r24
 	SPI_Write(0x00);
- 180:	80 e0       	ldi	r24, 0x00	; 0
- 182:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  c6:	10 92 c5 00 	sts	0x00C5, r1
+  ca:	89 e1       	ldi	r24, 0x19	; 25
 	SPI_Write(0x08);
- 186:	88 e0       	ldi	r24, 0x08	; 8
- 188:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  cc:	80 93 c4 00 	sts	0x00C4, r24
+  d0:	e1 ec       	ldi	r30, 0xC1	; 193
 	SPI_Write(0x00);
- 18c:	80 e0       	ldi	r24, 0x00	; 0
- 18e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  d2:	f0 e0       	ldi	r31, 0x00	; 0
+  d4:	80 81       	ld	r24, Z
+  d6:	88 60       	ori	r24, 0x08	; 8
 	SPI_Write(0x00);
- 192:	80 e0       	ldi	r24, 0x00	; 0
- 194:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  d8:	80 83       	st	Z, r24
+  da:	80 81       	ld	r24, Z
+  dc:	80 61       	ori	r24, 0x10	; 16
 	
 	SPI_Write(0x00); //Pull Ups
- 198:	80 e0       	ldi	r24, 0x00	; 0
- 19a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  de:	80 83       	st	Z, r24
+  e0:	08 95       	ret
+
+000000e2 <main>:
+  e2:	0e 94 5d 00 	call	0xba	; 0xba <USB_UART_Initialization>
 	SPI_Write(0x00);
- 19e:	80 e0       	ldi	r24, 0x00	; 0
- 1a0:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  e6:	8a b1       	in	r24, 0x0a	; 10
+  e8:	88 67       	ori	r24, 0x78	; 120
 	SPI_Write(0x00);
- 1a4:	80 e0       	ldi	r24, 0x00	; 0
- 1a6:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  ea:	8a b9       	out	0x0a, r24	; 10
+  ec:	52 9a       	sbi	0x0a, 2	; 10
+  ee:	5d 9a       	sbi	0x0b, 5	; 11
 	SPI_Write(0x00);
- 1aa:	80 e0       	ldi	r24, 0x00	; 0
- 1ac:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  f0:	0e 94 52 00 	call	0xa4	; 0xa4 <SPI_Init>
+  f4:	5b 98       	cbi	0x0b, 3	; 11
 	SPI_Write(0x00);
- 1b0:	80 e0       	ldi	r24, 0x00	; 0
- 1b2:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  f6:	5e 9a       	sbi	0x0b, 6	; 11
+  f8:	87 b1       	in	r24, 0x07	; 7
+  fa:	8d 67       	ori	r24, 0x7D	; 125
 	
 	SPI_Write(0x00); //VCC
- 1b6:	80 e0       	ldi	r24, 0x00	; 0
- 1b8:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+  fc:	87 b9       	out	0x07, r24	; 7
+  fe:	39 98       	cbi	0x07, 1	; 7
+ 100:	40 98       	cbi	0x08, 0	; 8
 	SPI_Write(0x20);
- 1bc:	80 e2       	ldi	r24, 0x20	; 32
- 1be:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 102:	8f ef       	ldi	r24, 0xFF	; 255
+ 104:	81 b9       	out	0x01, r24	; 1
+ 106:	2f ef       	ldi	r18, 0xFF	; 255
 	SPI_Write(0x00);
- 1c2:	80 e0       	ldi	r24, 0x00	; 0
- 1c4:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 108:	89 e6       	ldi	r24, 0x69	; 105
+ 10a:	98 e1       	ldi	r25, 0x18	; 24
+ 10c:	21 50       	subi	r18, 0x01	; 1
 	SPI_Write(0x00);
- 1c8:	80 e0       	ldi	r24, 0x00	; 0
- 1ca:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 10e:	80 40       	sbci	r24, 0x00	; 0
+ 110:	90 40       	sbci	r25, 0x00	; 0
+ 112:	e1 f7       	brne	.-8      	; 0x10c <main+0x2a>
 	SPI_Write(0x00);
- 1ce:	80 e0       	ldi	r24, 0x00	; 0
- 1d0:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 114:	00 c0       	rjmp	.+0      	; 0x116 <main+0x34>
+ 116:	00 00       	nop
+ 118:	5c 98       	cbi	0x0b, 4	; 11
 	
 	SPI_Write(0x00); //VPP
- 1d4:	80 e0       	ldi	r24, 0x00	; 0
- 1d6:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 11a:	80 e0       	ldi	r24, 0x00	; 0
+ 11c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
 	SPI_Write(0x00);
- 1da:	80 e0       	ldi	r24, 0x00	; 0
- 1dc:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 120:	80 e0       	ldi	r24, 0x00	; 0
+ 122:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
 	SPI_Write(0x00);
- 1e0:	80 e0       	ldi	r24, 0x00	; 0
- 1e2:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 126:	80 e0       	ldi	r24, 0x00	; 0
+ 128:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
 	SPI_Write(0x04);
- 1e6:	84 e0       	ldi	r24, 0x04	; 4
- 1e8:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 12c:	80 e0       	ldi	r24, 0x00	; 0
+ 12e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
 	SPI_Write(0x00);
- 1ec:	80 e0       	ldi	r24, 0x00	; 0
- 1ee:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 132:	80 e0       	ldi	r24, 0x00	; 0
+ 134:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
 	 Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
- 1f2:	5c 9a       	sbi	0x0b, 4	; 11
+ 138:	80 e0       	ldi	r24, 0x00	; 0
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 1f4:	88 e2       	ldi	r24, 0x28	; 40
- 1f6:	8a 95       	dec	r24
- 1f8:	f1 f7       	brne	.-4      	; 0x1f6 <EnterParallelProgrammingMode+0x13c>
+ 13a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 13e:	80 e0       	ldi	r24, 0x00	; 0
 	_delay_us(15);
 	ControlPort |= (1<<WR | 1<<OE);
- 1fa:	88 b1       	in	r24, 0x08	; 8
- 1fc:	8c 60       	ori	r24, 0x0C	; 12
- 1fe:	88 b9       	out	0x08, r24	; 8
- 200:	8b e6       	ldi	r24, 0x6B	; 107
- 202:	92 e0       	ldi	r25, 0x02	; 2
- 204:	01 97       	sbiw	r24, 0x01	; 1
- 206:	f1 f7       	brne	.-4      	; 0x204 <EnterParallelProgrammingMode+0x14a>
- 208:	00 c0       	rjmp	.+0      	; 0x20a <EnterParallelProgrammingMode+0x150>
- 20a:	00 00       	nop
- 20c:	08 95       	ret
+ 140:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 144:	88 e0       	ldi	r24, 0x08	; 8
+ 146:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 14a:	80 e0       	ldi	r24, 0x00	; 0
+ 14c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+ 150:	80 e0       	ldi	r24, 0x00	; 0
+ 152:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+		SPI_Write(0x08);
+		SPI_Write(0x00);
+		SPI_Write(0x00);
+		
+		SPI_Write(0x00); //Pull Ups
+ 156:	80 e0       	ldi	r24, 0x00	; 0
+ 158:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 15c:	80 e0       	ldi	r24, 0x00	; 0
+ 15e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 162:	80 e0       	ldi	r24, 0x00	; 0
+ 164:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 168:	80 e0       	ldi	r24, 0x00	; 0
+ 16a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 16e:	80 e0       	ldi	r24, 0x00	; 0
+ 170:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		
+		SPI_Write(0x00); //VCC
+ 174:	80 e0       	ldi	r24, 0x00	; 0
+ 176:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x20);
+ 17a:	80 e2       	ldi	r24, 0x20	; 32
+ 17c:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 180:	80 e0       	ldi	r24, 0x00	; 0
+ 182:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 186:	80 e0       	ldi	r24, 0x00	; 0
+ 188:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 18c:	80 e0       	ldi	r24, 0x00	; 0
+ 18e:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		
+		SPI_Write(0x00); //VPP
+ 192:	80 e0       	ldi	r24, 0x00	; 0
+ 194:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 198:	80 e0       	ldi	r24, 0x00	; 0
+ 19a:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 19e:	80 e0       	ldi	r24, 0x00	; 0
+ 1a0:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x04);
+ 1a4:	84 e0       	ldi	r24, 0x04	; 4
+ 1a6:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		SPI_Write(0x00);
+ 1aa:	80 e0       	ldi	r24, 0x00	; 0
+ 1ac:	0e 94 58 00 	call	0xb0	; 0xb0 <SPI_Write>
+		Switching_Circuitry_CS_PORT |= (1<<Switching_Circuitry_SPI_CS);
+ 1b0:	5c 9a       	sbi	0x0b, 4	; 11
+ 1b2:	a9 cf       	rjmp	.-174    	; 0x106 <main+0x24>
 
-0000020e <USB_UART_Initialization>:
-	while(!(SPSR0 & (1<<SPIF0)));
-}
+000001b4 <_exit>:
+ 1b4:	f8 94       	cli
 
-void USB_UART_Initialization(void)
-{
-	DDRD |= 1<<1;
- 20e:	51 9a       	sbi	0x0a, 1	; 10
-	DDRD &= ~(1<<0);
- 210:	50 98       	cbi	0x0a, 0	; 10
-	PORTD |= 1<<0;
- 212:	58 9a       	sbi	0x0b, 0	; 11
-	UCSR0C = (1<<UCSZ01 | 1<<UCSZ00);	//8 bit data
- 214:	86 e0       	ldi	r24, 0x06	; 6
- 216:	80 93 c2 00 	sts	0x00C2, r24
-	UBRR0H = 0;
- 21a:	10 92 c5 00 	sts	0x00C5, r1
-	UBRR0L = 25;						//2400 Baud
- 21e:	89 e1       	ldi	r24, 0x19	; 25
- 220:	80 93 c4 00 	sts	0x00C4, r24
-	UCSR0B |= 1<<TXEN0; //Enable Transmit
- 224:	e1 ec       	ldi	r30, 0xC1	; 193
- 226:	f0 e0       	ldi	r31, 0x00	; 0
- 228:	80 81       	ld	r24, Z
- 22a:	88 60       	ori	r24, 0x08	; 8
- 22c:	80 83       	st	Z, r24
-	UCSR0B |= 1<<RXEN0; //Enable Receive
- 22e:	80 81       	ld	r24, Z
- 230:	80 61       	ori	r24, 0x10	; 16
- 232:	80 83       	st	Z, r24
- 234:	08 95       	ret
-
-00000236 <main>:
-
-unsigned char DataValueIn = 0;
-
-int main(void)
-{
-	USB_UART_Initialization();
- 236:	0e 94 07 01 	call	0x20e	; 0x20e <USB_UART_Initialization>
-	
-	Shift_Reg_Cntrl_DDR |= (1<<SROE | 1<<Switching_Circuitry_SPI_CS | 1<<SReset | 1<<6);
- 23a:	8a b1       	in	r24, 0x0a	; 10
- 23c:	88 67       	ori	r24, 0x78	; 120
- 23e:	8a b9       	out	0x0a, r24	; 10
-	
-	DDRD |= 1<<2;
- 240:	52 9a       	sbi	0x0a, 2	; 10
-	
-	Shift_Reg_Cntrl_PORT |= 1<<SReset;
- 242:	5d 9a       	sbi	0x0b, 5	; 11
-	SPI_Init();
- 244:	0e 94 52 00 	call	0xa4	; 0xa4 <SPI_Init>
-	Shift_Reg_Cntrl_PORT &= ~(1<<SROE);
- 248:	5b 98       	cbi	0x0b, 3	; 11
-	PORTD |= 1<<6;
- 24a:	5e 9a       	sbi	0x0b, 6	; 11
-	
-	ControlDirection |= ( 1<<XTAL1 | 1<<OE | 1<<WR | 1<<BS1_PAGEL | 1<<XA0 | 1<<XA1_BS2);
- 24c:	87 b1       	in	r24, 0x07	; 7
- 24e:	8d 67       	ori	r24, 0x7D	; 125
- 250:	87 b9       	out	0x07, r24	; 7
-	ControlDirection &= ~(1<<RDY_BSY);
- 252:	39 98       	cbi	0x07, 1	; 7
-	ControlPort &= ~(1<<XTAL1);
- 254:	40 98       	cbi	0x08, 0	; 8
-	DATADirection = 0xFF;
- 256:	8f ef       	ldi	r24, 0xFF	; 255
- 258:	81 b9       	out	0x01, r24	; 1
-	
-	EnterParallelProgrammingMode();
- 25a:	0e 94 5d 00 	call	0xba	; 0xba <EnterParallelProgrammingMode>
- 25e:	ff cf       	rjmp	.-2      	; 0x25e <main+0x28>
-
-00000260 <_exit>:
- 260:	f8 94       	cli
-
-00000262 <__stop_program>:
- 262:	ff cf       	rjmp	.-2      	; 0x262 <__stop_program>
+000001b6 <__stop_program>:
+ 1b6:	ff cf       	rjmp	.-2      	; 0x1b6 <__stop_program>

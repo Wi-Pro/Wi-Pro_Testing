@@ -20,26 +20,20 @@
 
 int main(void)
 {
+	char buffer[100];
+	char* message = "What the fuck is this shit";
 	uart_init();
 	uart0_init(); 
-	SPI_Init(); 
-	//wifiInit(); 
+	SPI_Init();  
 	sei(); 
-	//setMachineMode(); 
+	RAMWrite(message, 0, strlen(message));
+	RAMPrint(0, strlen(message));
+	RAMRead(0, 30, buffer);
+	
 	ethernetInit();
-	//networkConnect("Wi-Pro", "brightshoe902");
-	//getRequestEthernet("GET http://www.wi-pro.us/uploads/hex/1000000000/flagfile.txt HTTP/1.1 \nHost: www.wi-pro.us \n\n");
-	//getRequestEthernet("http://www.wi-pro.us/uploads/hex/1000000000/flagfile.txt ");  
-	//sendRequestEthernet("", 0);
-	//networkScan(); 
-	//sendAvailableNetworks(); 
+	printf("ethernetInit Done");
 	pollingInit(); 
-	//getFlagStatus(); 
-	//getFlagStatus(); 
-	//clearFlags();
-	//getFlagStatus(); 
-	//ReceiveData(5, 0);
-	//printf("Reading from RAM...\n");
+	
 
 	printf("Done!\n");
     while(1)

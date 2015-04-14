@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "ATmega1280Test", "ATmega1280Test\ATmega1280Test.cproj", "{F158A5CF-4B34-4D91-A765-1C4D9B88315A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F158A5CF-4B34-4D91-A765-1C4D9B88315A}.Debug|AVR.ActiveCfg = Debug|AVR
+		{F158A5CF-4B34-4D91-A765-1C4D9B88315A}.Debug|AVR.Build.0 = Debug|AVR
+		{F158A5CF-4B34-4D91-A765-1C4D9B88315A}.Release|AVR.ActiveCfg = Release|AVR
+		{F158A5CF-4B34-4D91-A765-1C4D9B88315A}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
