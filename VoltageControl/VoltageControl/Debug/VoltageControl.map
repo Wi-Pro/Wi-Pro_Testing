@@ -1,11 +1,11 @@
 Archive member included because of file (symbol)
 
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                              c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o (exit)
+c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+                              c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o (exit)
 
 Discarded input sections
 
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
  .text          0x00000000        0x0 VoltageControl.o
  .bss           0x00000000        0x0 VoltageControl.o
  .text          0x00000000        0x0 VoltageControlDriver.o
@@ -18,27 +18,27 @@ Discarded input sections
                 0x00000000        0x8 VoltageControlDriver.o
  .text.disableVLogic
                 0x00000000        0xa VoltageControlDriver.o
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.div
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
- .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+ .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
 
 Memory Configuration
 
 Name             Origin             Length             Attributes
-text             0x00000000         0x00020000         xr
-data             0x00800100         0x0000ff00         rw !x
+text             0x00000000         0x00002000         xr
+data             0x00800060         0x0000ffa0         rw !x
 eeprom           0x00810000         0x00010000         rw !x
 fuse             0x00820000         0x00000400         rw !x
 lock             0x00830000         0x00000400         rw !x
@@ -48,17 +48,16 @@ user_signatures  0x00850000         0x00000400         rw !x
 
 Linker script and memory map
 
-Address of section .data set to 0x800200
-LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
 LOAD VoltageControl.o
 LOAD VoltageControlDriver.o
 START GROUP
-LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a
+LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a
 END GROUP
 START GROUP
-LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a
-LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libm.a
-LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a
+LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a
+LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libm.a
+LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack\libc.a
 END GROUP
 
 .hash
@@ -151,41 +150,41 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x16e
+.text           0x00000000       0xb0
  *(.vectors)
- .vectors       0x00000000       0xe4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+ .vectors       0x00000000       0x2a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
                 0x00000000                __vector_default
                 0x00000000                __vectors
  *(.vectors)
  *(.progmem.gcc*)
-                0x000000e4                . = ALIGN (0x2)
-                0x000000e4                __trampolines_start = .
+                0x0000002a                . = ALIGN (0x2)
+                0x0000002a                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x000000e4        0x0 linker stubs
+ .trampolines   0x0000002a        0x0 linker stubs
  *(.trampolines*)
-                0x000000e4                __trampolines_end = .
+                0x0000002a                __trampolines_end = .
  *(.progmem*)
-                0x000000e4                . = ALIGN (0x2)
+                0x0000002a                . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x000000e4                __ctors_start = .
+                0x0000002a                __ctors_start = .
  *(.ctors)
-                0x000000e4                __ctors_end = .
-                0x000000e4                __dtors_start = .
+                0x0000002a                __ctors_end = .
+                0x0000002a                __dtors_start = .
  *(.dtors)
-                0x000000e4                __dtors_end = .
+                0x0000002a                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x000000e4        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
-                0x000000e4                __init
+ .init0         0x0000002a        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
+                0x0000002a                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x000000e4        0xc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+ .init2         0x0000002a        0x8 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
  *(.init2)
  *(.init3)
  *(.init3)
@@ -200,101 +199,65 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000000f0        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+ .init9         0x00000032        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
  *(.init9)
  *(.text)
- .text          0x000000f4        0x2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
-                0x000000f4                __vector_38
-                0x000000f4                __vector_22
-                0x000000f4                __vector_28
-                0x000000f4                __vector_1
-                0x000000f4                __vector_32
-                0x000000f4                __vector_34
-                0x000000f4                __vector_24
-                0x000000f4                __vector_12
-                0x000000f4                __vector_55
-                0x000000f4                __vector_46
-                0x000000f4                __bad_interrupt
-                0x000000f4                __vector_6
-                0x000000f4                __vector_31
-                0x000000f4                __vector_35
-                0x000000f4                __vector_39
-                0x000000f4                __vector_3
-                0x000000f4                __vector_23
-                0x000000f4                __vector_30
-                0x000000f4                __vector_45
-                0x000000f4                __vector_25
-                0x000000f4                __vector_11
-                0x000000f4                __vector_54
-                0x000000f4                __vector_13
-                0x000000f4                __vector_17
-                0x000000f4                __vector_19
-                0x000000f4                __vector_56
-                0x000000f4                __vector_7
-                0x000000f4                __vector_49
-                0x000000f4                __vector_41
-                0x000000f4                __vector_43
-                0x000000f4                __vector_27
-                0x000000f4                __vector_5
-                0x000000f4                __vector_33
-                0x000000f4                __vector_47
-                0x000000f4                __vector_52
-                0x000000f4                __vector_37
-                0x000000f4                __vector_4
-                0x000000f4                __vector_44
-                0x000000f4                __vector_51
-                0x000000f4                __vector_9
-                0x000000f4                __vector_2
-                0x000000f4                __vector_21
-                0x000000f4                __vector_15
-                0x000000f4                __vector_36
-                0x000000f4                __vector_29
-                0x000000f4                __vector_40
-                0x000000f4                __vector_8
-                0x000000f4                __vector_26
-                0x000000f4                __vector_48
-                0x000000f4                __vector_14
-                0x000000f4                __vector_53
-                0x000000f4                __vector_10
-                0x000000f4                __vector_50
-                0x000000f4                __vector_16
-                0x000000f4                __vector_18
-                0x000000f4                __vector_20
-                0x000000f4                __vector_42
-                0x000000f6                . = ALIGN (0x2)
+ .text          0x00000036        0x2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
+                0x00000036                __vector_1
+                0x00000036                __vector_12
+                0x00000036                __bad_interrupt
+                0x00000036                __vector_6
+                0x00000036                __vector_3
+                0x00000036                __vector_11
+                0x00000036                __vector_13
+                0x00000036                __vector_17
+                0x00000036                __vector_19
+                0x00000036                __vector_7
+                0x00000036                __vector_5
+                0x00000036                __vector_4
+                0x00000036                __vector_9
+                0x00000036                __vector_2
+                0x00000036                __vector_15
+                0x00000036                __vector_8
+                0x00000036                __vector_14
+                0x00000036                __vector_10
+                0x00000036                __vector_16
+                0x00000036                __vector_18
+                0x00000036                __vector_20
+                0x00000038                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x000000f6       0x10 VoltageControl.o
-                0x000000f6                main
+ .text.main     0x00000038       0x10 VoltageControl.o
+                0x00000038                main
  .text.VppClear
-                0x00000106        0x8 VoltageControlDriver.o
-                0x00000106                VppClear
+                0x00000048        0x8 VoltageControlDriver.o
+                0x00000048                VppClear
  .text.voltageControlInit
-                0x0000010e       0x14 VoltageControlDriver.o
-                0x0000010e                voltageControlInit
+                0x00000050       0x14 VoltageControlDriver.o
+                0x00000050                voltageControlInit
  .text.enableVppRegulator
-                0x00000122        0x6 VoltageControlDriver.o
-                0x00000122                enableVppRegulator
+                0x00000064        0x6 VoltageControlDriver.o
+                0x00000064                enableVppRegulator
  .text.VccClear
-                0x00000128        0x8 VoltageControlDriver.o
-                0x00000128                VccClear
+                0x0000006a        0x8 VoltageControlDriver.o
+                0x0000006a                VccClear
  .text.enableVccRegulator
-                0x00000130        0x6 VoltageControlDriver.o
-                0x00000130                enableVccRegulator
- .text.setVcc   0x00000136       0x10 VoltageControlDriver.o
-                0x00000136                setVcc
- .text.setVpp   0x00000146       0x10 VoltageControlDriver.o
-                0x00000146                setVpp
+                0x00000072        0x6 VoltageControlDriver.o
+                0x00000072                enableVccRegulator
+ .text.setVcc   0x00000078       0x10 VoltageControlDriver.o
+                0x00000078                setVcc
+ .text.setVpp   0x00000088       0x10 VoltageControlDriver.o
+                0x00000088                setVpp
  .text.enableVLogic
-                0x00000156        0x4 VoltageControlDriver.o
-                0x00000156                enableVLogic
+                0x00000098        0x4 VoltageControlDriver.o
+                0x00000098                enableVLogic
  .text.setVLogic
-                0x0000015a       0x10 VoltageControlDriver.o
-                0x0000015a                setVLogic
-                0x0000016a                . = ALIGN (0x2)
+                0x0000009c       0x10 VoltageControlDriver.o
+                0x0000009c                setVLogic
+                0x000000ac                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000016a        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x0000016a                _exit
-                0x0000016a                exit
+ .fini9         0x000000ac        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
+                0x000000ac                _exit
+                0x000000ac                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -313,40 +276,40 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000016a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x000000ac        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000016e                _etext = .
+                0x000000b0                _etext = .
 
-.data           0x00800200        0x0 load address 0x0000016e
-                0x00800200                PROVIDE (__data_start, .)
+.data           0x00800060        0x0 load address 0x000000b0
+                0x00800060                PROVIDE (__data_start, .)
  *(.data)
- .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
- .data          0x00800200        0x0 VoltageControl.o
- .data          0x00800200        0x0 VoltageControlDriver.o
- .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .data          0x00800060        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr25/tiny-stack/crttn2313a.o
+ .data          0x00800060        0x0 VoltageControl.o
+ .data          0x00800060        0x0 VoltageControlDriver.o
+ .data          0x00800060        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr25/tiny-stack\libgcc.a(_exit.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800200                . = ALIGN (0x2)
-                0x00800200                _edata = .
-                0x00800200                PROVIDE (__data_end, .)
+                0x00800060                . = ALIGN (0x2)
+                0x00800060                _edata = .
+                0x00800060                PROVIDE (__data_end, .)
 
-.bss            0x00800200        0x0
-                0x00800200                PROVIDE (__bss_start, .)
+.bss            0x00800060        0x0
+                0x00800060                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
-                0x00800200                PROVIDE (__bss_end, .)
-                0x0000016e                __data_load_start = LOADADDR (.data)
-                0x0000016e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800060                PROVIDE (__bss_end, .)
+                0x000000b0                __data_load_start = LOADADDR (.data)
+                0x000000b0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800200        0x0
-                0x00800200                PROVIDE (__noinit_start, .)
+.noinit         0x00800060        0x0
+                0x00800060                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800200                PROVIDE (__noinit_end, .)
-                0x00800200                _end = .
-                0x00800200                PROVIDE (__heap_start, .)
+                0x00800060                PROVIDE (__noinit_end, .)
+                0x00800060                _end = .
+                0x00800060                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -436,12 +399,12 @@ END GROUP
  .debug_frame   0x00000000       0x24 VoltageControl.o
  .debug_frame   0x00000024       0xe4 VoltageControlDriver.o
 
-.debug_str      0x00000000      0x21d
+.debug_str      0x00000000      0x229
  *(.debug_str)
- .debug_str     0x00000000      0x16d VoltageControl.o
-                                0x1a1 (size before relaxing)
- .debug_str     0x0000016d       0xb0 VoltageControlDriver.o
-                                0x23b (size before relaxing)
+ .debug_str     0x00000000      0x179 VoltageControl.o
+                                0x1ad (size before relaxing)
+ .debug_str     0x00000179       0xb0 VoltageControlDriver.o
+                                0x247 (size before relaxing)
 
 .debug_loc      0x00000000       0xae
  *(.debug_loc)
