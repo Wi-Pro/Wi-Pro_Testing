@@ -5,7 +5,7 @@
  *  Author: Adam Vogel
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 4000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -86,7 +86,7 @@ void ProgramFlash(void);
 
 int main(void)
 {
-	_delay_ms(1000);
+	_delay_ms(500);
 	
 	USB_UART0_Initialization();
 	USB_UART2_Initialization();
@@ -94,7 +94,7 @@ int main(void)
 	SPI_Switching_Circuitry_Init();
 	ParallelProgrammingInit();
 	
-	_delay_ms(2000);
+	_delay_ms(500);
 
 	//_delay_ms(1000);
 	//
@@ -111,13 +111,14 @@ int main(void)
 	//_delay_ms(500);
 	//EnterParallelProgrammingMode();
 	//ReadSignatureBytes();
+	//ExitParallelProgrammingMode();
 	
 	while(1)
 	{
 		_delay_ms(500);
 		EnterParallelProgrammingMode();
-		//ReadSignatureBytes();
-		//ExitParallelProgrammingMode();
+		ReadSignatureBytes();
+		ExitParallelProgrammingMode();
 	}
 }
 
@@ -522,47 +523,13 @@ void ExitParallelProgrammingMode(void)
 	_delay_ms(1);
 	SPI_FPGA_Write(0x00);
 	
-	SR_Cntrl_PORT &= ~(1<<SRCS); //Applying VCC and GND
-	SPI_Switching_Circuitry_Write(0x00); //Pull Downs
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //GND
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //Pull Ups
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //VCC
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //VPP
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00);//MAX395s
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SR_Cntrl_PORT |= (1<<SRCS);
-	
 	SR_Cntrl_PORT &= ~(1<<SReset); //Clearing Max395s and Shift Registers
 	_delay_us(20);
 	SR_Cntrl_PORT |= (1<<SReset);
+	
+	SR_Cntrl_PORT &= ~(1<<SRCS); //Clearing Max395s and Shift Registers
+	_delay_us(20);
+	SR_Cntrl_PORT |= (1<<SRCS);
 	
 	SR_Cntrl_PORT |= (1<<SROE);
 	
@@ -595,7 +562,7 @@ void SPI_FPGA_Init(void)
 	FPGA_CS_DDR |= (1<<FPGA_SPI_CS);
 	FPGA_CS_PORT |= (1<<FPGA_SPI_CS);
 	// Enable SPI, Master Mode 0, set the clock rate fck/128
-	SPCR = ((1<<SPE)|(1<<MSTR)|(1<<SPR1));
+	SPCR = ((1<<SPE)|(1<<MSTR)|(1<<SPR0)|(1<<SPR1));
 	SPSR &= ~(1<<SPI2X); 
 	SPI_FPGA_Write(0x00);
 }
@@ -649,7 +616,7 @@ void USB_UART2_Initialization(void)
 	PORTH |= 1<<0;
 	UCSR2C = (1<<UCSZ21 | 1<<UCSZ20);	//8 bit data
 	UBRR2H = 0;
-	UBRR2L = 51;						//9600 Baud at 8MHz
+	UBRR2L = 25;						//9600 Baud at 8MHz
 	UCSR2B |= 1<<TXEN2; //Enable Transmit
 	UCSR2B |= 1<<RXEN2; //Enable Receive
 	//UCSR0B |= 1<<RXCIE0;	//Interrupt enable
