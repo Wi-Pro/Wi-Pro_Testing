@@ -99,15 +99,31 @@ void sendAvailableNetworks()
 	printf("Sent!");
 }
 
+int getHexFile()
+{
+	Flags[WIFI] = 1; 
+	if(Flags[WIFI])
+	{
+		strcpy(filepath, URL);
+		strcat(filepath, HEX_FILE);
+		//setTestPrint(1);
+		getFileWifi(filepath, 1, HEX_FILE_ADDRESS);
+		printf("Hex File Downloaded!\n");
+	}
+}
+
 int getFlagStatus()
 {
 	//Testing 
 	TIMSK1 &= ~(1 << TOIE1);
-	Flags[ETHERNET] = 1; 
-	Flags[WIFI] = 0; 
+	Flags[ETHERNET] = 0; 
+	Flags[WIFI] = 1; 
+	
 	if(Flags[ETHERNET]){
 		getFileEthernet(FLAG_FILE, 1, STATUS_FLAG_ADDRESS, 3); 
-		RAMPrint(STATUS_FLAG_ADDRESS, 15);
+		printf("Ram Print: ");
+		RAMPrint(STATUS_FLAG_ADDRESS-10, 20);
+		printf("\n");
 		//RAMRead(STATUS_FLAG_ADDRESS, 1, Flags[PROGRAM]); 
 		//RAMRead(STATUS_FLAG_ADDRESS + 1, 1, Flags[PROGRAM + 1]); 
 		//RAMRead(STATUS_FLAG_ADDRESS + 2, 1, Flags[PROGRAM + 2]); 
@@ -115,14 +131,16 @@ int getFlagStatus()
 		Flags[PROGRAM] = (RAMReadByte(STATUS_FLAG_ADDRESS) & 0x0F);
 		Flags[NETWORK_SCAN] = (RAMReadByte(STATUS_FLAG_ADDRESS + 1) & 0x0F);
 		Flags[NETWORK_CONNECT] = (RAMReadByte(STATUS_FLAG_ADDRESS + 2) & 0x0F); 
-		
 		//printf("Flag Status: %s\n", flags);  
 	}
 	else if(Flags[WIFI]){
 		strcpy(filepath, URL);
 		strcat(filepath, FLAG_FILE); 
+		//setTestPrint(1);
 		getFileWifi(filepath, 1, STATUS_FLAG_ADDRESS); 
+		printf("Ram Print: ");
 		RAMPrint(STATUS_FLAG_ADDRESS, 3);
+		printf("\n");
 		Flags[PROGRAM] = (RAMReadByte(STATUS_FLAG_ADDRESS) & 0x0F);
 		Flags[NETWORK_SCAN] = (RAMReadByte(STATUS_FLAG_ADDRESS + 1) & 0x0F);
 		Flags[NETWORK_CONNECT] = (RAMReadByte(STATUS_FLAG_ADDRESS + 2) & 0x0F);
@@ -133,16 +151,20 @@ int getFlagStatus()
 	if(Flags[PROGRAM] == 0x01)
 	{
 		//Program Function 
+		printf("Program!\n");
+		setTestPrint(1);
+		getHexFile(); 
+		printf("Done Downloading!\n");
 	}
 	else if(Flags[NETWORK_SCAN] == 0x01)
 	{
 		//printf("Network Scan!!\n"); 
-		sendAvailableNetworks(); 
+		//sendAvailableNetworks(); 
 	}
 	else if(Flags[NETWORK_CONNECT] == 0x01)
 	{
 		//printf("Network Connect!\n");
-		networkConnect("Wi-Pro", "brightshoe902"); 
+		//networkConnect("Wi-Pro", "brightshoe902"); 
 		//getFileEthernet()
 	}
 	//_delay_ms(500);
@@ -150,13 +172,7 @@ int getFlagStatus()
 	TIMSK1 |= (1 << TOIE1);
 }
 
-int getHexFile()
-{
-	if(Flags[WIFI])
-	{
-		
-	}
-}
+
 
 //Timer overflow vector for polling 
 ISR(TIMER1_OVF_vect)

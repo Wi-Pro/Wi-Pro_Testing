@@ -19,7 +19,7 @@ struct connStatus{
 	};
 //commands 
 #define SCAN "scan"
-#define HTTP_GET "http_get"
+#define HTTP_GET "http_get "
 #define TCP_CLIENT "tcp_client"
 #define STREAM_READ "stream_read"
 #define STREAM_CLOSE "stream_close all"
