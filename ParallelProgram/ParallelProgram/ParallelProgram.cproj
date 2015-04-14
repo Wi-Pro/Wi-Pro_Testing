@@ -105,6 +105,9 @@
     <Compile Include="IntelHex.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="IntelHex.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ProgramDriver.c">
       <SubType>compile</SubType>
     </Compile>

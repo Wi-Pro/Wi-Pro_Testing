@@ -21,8 +21,12 @@
 #define TYPE_DATA 0x00 
 #define TYPE_END_OF_FILE 0x01
 
+//Page Sizes 
+#define PAGE_SIZE_BYTES 32 
+
 char* getHexRow();
 void hexInit();
+void writeHexFileTest();
 
 
 
