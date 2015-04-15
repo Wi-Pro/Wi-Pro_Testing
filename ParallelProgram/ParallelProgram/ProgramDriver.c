@@ -8,6 +8,7 @@
 #include <util/delay.h>
 #include "ProgramDriver.h"
 #include "IntelHex.h"
+#include "SwitchingCircuitry.h"
 
 
 //int main(void)
@@ -70,6 +71,92 @@ void ProgInit(void)
 	//Setting up Control lines
 	CONTROL_DDR |= ( (1<<XTAL1) | (1<<OE) | (1<<WR) | (1<<BS1_PAGEL) | (1<<XA0) | (1<<XA1_BS2) | (1<<PAGEL) | (1<<BS2));
 	DATA_DDR = 0xFF;
+}
+
+void LoadCommand(char command)
+{
+	//A: Load Command "Program Flash"
+	CONTROL_PORT |= 1<<XA1_BS2;
+	CONTROL_PORT &= ~(1<<XA0);
+	CONTROL_PORT &= ~(1<<BS1_PAGEL);
+	DATA_PORT = WRITE_FLASH;
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
+}
+
+void WriteWord(uint16_t data)
+{
+	//C: Load Data Low Byte
+	CONTROL_PORT &= ~(1<<XA1_BS2);
+	CONTROL_PORT |= 1<<XA0;
+	DATA_PORT = data & 0x00FF; 
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
+	
+	//D: Load Data High Byte
+	CONTROL_PORT |= 1<<BS1_PAGEL;
+	CONTROL_PORT &= ~(1<<XA1_BS2);
+	CONTROL_PORT |= 1<<XA0;
+	DATA_PORT = (data & 0xFF00) >> 8; 
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
+}
+
+void LoadLowAddress(uint16_t address)
+{
+	//B: Load Address Low Byte
+	CONTROL_PORT &= ~(1<<XA1_BS2);
+	CONTROL_PORT &= ~(1<<XA0);
+	CONTROL_PORT &= ~(1<<BS1_PAGEL);
+	DATA_PORT = (address & 0x00FF);
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
+}
+
+void LoadHighAddress(uint16_t address)
+{
+	//F: Load Address High Byte
+	CONTROL_PORT &= ~(1<<XA1_BS2);
+	CONTROL_PORT &= ~(1<<XA0);
+	CONTROL_PORT |= 1<<BS1_PAGEL;
+	DATA_PORT = (address & 0xFF00) >> 8;
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
+}
+
+void ProgramPage(void)
+{
+	//G: Program Page
+	CONTROL_PORT &= ~(1<<WR);
+	_delay_us(25);
+	CONTROL_PORT |= 1<<WR;
+	_delay_us(25);
+	while(!(CONTROL_PIN & (1<<RDY_BSY)));
+		
+	//I: End Page Programming
+	CONTROL_PORT |= 1<<XA1_BS2;
+	CONTROL_PORT &= ~(1<<XA0);
+	DATA_PORT = 0x00;
+	_delay_us(25);
+	CONTROL_PORT |= 1<<XTAL1;
+	_delay_us(25);
+	CONTROL_PORT &= ~(1<<XTAL1);
+	_delay_us(25);
 }
 
 void EnableProgMode(void)
@@ -339,109 +426,48 @@ void ChipErase(void)
 
 void ProgramFlash(char* hexData)
 {
-	char* hexRow = 
-	//A: Load Command "Program Flash"
-	CONTROL_PORT |= 1<<XA1_BS2;
-	CONTROL_PORT &= ~(1<<XA0);
-	CONTROL_PORT &= ~(1<<BS1_PAGEL);
-	DATA_PORT = WRITE_FLASH;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-
-	//B: Load Address Low Byte
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT &= ~(1<<XA0);
-	CONTROL_PORT &= ~(1<<BS1_PAGEL);
-	DATA_PORT = 0x00;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
+	char* hexRow;
+	uint16_t byteCount;
+	uint16_t address;
+	uint16_t data;
+	uint32_t totalBytes = 0; 
+	//Keep looping until the hexRow is the end of file or we hit the end of a page 
+	while(1)
+	{
+		hexRow = getHexRow();
+		if(hexRow[START_CODE] == TYPE_END_OF_FILE)
+			break; 
+			
+		byteCount = hexRow[BYTE_COUNT];
+		address = hexRow[ADDRESS_H];
+		address <<= 8;
+		address |= hexRow[ADDRESS_L];
+		
+		for(int i=0; i<byteCount; i+=2)
+		{
+			LoadCommand(WRITE_FLASH);
+			LoadLowAddress(address + i);
+			data = hexRow[DATA_BEGIN + i];
+			data <<= 8;
+			data |= hexRow[DATA_BEGIN + i + 1];
+			WriteWord(data);
+			totalBytes+=i; 
+		}
+		
+		//Check to see if we hit the end of a page 
+		if(totalBytes%PAGE_SIZE_BYTES == 0)
+		{
+			LoadHighAddress(address);
+			ProgramPage();
+		}
+	}
 	
-	//C: Load Data Low Byte
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT |= 1<<XA0;
-	DATA_PORT = 0x12;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//D: Load Data High Byte
-	CONTROL_PORT |= 1<<BS1_PAGEL;
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT |= 1<<XA0;
-	DATA_PORT = 0xC0;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//B: Load Address Low Byte
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT &= ~(1<<XA0);
-	CONTROL_PORT &= ~(1<<BS1_PAGEL);
-	DATA_PORT = 0x01;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//C: Load Data Low Byte
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT |= 1<<XA0;
-	DATA_PORT = 0x22;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//D: Load Data High Byte
-	CONTROL_PORT |= 1<<BS1_PAGEL;
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT |= 1<<XA0;
-	DATA_PORT = 0x33;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//F: Load Address High Byte
-	CONTROL_PORT &= ~(1<<XA1_BS2);
-	CONTROL_PORT &= ~(1<<XA0);
-	CONTROL_PORT |= 1<<BS1_PAGEL;
-	DATA_PORT = 0x00;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
-	
-	//G: Program Page
-	CONTROL_PORT &= ~(1<<WR);
-	_delay_us(25);
-	CONTROL_PORT |= 1<<WR;
-	_delay_us(25);
-	while(!(CONTROL_PIN & (1<<RDY_BSY)));
-	
-	//I: End Page Programming
-	CONTROL_PORT |= 1<<XA1_BS2;
-	CONTROL_PORT &= ~(1<<XA0);
-	DATA_PORT = 0x00;
-	_delay_us(25);
-	CONTROL_PORT |= 1<<XTAL1;
-	_delay_us(25);
-	CONTROL_PORT &= ~(1<<XTAL1);
-	_delay_us(25);
+	//After reaching end of file, do a final page write in case we did not fill an entire page
+	if(totalBytes%PAGE_SIZE_BYTES != 0)
+	{
+		LoadHighAddress(address);
+		ProgramPage();
+	} 
 }
 
 void ExitParallelProgrammingMode(void)
@@ -453,41 +479,41 @@ void ExitParallelProgrammingMode(void)
 	SPI_FPGA_Write(0x00);
 	
 	SR_CNTRL_PORT &= ~(1<<SRCS); //Applying VCC and GND
-	SPI_Switching_Circuitry_Write(0x00); //Pull Downs
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //GND
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //Pull Ups
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //VCC
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00); //VPP
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	
-	SPI_Switching_Circuitry_Write(0x00);//MAX395s
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
-	SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00); //Pull Downs
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//
+	//SPI_Switching_Circuitry_Write(0x00); //GND
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//
+	//SPI_Switching_Circuitry_Write(0x00); //Pull Ups
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//
+	//SPI_Switching_Circuitry_Write(0x00); //VCC
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//
+	//SPI_Switching_Circuitry_Write(0x00); //VPP
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//
+	//SPI_Switching_Circuitry_Write(0x00);//MAX395s
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
+	//SPI_Switching_Circuitry_Write(0x00);
 	SR_CNTRL_PORT |= (1<<SRCS);
 	
 	SR_CNTRL_PORT &= ~(1<<SR_RESET); //Clearing Max395s and Shift Registers
