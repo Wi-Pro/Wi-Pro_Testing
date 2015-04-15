@@ -10,16 +10,12 @@
 
 void SPI_FPGA_Init(void)
 {
-	// Set MOSI ,SCK, and SS as output, others as input
-	SPI_DDR |= ((1<<MOSI)|(1<<SCK)|(1<<SS));
-	SPI_DDR &= ~(1<<MISO);
-	// CS pin is not active
 	FPGA_CS_DDR |= (1<<FPGA_SPI_CS);
 	FPGA_CS_PORT |= (1<<FPGA_SPI_CS);
-	// Enable SPI, Master Mode 0, set the clock rate fck/128
-	SPCR = ((1<<SPE)|(1<<MSTR)|(1<<SPR1));
-	SPSR &= ~(1<<SPI2X);
-	SPI_FPGA_Write(0x00);
+	
+	WR_DDR |= 1<<FPGAWR;
+	WR_PORT &= ~(1<<FPGAWR);
+	SPI_FPGA_Write(FPGA_Disable);
 }
 
 void SPI_FPGA_Write(unsigned char SPI_Data)

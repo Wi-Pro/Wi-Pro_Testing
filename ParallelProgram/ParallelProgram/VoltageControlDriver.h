@@ -34,7 +34,7 @@ void enableVppRegulator();
 void disableVppRegulator();
 void VccClear();
 void enableVccRegulator(); 
-void disbaleVccReglator();
+void disableVccRegulator();
 void VLogicClear(); 
 void enableVLogic(); 
 void disableVLogic(); 

@@ -50,7 +50,7 @@ void enableVccRegulator()
 	VEN_PORT |= (1<<VCCENABLE);
 }
 
-void disbaleVccRegulator()
+void disableVccRegulator()
 {
 	VEN_PORT &= ~(1<<VCCENABLE);
 }

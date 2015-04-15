@@ -9,9 +9,6 @@
 #ifndef PROGRAMDRIVER_H_
 #define PROGRAMDRIVER_H_
 
-#define F_CPU 8000000UL
-
-
 #define SPI_PORT PORTB
 #define SPI_DDR  DDRB
 #define MISO 3
@@ -89,9 +86,9 @@ void SPI_Switching_Circuitry_Init();
 void SPI_Switching_Circuitry_Write(unsigned char SPI_Data);
 
 void ProgInit();
-void EnableProgMode();
+void EnableProgMode(unsigned char TargetMicrocontroller);
 void ExitParallelProgrammingMode();
-void ReadSignatureBytes();
+char* ReadSignatureBytes();
 void ChipErase();
 void ReadFlash();
 void ProgramFlash();

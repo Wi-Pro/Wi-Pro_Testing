@@ -15,7 +15,7 @@
 #define CTS PORTD4
 #define RTS PORTD5 
 
-void uart0_init();
+void uart2_init();
 void uart1_init();
 void uart_flush();
 //int uart_send(unsigned char data[]);

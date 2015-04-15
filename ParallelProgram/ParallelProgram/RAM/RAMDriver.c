@@ -19,6 +19,10 @@ void SPI_Init()
 	SPI_DDR = (1<<MOSI)|(1<<SCK)|(1<<SS);
 	// CS pin is not active
 	RAM_DDR |= (1<<RAM_CS);
+	RAM_PORT |= (1<<RAM_CS);
+	
+	RAM_HOLD_DDR |= (1<<RAM_HOLD);
+	RAM_HOLD_PORT |= (1<<RAM_HOLD);
 	// Enable SPI, Master Mode 0, set the clock rate fck/16
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 	RAMWriteByte(0x32, 0000);
@@ -96,17 +100,20 @@ void setRAMStatus(char mode)
 	RAM_PORT |= (1<<RAM_CS);
 }
 
-void SPI_WriteAddress(uint16_t address)
+void SPI_WriteAddress(uint32_t address)
 {
 	SPDR = WRITE;
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
 	// Start Wiznet W5100 Address High Bytes transmission
-	SPDR = (address & 0xFF00) >> 8;
+	SPDR = (address & 0xFF0000) >> 16;
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
 	// Start Wiznet W5100 Address Low Bytes transmission
-	SPDR = address & 0x00FF;
+	SPDR = (address & 0x00FF00) >> 8;
+	// Wait for transmission complete
+	while(!(SPSR & (1<<SPIF)));
+	SPDR = (address & 0x0000FF);
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
 }
@@ -119,16 +126,19 @@ void SPI_WriteData(char data)
 	while(!(SPSR & (1<<SPIF)));
 }
 
-void SPI_ReadAddress(uint16_t address)
+void SPI_ReadAddress(uint32_t address)
 {
 	SPDR = READ;
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
-	SPDR = (address & 0xFF00) >> 8;
+	SPDR = (address & 0xFF0000) >> 16;
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
 	// Start Wiznet W5100 Address Low Bytes transmission
-	SPDR = address & 0x00FF;
+	SPDR = (address & 0x00FF00) >> 8;
+	// Wait for transmission complete
+	while(!(SPSR & (1<<SPIF)));
+	SPDR = (address & 0x0000FF);
 	// Wait for transmission complete
 	while(!(SPSR & (1<<SPIF)));
 }
@@ -189,7 +199,7 @@ void RAMPrint(uint32_t startAddress, uint16_t length)
 	int i; 
 	for(i=0; i<length; i++)
 	{
-		printf("%c", SPI_ReadData());
+		printf("0x%02X ", SPI_ReadData());
 	}
 	RAM_PORT |= (1<<RAM_CS); 
 	printf("\nSize: %d\n", i); 

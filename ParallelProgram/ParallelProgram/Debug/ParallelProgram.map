@@ -3,7 +3,7 @@ Archive member included because of file (symbol)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm640.o (exit)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_copy_data.o)
-                              Print/PrintDriver.o (__do_copy_data)
+                              IntelHex.o (__do_copy_data)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
                               IntelHex.o (__do_clear_bss)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
@@ -11,9 +11,9 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
                               Print/PrintDriver.o (__iob)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
-                              RAM/RAMDriver.o (printf)
-c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
-                              RAM/RAMDriver.o (putchar)
+                              IntelHex.o (printf)
+c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+                              ParallelProgram.o (puts)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
                               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o) (vfprintf)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
@@ -33,31 +33,21 @@ Common symbol       size              file
 hexRow              0x32              IntelHex.o
 RAMOffset           0x2               IntelHex.o
 __iob               0x6               c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
-ShiftRegData        0xf0              SwitchingCircuitry.o
+ShiftRegData        0x1e              SwitchingCircuitry.o
 
 Discarded input sections
 
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm640.o
  .text          0x00000000        0x0 FPGA.o
  .bss           0x00000000        0x0 FPGA.o
- .text.SPI_FPGA_Write
-                0x00000000        0xe FPGA.o
- .text.SPI_FPGA_Init
-                0x00000000       0x1e FPGA.o
  .text          0x00000000        0x0 IntelHex.o
  .bss           0x00000000        0x0 IntelHex.o
  .text.hexInit  0x00000000       0x18 IntelHex.o
  .text.getHexRow
                 0x00000000       0x84 IntelHex.o
- .text.writeHexFileTest
-                0x00000000        0x2 IntelHex.o
  COMMON         0x00000000       0x34 IntelHex.o
  .text          0x00000000        0x0 ProgramDriver.o
  .bss           0x00000000        0x0 ProgramDriver.o
- .text.ProgInit
-                0x00000000       0x34 ProgramDriver.o
- .text.LoadCommand
-                0x00000000       0x2a ProgramDriver.o
  .text.WriteWord
                 0x00000000       0x4c ProgramDriver.o
  .text.LoadLowAddress
@@ -65,27 +55,13 @@ Discarded input sections
  .text.LoadHighAddress
                 0x00000000       0x28 ProgramDriver.o
  .text.ProgramPage
-                0x00000000       0x3e ProgramDriver.o
- .text.EnableProgMode
-                0x00000000       0x4a ProgramDriver.o
- .text.ReadSignatureBytes
-                0x00000000      0x148 ProgramDriver.o
- .text.ReadFlash
-                0x00000000      0x118 ProgramDriver.o
- .text.ChipErase
-                0x00000000       0x42 ProgramDriver.o
+                0x00000000       0x4c ProgramDriver.o
  .text.ProgramFlash
-                0x00000000      0x110 ProgramDriver.o
- .text.ExitParallelProgrammingMode
-                0x00000000       0x54 ProgramDriver.o
+                0x00000000      0x134 ProgramDriver.o
  .text          0x00000000        0x0 ParallelProgram.o
  .bss           0x00000000        0x0 ParallelProgram.o
  .text          0x00000000        0x0 Print/PrintDriver.o
  .bss           0x00000000        0x0 Print/PrintDriver.o
- .text.uart_sendStream
-                0x00000000       0x24 Print/PrintDriver.o
- .text.uart_receiveStream
-                0x00000000       0x20 Print/PrintDriver.o
  .text.uart_flush
                 0x00000000       0x1a Print/PrintDriver.o
  .text.uart_putch
@@ -94,47 +70,29 @@ Discarded input sections
                 0x00000000       0x20 Print/PrintDriver.o
  .text.ansi_cl  0x00000000       0x56 Print/PrintDriver.o
  .text.ansi_me  0x00000000       0x3e Print/PrintDriver.o
- .text.uart0_init
-                0x00000000       0x2c Print/PrintDriver.o
  .text.UARTStream_Init
                 0x00000000       0x34 Print/PrintDriver.o
- .data.uart_stream
-                0x00000000        0xe Print/PrintDriver.o
  .text          0x00000000        0x0 Print/UARTStream.o
  .bss           0x00000000        0x0 Print/UARTStream.o
  .text          0x00000000        0x0 RAM/RAMDriver.o
  .bss           0x00000000        0x0 RAM/RAMDriver.o
  .text.setSPIClockDiv
                 0x00000000        0x6 RAM/RAMDriver.o
- .text.getRAMStatus
-                0x00000000       0x1c RAM/RAMDriver.o
- .text.setRAMStatus
-                0x00000000       0x18 RAM/RAMDriver.o
- .text.SPI_WriteAddress
-                0x00000000       0x1c RAM/RAMDriver.o
- .text.SPI_WriteData
-                0x00000000        0xa RAM/RAMDriver.o
- .text.SPI_ReadAddress
-                0x00000000       0x1c RAM/RAMDriver.o
- .text.SPI_ReadData
-                0x00000000        0xc RAM/RAMDriver.o
- .text.RAMWrite
-                0x00000000       0x72 RAM/RAMDriver.o
- .text.RAMRead  0x00000000       0x66 RAM/RAMDriver.o
- .rodata.str1.1
-                0x00000000       0x1c RAM/RAMDriver.o
- .text.RAMPrint
-                0x00000000       0x90 RAM/RAMDriver.o
- .text.RAMWriteByte
-                0x00000000       0x18 RAM/RAMDriver.o
- .text.SPI_Init
-                0x00000000       0x16 RAM/RAMDriver.o
+ .text.RAMRead  0x00000000       0x68 RAM/RAMDriver.o
  .text.RAMReadByte
-                0x00000000        0xe RAM/RAMDriver.o
+                0x00000000       0x14 RAM/RAMDriver.o
  .text          0x00000000        0x0 SwitchingCircuitry.o
  .bss           0x00000000        0x0 SwitchingCircuitry.o
  .text.ClearShiftRegData
-                0x00000000       0x2c SwitchingCircuitry.o
+                0x00000000       0x26 SwitchingCircuitry.o
+ .text          0x00000000        0x0 VoltageControlDriver.o
+ .bss           0x00000000        0x0 VoltageControlDriver.o
+ .text.VppClear
+                0x00000000        0xa VoltageControlDriver.o
+ .text.VccClear
+                0x00000000        0xa VoltageControlDriver.o
+ .text.VLogicClear
+                0x00000000        0xa VoltageControlDriver.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -182,35 +140,20 @@ Discarded input sections
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
- .text.avr-libc
-                0x00000000       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
- COMMON         0x00000000        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
- .text.avr-libc
-                0x00000000       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
- .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
- .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
- .text.avr-libc
-                0x00000000        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+ .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
- .text.avr-libc
-                0x00000000      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
- .text.avr-libc
-                0x00000000       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
- .text.avr-libc
-                0x00000000       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
- .text.avr-libc
-                0x00000000       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .text.libgcc.mul
@@ -218,8 +161,6 @@ Discarded input sections
  .text.libgcc.div
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
- .text.libgcc.prologue
-                0x00000000       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .text.libgcc.builtins
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .text.libgcc.fmul
@@ -233,8 +174,6 @@ Discarded input sections
  .text.libgcc.div
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
- .text.libgcc.prologue
-                0x00000000       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  .text.libgcc.builtins
                 0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  .text.libgcc.fmul
@@ -266,6 +205,7 @@ LOAD Print/PrintDriver.o
 LOAD Print/UARTStream.o
 LOAD RAM/RAMDriver.o
 LOAD SwitchingCircuitry.o
+LOAD VoltageControlDriver.o
 START GROUP
 LOAD c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libm.a
 END GROUP
@@ -365,7 +305,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x2ee
+.text           0x00000000     0x113e
  *(.vectors)
  .vectors       0x00000000       0xe4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm640.o
                 0x00000000                __vector_default
@@ -481,31 +421,155 @@ END GROUP
                 0x0000011e                __vector_42
                 0x00000122                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x00000122       0x12 ParallelProgram.o
-                0x00000122                main
+ .text.SPI_FPGA_Write
+                0x00000122        0xe FPGA.o
+                0x00000122                SPI_FPGA_Write
+ .text.SPI_FPGA_Init
+                0x00000130       0x20 FPGA.o
+                0x00000130                SPI_FPGA_Init
+ .text.writeHexFileTest
+                0x00000150       0x5a IntelHex.o
+                0x00000150                writeHexFileTest
+ .text.ProgInit
+                0x000001aa       0x32 ProgramDriver.o
+                0x000001aa                ProgInit
+ .text.LoadCommand
+                0x000001dc       0x28 ProgramDriver.o
+                0x000001dc                LoadCommand
+ .text.EnableProgMode
+                0x00000204       0x5c ProgramDriver.o
+                0x00000204                EnableProgMode
+ .text.ReadSignatureBytes
+                0x00000260      0x196 ProgramDriver.o
+                0x00000260                ReadSignatureBytes
+ .text.ReadFlash
+                0x000003f6      0x158 ProgramDriver.o
+                0x000003f6                ReadFlash
+ .text.ChipErase
+                0x0000054e       0x50 ProgramDriver.o
+                0x0000054e                ChipErase
+ .text.ExitParallelProgrammingMode
+                0x0000059e       0x7e ProgramDriver.o
+                0x0000059e                ExitParallelProgrammingMode
+ .text.main     0x0000061c       0x98 ParallelProgram.o
+                0x0000061c                main
+ .text.uart_sendStream
+                0x000006b4       0x24 Print/PrintDriver.o
+                0x000006b4                uart_sendStream
+ .text.uart_receiveStream
+                0x000006d8       0x20 Print/PrintDriver.o
+                0x000006d8                uart_receiveStream
+ .text.uart2_init
+                0x000006f8       0x2c Print/PrintDriver.o
+                0x000006f8                uart2_init
+ .text.getRAMStatus
+                0x00000724       0x1c RAM/RAMDriver.o
+                0x00000724                getRAMStatus
+ .text.setRAMStatus
+                0x00000740       0x18 RAM/RAMDriver.o
+                0x00000740                setRAMStatus
+ .text.SPI_WriteAddress
+                0x00000758       0x2c RAM/RAMDriver.o
+                0x00000758                SPI_WriteAddress
+ .text.SPI_WriteData
+                0x00000784        0xa RAM/RAMDriver.o
+                0x00000784                SPI_WriteData
+ .text.SPI_ReadAddress
+                0x0000078e       0x2c RAM/RAMDriver.o
+                0x0000078e                SPI_ReadAddress
+ .text.SPI_ReadData
+                0x000007ba        0xc RAM/RAMDriver.o
+                0x000007ba                SPI_ReadData
+ .text.RAMWrite
+                0x000007c6       0x8a RAM/RAMDriver.o
+                0x000007c6                RAMWrite
+ .text.RAMPrint
+                0x00000850       0xa6 RAM/RAMDriver.o
+                0x00000850                RAMPrint
+ .text.RAMWriteByte
+                0x000008f6       0x1a RAM/RAMDriver.o
+                0x000008f6                RAMWriteByte
+ .text.SPI_Init
+                0x00000910       0x1c RAM/RAMDriver.o
+                0x00000910                SPI_Init
  .text.SPI_Switching_Circuitry_Init
-                0x00000134       0x20 SwitchingCircuitry.o
-                0x00000134                SPI_Switching_Circuitry_Init
+                0x0000092c       0x2c SwitchingCircuitry.o
+                0x0000092c                SPI_Switching_Circuitry_Init
  .text.SPI_Switching_Circuitry_Write
-                0x00000154        0xa SwitchingCircuitry.o
-                0x00000154                SPI_Switching_Circuitry_Write
+                0x00000958        0xa SwitchingCircuitry.o
+                0x00000958                SPI_Switching_Circuitry_Write
  .text.SwitchingCircuitryEnable
-                0x0000015e       0x36 SwitchingCircuitry.o
-                0x0000015e                SwitchingCircuitryEnable
+                0x00000962       0x26 SwitchingCircuitry.o
+                0x00000962                SwitchingCircuitryEnable
  .text.SetShiftRegData
-                0x00000194       0x2e SwitchingCircuitry.o
-                0x00000194                SetShiftRegData
+                0x00000988       0x28 SwitchingCircuitry.o
+                0x00000988                SetShiftRegData
  .text.WriteShiftRegData
-                0x000001c2       0x84 SwitchingCircuitry.o
-                0x000001c2                WriteShiftRegData
+                0x000009b0       0x84 SwitchingCircuitry.o
+                0x000009b0                WriteShiftRegData
  .text.setAtTiny2313
-                0x00000246       0xa4 SwitchingCircuitry.o
-                0x00000246                setAtTiny2313
-                0x000002ea                . = ALIGN (0x2)
+                0x00000a34       0xa6 SwitchingCircuitry.o
+                0x00000a34                setAtTiny2313
+ .text.voltageControlInit
+                0x00000ada       0x14 VoltageControlDriver.o
+                0x00000ada                voltageControlInit
+ .text.enableVppRegulator
+                0x00000aee        0x4 VoltageControlDriver.o
+                0x00000aee                enableVppRegulator
+ .text.disableVppRegulator
+                0x00000af2        0x4 VoltageControlDriver.o
+                0x00000af2                disableVppRegulator
+ .text.enableVccRegulator
+                0x00000af6        0x4 VoltageControlDriver.o
+                0x00000af6                enableVccRegulator
+ .text.disableVccRegulator
+                0x00000afa        0x4 VoltageControlDriver.o
+                0x00000afa                disableVccRegulator
+ .text.setVcc   0x00000afe       0x1c VoltageControlDriver.o
+                0x00000afe                setVcc
+ .text.setVpp   0x00000b1a       0x1c VoltageControlDriver.o
+                0x00000b1a                setVpp
+ .text.enableVLogic
+                0x00000b36        0x4 VoltageControlDriver.o
+                0x00000b36                enableVLogic
+ .text.disableVLogic
+                0x00000b3a        0x4 VoltageControlDriver.o
+                0x00000b3a                disableVLogic
+ .text.setVLogic
+                0x00000b3e       0x1c VoltageControlDriver.o
+                0x00000b3e                setVLogic
+ .text.avr-libc
+                0x00000b5a       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
+                0x00000b5a                fputc
+ .text.avr-libc
+                0x00000bbe       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
+                0x00000bbe                printf
+ .text.avr-libc
+                0x00000be6       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+                0x00000be6                puts
+ .text.avr-libc
+                0x00000c40      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
+                0x00000c40                vfprintf
+ .text.avr-libc
+                0x00000fe4       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
+                0x00000fe4                strnlen_P
+ .text.avr-libc
+                0x00000ffa       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
+                0x00000ffa                strnlen
+ .text.avr-libc
+                0x00001010       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
+                0x00001010                __ultoa_invert
+ .text.libgcc.prologue
+                0x000010cc       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
+                0x000010cc                __prologue_saves__
+ .text.libgcc.prologue
+                0x00001104       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
+                0x00001104                __epilogue_restores__
+                0x0000113a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000002ea        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
-                0x000002ea                _exit
-                0x000002ea                exit
+ .fini9         0x0000113a        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+                0x0000113a                _exit
+                0x0000113a                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -524,11 +588,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000002ea        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x0000113a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000002ee                _etext = .
+                0x0000113e                _etext = .
 
-.data           0x00800200        0x0 load address 0x000002ee
+.data           0x00800200       0xb8 load address 0x0000113e
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm640.o
@@ -540,13 +604,14 @@ END GROUP
  .data          0x00800200        0x0 Print/UARTStream.o
  .data          0x00800200        0x0 RAM/RAMDriver.o
  .data          0x00800200        0x0 SwitchingCircuitry.o
+ .data          0x00800200        0x0 VoltageControlDriver.o
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_copy_data.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_clear_bss.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
- .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+ .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
@@ -554,30 +619,50 @@ END GROUP
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  *(.data*)
+ .data.buffer   0x00800200       0x3c IntelHex.o
+                0x00800200                buffer
+ .data.uart_stream
+                0x0080023c        0xe Print/PrintDriver.o
+                0x0080023c                uart_stream
  *(.rodata)
  *(.rodata*)
+ .rodata.str1.1
+                0x0080024a        0x8 IntelHex.o
+ .rodata.str1.1
+                0x00000000        0x8 ProgramDriver.o
+                                  0xc (size before relaxing)
+ .rodata.str1.1
+                0x00800252       0x4a ParallelProgram.o
+                                 0x57 (size before relaxing)
+ .rodata.str1.1
+                0x0080029c       0x1c RAM/RAMDriver.o
+                                 0x24 (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x00800200                . = ALIGN (0x2)
-                0x00800200                _edata = .
-                0x00800200                PROVIDE (__data_end, .)
+                0x008002b8                . = ALIGN (0x2)
+                0x008002b8                _edata = .
+                0x008002b8                PROVIDE (__data_end, .)
 
-.bss            0x00800200       0xf0
-                0x00800200                PROVIDE (__bss_start, .)
+.bss            0x008002b8       0x27
+                0x008002b8                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.SignatureBytes.1836
+                0x008002b8        0x3 ProgramDriver.o
  *(COMMON)
- COMMON         0x00800200       0xf0 SwitchingCircuitry.o
-                0x00800200                ShiftRegData
-                0x008002f0                PROVIDE (__bss_end, .)
-                0x000002ee                __data_load_start = LOADADDR (.data)
-                0x000002ee                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x008002bb       0x1e SwitchingCircuitry.o
+                0x008002bb                ShiftRegData
+ COMMON         0x008002d9        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
+                0x008002d9                __iob
+                0x008002df                PROVIDE (__bss_end, .)
+                0x0000113e                __data_load_start = LOADADDR (.data)
+                0x000011f6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008002f0        0x0
-                0x008002f0                PROVIDE (__noinit_start, .)
+.noinit         0x008002df        0x0
+                0x008002df                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x008002f0                PROVIDE (__noinit_end, .)
-                0x008002f0                _end = .
-                0x008002f0                PROVIDE (__heap_start, .)
+                0x008002df                PROVIDE (__noinit_end, .)
+                0x008002df                _end = .
+                0x008002df                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -627,10 +712,11 @@ END GROUP
  .comment       0x00000000       0x31 Print/UARTStream.o
  .comment       0x00000000       0x31 RAM/RAMDriver.o
  .comment       0x00000000       0x31 SwitchingCircuitry.o
+ .comment       0x00000000       0x31 VoltageControlDriver.o
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
  .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
- .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+ .comment       0x00000000       0x31 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
  .comment       0x00000030       0x2c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
                                  0x2d (size before relaxing)
 
@@ -649,7 +735,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x238
+.debug_aranges  0x00000000      0x2b8
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x28 FPGA.o
@@ -667,79 +753,89 @@ END GROUP
                 0x00000168       0x80 RAM/RAMDriver.o
  .debug_aranges
                 0x000001e8       0x50 SwitchingCircuitry.o
+ .debug_aranges
+                0x00000238       0x80 VoltageControlDriver.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x229a
+.debug_info     0x00000000     0x276e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0xbb FPGA.o
- .debug_info    0x000000bb      0x173 IntelHex.o
- .debug_info    0x0000022e     0x11e2 ProgramDriver.o
- .debug_info    0x00001410       0xdd ParallelProgram.o
- .debug_info    0x000014ed      0x497 Print/PrintDriver.o
- .debug_info    0x00001984       0x5d Print/UARTStream.o
- .debug_info    0x000019e1      0x4b0 RAM/RAMDriver.o
- .debug_info    0x00001e91      0x409 SwitchingCircuitry.o
+ .debug_info    0x000000bb      0x243 IntelHex.o
+ .debug_info    0x000002fe     0x12e0 ProgramDriver.o
+ .debug_info    0x000015de      0x296 ParallelProgram.o
+ .debug_info    0x00001874      0x497 Print/PrintDriver.o
+ .debug_info    0x00001d0b       0x5d Print/UARTStream.o
+ .debug_info    0x00001d68      0x494 RAM/RAMDriver.o
+ .debug_info    0x000021fc      0x3a6 SwitchingCircuitry.o
+ .debug_info    0x000025a2      0x1cc VoltageControlDriver.o
 
-.debug_abbrev   0x00000000      0x969
+.debug_abbrev   0x00000000      0xb79
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x91 FPGA.o
- .debug_abbrev  0x00000091       0xff IntelHex.o
- .debug_abbrev  0x00000190      0x1f9 ProgramDriver.o
- .debug_abbrev  0x00000389       0x78 ParallelProgram.o
- .debug_abbrev  0x00000401      0x1e3 Print/PrintDriver.o
- .debug_abbrev  0x000005e4       0x26 Print/UARTStream.o
- .debug_abbrev  0x0000060a      0x192 RAM/RAMDriver.o
- .debug_abbrev  0x0000079c      0x1cd SwitchingCircuitry.o
+ .debug_abbrev  0x00000091      0x13c IntelHex.o
+ .debug_abbrev  0x000001cd      0x2ba ProgramDriver.o
+ .debug_abbrev  0x00000487      0x117 ParallelProgram.o
+ .debug_abbrev  0x0000059e      0x1e3 Print/PrintDriver.o
+ .debug_abbrev  0x00000781       0x26 Print/UARTStream.o
+ .debug_abbrev  0x000007a7      0x17c RAM/RAMDriver.o
+ .debug_abbrev  0x00000923      0x1c2 SwitchingCircuitry.o
+ .debug_abbrev  0x00000ae5       0x94 VoltageControlDriver.o
 
-.debug_line     0x00000000      0xe20
+.debug_line     0x00000000     0x107f
  *(.debug_line .debug_line.* .debug_line_end)
- .debug_line    0x00000000       0xc7 FPGA.o
- .debug_line    0x000000c7      0x10f IntelHex.o
- .debug_line    0x000001d6      0x607 ProgramDriver.o
- .debug_line    0x000007dd       0x5f ParallelProgram.o
- .debug_line    0x0000083c      0x183 Print/PrintDriver.o
- .debug_line    0x000009bf       0x1a Print/UARTStream.o
- .debug_line    0x000009d9      0x226 RAM/RAMDriver.o
- .debug_line    0x00000bff      0x221 SwitchingCircuitry.o
+ .debug_line    0x00000000       0xc5 FPGA.o
+ .debug_line    0x000000c5      0x12c IntelHex.o
+ .debug_line    0x000001f1      0x600 ProgramDriver.o
+ .debug_line    0x000007f1      0x139 ParallelProgram.o
+ .debug_line    0x0000092a      0x183 Print/PrintDriver.o
+ .debug_line    0x00000aad       0x1a Print/UARTStream.o
+ .debug_line    0x00000ac7      0x22a RAM/RAMDriver.o
+ .debug_line    0x00000cf1      0x206 SwitchingCircuitry.o
+ .debug_line    0x00000ef7      0x188 VoltageControlDriver.o
 
-.debug_frame    0x00000000      0x548
+.debug_frame    0x00000000      0x6fc
  *(.debug_frame)
  .debug_frame   0x00000000       0x34 FPGA.o
- .debug_frame   0x00000034       0x58 IntelHex.o
- .debug_frame   0x0000008c      0x168 ProgramDriver.o
- .debug_frame   0x000001f4       0x24 ParallelProgram.o
- .debug_frame   0x00000218       0xdc Print/PrintDriver.o
- .debug_frame   0x000002f4      0x180 RAM/RAMDriver.o
- .debug_frame   0x00000474       0xd4 SwitchingCircuitry.o
+ .debug_frame   0x00000034       0x88 IntelHex.o
+ .debug_frame   0x000000bc      0x1d0 ProgramDriver.o
+ .debug_frame   0x0000028c       0x40 ParallelProgram.o
+ .debug_frame   0x000002cc       0xdc Print/PrintDriver.o
+ .debug_frame   0x000003a8      0x19c RAM/RAMDriver.o
+ .debug_frame   0x00000544       0xd4 SwitchingCircuitry.o
+ .debug_frame   0x00000618       0xe4 VoltageControlDriver.o
 
-.debug_str      0x00000000      0x5dd
+.debug_str      0x00000000      0x6bb
  *(.debug_str)
- .debug_str     0x00000000      0x157 FPGA.o
-                                0x18b (size before relaxing)
- .debug_str     0x00000157       0x74 IntelHex.o
-                                0x1d2 (size before relaxing)
- .debug_str     0x000001cb      0x16b ProgramDriver.o
-                                0x2f7 (size before relaxing)
- .debug_str     0x00000336       0x72 ParallelProgram.o
-                                0x1c3 (size before relaxing)
- .debug_str     0x000003a8       0xcc Print/PrintDriver.o
-                                0x231 (size before relaxing)
- .debug_str     0x00000474       0x16 Print/UARTStream.o
-                                0x16c (size before relaxing)
- .debug_str     0x0000048a       0xe3 RAM/RAMDriver.o
-                                0x27b (size before relaxing)
- .debug_str     0x0000056d       0x70 SwitchingCircuitry.o
-                                0x293 (size before relaxing)
+ .debug_str     0x00000000      0x152 FPGA.o
+                                0x186 (size before relaxing)
+ .debug_str     0x00000152       0x84 IntelHex.o
+                                0x1dd (size before relaxing)
+ .debug_str     0x000001d6      0x235 ProgramDriver.o
+                                0x3e9 (size before relaxing)
+ .debug_str     0x0000040b       0x48 ParallelProgram.o
+                                0x232 (size before relaxing)
+ .debug_str     0x00000453       0xc1 Print/PrintDriver.o
+                                0x22c (size before relaxing)
+ .debug_str     0x00000514       0x16 Print/UARTStream.o
+                                0x167 (size before relaxing)
+ .debug_str     0x0000052a       0xaf RAM/RAMDriver.o
+                                0x25c (size before relaxing)
+ .debug_str     0x000005d9       0x9b SwitchingCircuitry.o
+                                0x28e (size before relaxing)
+ .debug_str     0x00000674       0x47 VoltageControlDriver.o
+                                0x234 (size before relaxing)
 
-.debug_loc      0x00000000      0xdf0
+.debug_loc      0x00000000     0x1220
  *(.debug_loc)
- .debug_loc     0x00000000      0x10e IntelHex.o
- .debug_loc     0x0000010e      0x3bc ProgramDriver.o
- .debug_loc     0x000004ca      0x22e Print/PrintDriver.o
- .debug_loc     0x000006f8      0x4e2 RAM/RAMDriver.o
- .debug_loc     0x00000bda      0x216 SwitchingCircuitry.o
+ .debug_loc     0x00000000      0x200 IntelHex.o
+ .debug_loc     0x00000200      0x524 ProgramDriver.o
+ .debug_loc     0x00000724       0xb2 ParallelProgram.o
+ .debug_loc     0x000007d6      0x22e Print/PrintDriver.o
+ .debug_loc     0x00000a04      0x55d RAM/RAMDriver.o
+ .debug_loc     0x00000f61      0x25c SwitchingCircuitry.o
+ .debug_loc     0x000011bd       0x63 VoltageControlDriver.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -759,15 +855,16 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x1c8
+.debug_ranges   0x00000000      0x220
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x18 FPGA.o
  .debug_ranges  0x00000018       0x20 IntelHex.o
- .debug_ranges  0x00000038       0x80 ProgramDriver.o
- .debug_ranges  0x000000b8       0x10 ParallelProgram.o
- .debug_ranges  0x000000c8       0x50 Print/PrintDriver.o
- .debug_ranges  0x00000118       0x70 RAM/RAMDriver.o
- .debug_ranges  0x00000188       0x40 SwitchingCircuitry.o
+ .debug_ranges  0x00000038       0x68 ProgramDriver.o
+ .debug_ranges  0x000000a0       0x10 ParallelProgram.o
+ .debug_ranges  0x000000b0       0x50 Print/PrintDriver.o
+ .debug_ranges  0x00000100       0x70 RAM/RAMDriver.o
+ .debug_ranges  0x00000170       0x40 SwitchingCircuitry.o
+ .debug_ranges  0x000001b0       0x70 VoltageControlDriver.o
 
 .debug_macro
  *(.debug_macro)

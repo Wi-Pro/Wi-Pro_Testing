@@ -45,7 +45,8 @@ C_SRCS +=  \
 ../Print/PrintDriver.c \
 ../Print/UARTStream.c \
 ../RAM/RAMDriver.c \
-../SwitchingCircuitry.c
+../SwitchingCircuitry.c \
+../VoltageControlDriver.c
 
 
 PREPROCESSING_SRCS += 
@@ -62,7 +63,8 @@ ParallelProgram.o \
 Print/PrintDriver.o \
 Print/UARTStream.o \
 RAM/RAMDriver.o \
-SwitchingCircuitry.o
+SwitchingCircuitry.o \
+VoltageControlDriver.o
 
 OBJS_AS_ARGS +=  \
 FPGA.o \
@@ -72,7 +74,8 @@ ParallelProgram.o \
 Print/PrintDriver.o \
 Print/UARTStream.o \
 RAM/RAMDriver.o \
-SwitchingCircuitry.o
+SwitchingCircuitry.o \
+VoltageControlDriver.o
 
 C_DEPS +=  \
 FPGA.d \
@@ -82,7 +85,8 @@ ParallelProgram.d \
 Print/PrintDriver.d \
 Print/UARTStream.d \
 RAM/RAMDriver.d \
-SwitchingCircuitry.d
+SwitchingCircuitry.d \
+VoltageControlDriver.d
 
 C_DEPS_AS_ARGS +=  \
 FPGA.d \
@@ -92,7 +96,8 @@ ParallelProgram.d \
 Print/PrintDriver.d \
 Print/UARTStream.d \
 RAM/RAMDriver.d \
-SwitchingCircuitry.d
+SwitchingCircuitry.d \
+VoltageControlDriver.d
 
 OUTPUT_FILE_PATH +=ParallelProgram.elf
 
@@ -105,6 +110,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

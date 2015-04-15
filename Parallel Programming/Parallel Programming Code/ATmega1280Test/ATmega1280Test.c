@@ -92,7 +92,7 @@ int main(void)
 	USB_UART2_Initialization();
 	SPI_FPGA_Init();
 	SPI_Switching_Circuitry_Init();
-	ParallelProgrammingInit();
+	//ParallelProgrammingInit();
 	
 	_delay_ms(500);
 
@@ -108,17 +108,17 @@ int main(void)
 	LED_DDR |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
 	LED_PORT |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
 	
-	//_delay_ms(500);
+	_delay_ms(500);
 	//EnterParallelProgrammingMode();
 	//ReadSignatureBytes();
 	//ExitParallelProgrammingMode();
 	
 	while(1)
 	{
-		_delay_ms(500);
-		EnterParallelProgrammingMode();
-		ReadSignatureBytes();
-		ExitParallelProgrammingMode();
+		//_delay_ms(500);
+		//EnterParallelProgrammingMode();
+		//ReadSignatureBytes();
+		//ExitParallelProgrammingMode();
 	}
 }
 

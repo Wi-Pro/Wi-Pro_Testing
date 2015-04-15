@@ -11,13 +11,17 @@
 
 #define SPI_PORT PORTB
 #define SPI_DDR  DDRB
-#define RAM_PORT PORTA
-#define RAM_DDR DDRA 
-#define RAM_CS PORTA1
+#define RAM_PORT PORTG
+#define RAM_DDR DDRG 
+#define RAM_CS 3
 
-#define MOSI PORTB5
-#define SCK PORTB7
-#define SS PORTB4
+#define RAM_HOLD_DDR DDRB
+#define RAM_HOLD_PORT PORTB
+#define RAM_HOLD 7
+
+#define MOSI 2
+#define SCK 1
+#define SS 0
 
 #define READ 0x03
 #define WRITE 0x02
@@ -33,11 +37,12 @@ void SPI_Init();
 int setSPIClockDiv(uint8_t division);
 int getRAMStatus(); 
 void setRAMStatus(char mode);
-void SPI_WriteAddress(uint16_t address);
+void SPI_WriteAddress(uint32_t address);
 void SPI_WriteData(char data);
 uint16_t RAMWrite(char* data, uint16_t startAddress, uint16_t length);
 void RAMWriteByte(char data, uint16_t address);
 char RAMReadByte(uint16_t address);
+void SPI_ReadAddress(uint32_t address);
 char* RAMRead(uint32_t startAddress, uint16_t length, char* buffer);
 void RAMPrint(uint32_t startAddress, uint16_t length);
 

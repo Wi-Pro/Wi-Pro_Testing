@@ -3,27 +3,27 @@ ATmega1280Test.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800200  00000630  000006a4  2**0
+  0 .data         00000000  00800200  000001f4  00000268  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000630  00000000  00000000  00000074  2**1
+  1 .text         000001f4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000006a4  2**0
+  2 .comment      00000030  00000000  00000000  00000268  2**0
                   CONTENTS, READONLY
-  3 .debug_aranges 000000b0  00000000  00000000  000006d4  2**0
+  3 .debug_aranges 000000b0  00000000  00000000  00000298  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_info   00001e6d  00000000  00000000  00000784  2**0
+  4 .debug_info   00001e49  00000000  00000000  00000348  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_abbrev 00000226  00000000  00000000  000025f1  2**0
+  5 .debug_abbrev 00000226  00000000  00000000  00002191  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_line   00000eec  00000000  00000000  00002817  2**0
+  6 .debug_line   00000ec2  00000000  00000000  000023b7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_frame  00000190  00000000  00000000  00003704  2**2
+  7 .debug_frame  00000190  00000000  00000000  0000327c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_str    00000361  00000000  00000000  00003894  2**0
+  8 .debug_str    00000361  00000000  00000000  0000340c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_loc    0000029f  00000000  00000000  00003bf5  2**0
+  9 .debug_loc    0000029f  00000000  00000000  0000376d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 000000a0  00000000  00000000  00003e94  2**0
+ 10 .debug_ranges 000000a0  00000000  00000000  00003a0c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -151,854 +151,185 @@ Disassembly of section .text:
   ea:	d1 e2       	ldi	r29, 0x21	; 33
   ec:	de bf       	out	0x3e, r29	; 62
   ee:	cd bf       	out	0x3d, r28	; 61
-  f0:	73 d2       	rcall	.+1254   	; 0x5d8 <main>
-  f2:	9c c2       	rjmp	.+1336   	; 0x62c <_exit>
+  f0:	59 d0       	rcall	.+178    	; 0x1a4 <main>
+  f2:	7e c0       	rjmp	.+252    	; 0x1f0 <_exit>
 
 000000f4 <__bad_interrupt>:
   f4:	85 cf       	rjmp	.-246    	; 0x0 <__vectors>
 
-000000f6 <ParallelProgrammingInit>:
-	
-	while (!(UCSR2A & (1<<RXC2))); //received a value?
-	TransmissionValue = UDR2;
-	
-	return TransmissionValue;
-}
-  f6:	8f ef       	ldi	r24, 0xFF	; 255
-  f8:	80 bb       	out	0x10, r24	; 16
-  fa:	82 e5       	ldi	r24, 0x52	; 82
-  fc:	81 bb       	out	0x11, r24	; 17
-  fe:	24 9a       	sbi	0x04, 4	; 4
- 100:	25 9a       	sbi	0x04, 5	; 4
- 102:	26 9a       	sbi	0x04, 6	; 4
- 104:	2d 9a       	sbi	0x05, 5	; 5
- 106:	2e 9a       	sbi	0x05, 6	; 5
- 108:	2f e7       	ldi	r18, 0x7F	; 127
- 10a:	88 e3       	ldi	r24, 0x38	; 56
- 10c:	91 e0       	ldi	r25, 0x01	; 1
- 10e:	21 50       	subi	r18, 0x01	; 1
- 110:	80 40       	sbci	r24, 0x00	; 0
- 112:	90 40       	sbci	r25, 0x00	; 0
- 114:	e1 f7       	brne	.-8      	; 0x10e <ParallelProgrammingInit+0x18>
- 116:	00 c0       	rjmp	.+0      	; 0x118 <ParallelProgrammingInit+0x22>
- 118:	00 00       	nop
- 11a:	e4 e0       	ldi	r30, 0x04	; 4
- 11c:	f1 e0       	ldi	r31, 0x01	; 1
- 11e:	80 81       	ld	r24, Z
- 120:	84 60       	ori	r24, 0x04	; 4
- 122:	80 83       	st	Z, r24
- 124:	8a b1       	in	r24, 0x0a	; 10
- 126:	8f ef       	ldi	r24, 0xFF	; 255
- 128:	8a b9       	out	0x0a, r24	; 10
- 12a:	80 93 0a 01 	sts	0x010A, r24
- 12e:	08 95       	ret
+000000f6 <SPI_Switching_Circuitry_Init>:
+void USB_UART0_Out(unsigned char TransmissionValue)
+{
+	while(!(UCSR0A & (1<<UDRE0))); //buffer empty and ready to transmit
+	UDR0 = TransmissionValue; //start transmitting value
+	while(!(UCSR0A & (1<<TXC0))); //wait for transmit to complete
+	UCSR0A |= 1<<TXC0; //clear transmit complete flag
+  f6:	9d 9a       	sbi	0x13, 5	; 19
+  f8:	e4 e0       	ldi	r30, 0x04	; 4
+  fa:	f1 e0       	ldi	r31, 0x01	; 1
+  fc:	80 81       	ld	r24, Z
+  fe:	88 63       	ori	r24, 0x38	; 56
+ 100:	80 83       	st	Z, r24
+ 102:	e5 e0       	ldi	r30, 0x05	; 5
+ 104:	f1 e0       	ldi	r31, 0x01	; 1
+ 106:	80 81       	ld	r24, Z
+ 108:	88 61       	ori	r24, 0x18	; 24
+ 10a:	80 83       	st	Z, r24
+ 10c:	80 81       	ld	r24, Z
+ 10e:	8f 7d       	andi	r24, 0xDF	; 223
+ 110:	80 83       	st	Z, r24
+ 112:	a5 9a       	sbi	0x14, 5	; 20
+ 114:	08 95       	ret
 
-00000130 <SPI_Switching_Circuitry_Init>:
- 130:	9d 9a       	sbi	0x13, 5	; 19
- 132:	e4 e0       	ldi	r30, 0x04	; 4
- 134:	f1 e0       	ldi	r31, 0x01	; 1
- 136:	80 81       	ld	r24, Z
- 138:	88 63       	ori	r24, 0x38	; 56
- 13a:	80 83       	st	Z, r24
- 13c:	e5 e0       	ldi	r30, 0x05	; 5
- 13e:	f1 e0       	ldi	r31, 0x01	; 1
- 140:	80 81       	ld	r24, Z
- 142:	88 61       	ori	r24, 0x18	; 24
- 144:	80 83       	st	Z, r24
- 146:	80 81       	ld	r24, Z
- 148:	8f 7d       	andi	r24, 0xDF	; 223
- 14a:	80 83       	st	Z, r24
- 14c:	a5 9a       	sbi	0x14, 5	; 20
- 14e:	08 95       	ret
+00000116 <SPI_FPGA_Write>:
+ 116:	a4 98       	cbi	0x14, 4	; 20
+ 118:	8e bd       	out	0x2e, r24	; 46
+ 11a:	0d b4       	in	r0, 0x2d	; 45
+ 11c:	07 fe       	sbrs	r0, 7
+ 11e:	fd cf       	rjmp	.-6      	; 0x11a <SPI_FPGA_Write+0x4>
+ 120:	a4 9a       	sbi	0x14, 4	; 20
+ 122:	08 95       	ret
 
-00000150 <SPI_Switching_Circuitry_Write>:
- 150:	8e bd       	out	0x2e, r24	; 46
- 152:	0d b4       	in	r0, 0x2d	; 45
- 154:	07 fe       	sbrs	r0, 7
- 156:	fd cf       	rjmp	.-6      	; 0x152 <SPI_Switching_Circuitry_Write+0x2>
- 158:	08 95       	ret
+00000124 <SPI_FPGA_Init>:
+ 124:	84 b1       	in	r24, 0x04	; 4
+ 126:	87 60       	ori	r24, 0x07	; 7
+ 128:	84 b9       	out	0x04, r24	; 4
+ 12a:	23 98       	cbi	0x04, 3	; 4
+ 12c:	9c 9a       	sbi	0x13, 4	; 19
+ 12e:	a4 9a       	sbi	0x14, 4	; 20
+ 130:	83 e5       	ldi	r24, 0x53	; 83
+ 132:	8c bd       	out	0x2c, r24	; 44
+ 134:	8d b5       	in	r24, 0x2d	; 45
+ 136:	8e 7f       	andi	r24, 0xFE	; 254
+ 138:	8d bd       	out	0x2d, r24	; 45
+ 13a:	80 e0       	ldi	r24, 0x00	; 0
+ 13c:	ec cf       	rjmp	.-40     	; 0x116 <SPI_FPGA_Write>
+ 13e:	08 95       	ret
 
-0000015a <SPI_FPGA_Write>:
- 15a:	a4 98       	cbi	0x14, 4	; 20
- 15c:	8e bd       	out	0x2e, r24	; 46
- 15e:	0d b4       	in	r0, 0x2d	; 45
- 160:	07 fe       	sbrs	r0, 7
- 162:	fd cf       	rjmp	.-6      	; 0x15e <SPI_FPGA_Write+0x4>
- 164:	a4 9a       	sbi	0x14, 4	; 20
+00000140 <USB_UART0_Initialization>:
+ 140:	69 9a       	sbi	0x0d, 1	; 13
+ 142:	68 98       	cbi	0x0d, 0	; 13
+ 144:	70 9a       	sbi	0x0e, 0	; 14
+ 146:	86 e0       	ldi	r24, 0x06	; 6
+ 148:	80 93 c2 00 	sts	0x00C2, r24
+ 14c:	10 92 c5 00 	sts	0x00C5, r1
+ 150:	81 e0       	ldi	r24, 0x01	; 1
+ 152:	80 93 c4 00 	sts	0x00C4, r24
+ 156:	e1 ec       	ldi	r30, 0xC1	; 193
+ 158:	f0 e0       	ldi	r31, 0x00	; 0
+ 15a:	80 81       	ld	r24, Z
+ 15c:	88 60       	ori	r24, 0x08	; 8
+ 15e:	80 83       	st	Z, r24
+ 160:	80 81       	ld	r24, Z
+ 162:	80 61       	ori	r24, 0x10	; 16
+ 164:	80 83       	st	Z, r24
  166:	08 95       	ret
 
-00000168 <EnterParallelProgrammingMode>:
- 168:	cf 93       	push	r28
- 16a:	df 93       	push	r29
- 16c:	84 b3       	in	r24, 0x14	; 20
- 16e:	88 7f       	andi	r24, 0xF8	; 248
- 170:	84 bb       	out	0x14, r24	; 20
- 172:	38 98       	cbi	0x07, 0	; 7
- 174:	58 98       	cbi	0x0b, 0	; 11
- 176:	8b b1       	in	r24, 0x0b	; 11
- 178:	83 7c       	andi	r24, 0xC3	; 195
- 17a:	8b b9       	out	0x0b, r24	; 11
- 17c:	c5 e0       	ldi	r28, 0x05	; 5
- 17e:	d1 e0       	ldi	r29, 0x01	; 1
- 180:	88 81       	ld	r24, Y
- 182:	8b 7f       	andi	r24, 0xFB	; 251
- 184:	88 83       	st	Y, r24
- 186:	81 e0       	ldi	r24, 0x01	; 1
- 188:	e8 df       	rcall	.-48     	; 0x15a <SPI_FPGA_Write>
- 18a:	10 92 0b 01 	sts	0x010B, r1
- 18e:	1b b8       	out	0x0b, r1	; 11
- 190:	88 81       	ld	r24, Y
- 192:	8f 7d       	andi	r24, 0xDF	; 223
- 194:	88 83       	st	Y, r24
- 196:	81 e2       	ldi	r24, 0x21	; 33
- 198:	8a 95       	dec	r24
- 19a:	f1 f7       	brne	.-4      	; 0x198 <EnterParallelProgrammingMode+0x30>
- 19c:	00 00       	nop
- 19e:	e5 e0       	ldi	r30, 0x05	; 5
- 1a0:	f1 e0       	ldi	r31, 0x01	; 1
- 1a2:	80 81       	ld	r24, Z
- 1a4:	80 62       	ori	r24, 0x20	; 32
- 1a6:	80 83       	st	Z, r24
- 1a8:	91 e2       	ldi	r25, 0x21	; 33
- 1aa:	9a 95       	dec	r25
- 1ac:	f1 f7       	brne	.-4      	; 0x1aa <EnterParallelProgrammingMode+0x42>
- 1ae:	00 00       	nop
- 1b0:	80 81       	ld	r24, Z
- 1b2:	87 7f       	andi	r24, 0xF7	; 247
- 1b4:	80 83       	st	Z, r24
- 1b6:	81 e2       	ldi	r24, 0x21	; 33
- 1b8:	8a 95       	dec	r24
- 1ba:	f1 f7       	brne	.-4      	; 0x1b8 <EnterParallelProgrammingMode+0x50>
- 1bc:	00 00       	nop
- 1be:	80 81       	ld	r24, Z
- 1c0:	8f 7e       	andi	r24, 0xEF	; 239
- 1c2:	80 83       	st	Z, r24
- 1c4:	80 e0       	ldi	r24, 0x00	; 0
- 1c6:	c4 df       	rcall	.-120    	; 0x150 <SPI_Switching_Circuitry_Write>
- 1c8:	9d e0       	ldi	r25, 0x0D	; 13
- 1ca:	9a 95       	dec	r25
- 1cc:	f1 f7       	brne	.-4      	; 0x1ca <EnterParallelProgrammingMode+0x62>
- 1ce:	00 00       	nop
- 1d0:	80 e0       	ldi	r24, 0x00	; 0
- 1d2:	be df       	rcall	.-132    	; 0x150 <SPI_Switching_Circuitry_Write>
- 1d4:	8d e0       	ldi	r24, 0x0D	; 13
- 1d6:	8a 95       	dec	r24
- 1d8:	f1 f7       	brne	.-4      	; 0x1d6 <EnterParallelProgrammingMode+0x6e>
- 1da:	00 00       	nop
- 1dc:	80 e0       	ldi	r24, 0x00	; 0
- 1de:	b8 df       	rcall	.-144    	; 0x150 <SPI_Switching_Circuitry_Write>
- 1e0:	9d e0       	ldi	r25, 0x0D	; 13
- 1e2:	9a 95       	dec	r25
- 1e4:	f1 f7       	brne	.-4      	; 0x1e2 <EnterParallelProgrammingMode+0x7a>
- 1e6:	00 00       	nop
- 1e8:	80 e0       	ldi	r24, 0x00	; 0
- 1ea:	b2 df       	rcall	.-156    	; 0x150 <SPI_Switching_Circuitry_Write>
- 1ec:	8d e0       	ldi	r24, 0x0D	; 13
- 1ee:	8a 95       	dec	r24
- 1f0:	f1 f7       	brne	.-4      	; 0x1ee <EnterParallelProgrammingMode+0x86>
- 1f2:	00 00       	nop
- 1f4:	80 e0       	ldi	r24, 0x00	; 0
- 1f6:	ac df       	rcall	.-168    	; 0x150 <SPI_Switching_Circuitry_Write>
- 1f8:	9d e0       	ldi	r25, 0x0D	; 13
- 1fa:	9a 95       	dec	r25
- 1fc:	f1 f7       	brne	.-4      	; 0x1fa <EnterParallelProgrammingMode+0x92>
- 1fe:	00 00       	nop
- 200:	80 e0       	ldi	r24, 0x00	; 0
- 202:	a6 df       	rcall	.-180    	; 0x150 <SPI_Switching_Circuitry_Write>
- 204:	8d e0       	ldi	r24, 0x0D	; 13
- 206:	8a 95       	dec	r24
- 208:	f1 f7       	brne	.-4      	; 0x206 <EnterParallelProgrammingMode+0x9e>
- 20a:	00 00       	nop
- 20c:	80 e0       	ldi	r24, 0x00	; 0
- 20e:	a0 df       	rcall	.-192    	; 0x150 <SPI_Switching_Circuitry_Write>
- 210:	9d e0       	ldi	r25, 0x0D	; 13
- 212:	9a 95       	dec	r25
- 214:	f1 f7       	brne	.-4      	; 0x212 <EnterParallelProgrammingMode+0xaa>
- 216:	00 00       	nop
- 218:	88 e0       	ldi	r24, 0x08	; 8
- 21a:	9a df       	rcall	.-204    	; 0x150 <SPI_Switching_Circuitry_Write>
- 21c:	8d e0       	ldi	r24, 0x0D	; 13
- 21e:	8a 95       	dec	r24
- 220:	f1 f7       	brne	.-4      	; 0x21e <EnterParallelProgrammingMode+0xb6>
- 222:	00 00       	nop
- 224:	80 e0       	ldi	r24, 0x00	; 0
- 226:	94 df       	rcall	.-216    	; 0x150 <SPI_Switching_Circuitry_Write>
- 228:	9d e0       	ldi	r25, 0x0D	; 13
- 22a:	9a 95       	dec	r25
- 22c:	f1 f7       	brne	.-4      	; 0x22a <EnterParallelProgrammingMode+0xc2>
- 22e:	00 00       	nop
- 230:	80 e0       	ldi	r24, 0x00	; 0
- 232:	8e df       	rcall	.-228    	; 0x150 <SPI_Switching_Circuitry_Write>
- 234:	8d e0       	ldi	r24, 0x0D	; 13
- 236:	8a 95       	dec	r24
- 238:	f1 f7       	brne	.-4      	; 0x236 <EnterParallelProgrammingMode+0xce>
- 23a:	00 00       	nop
- 23c:	80 e0       	ldi	r24, 0x00	; 0
- 23e:	88 df       	rcall	.-240    	; 0x150 <SPI_Switching_Circuitry_Write>
- 240:	9d e0       	ldi	r25, 0x0D	; 13
- 242:	9a 95       	dec	r25
- 244:	f1 f7       	brne	.-4      	; 0x242 <EnterParallelProgrammingMode+0xda>
- 246:	00 00       	nop
- 248:	80 e0       	ldi	r24, 0x00	; 0
- 24a:	82 df       	rcall	.-252    	; 0x150 <SPI_Switching_Circuitry_Write>
- 24c:	8d e0       	ldi	r24, 0x0D	; 13
- 24e:	8a 95       	dec	r24
- 250:	f1 f7       	brne	.-4      	; 0x24e <EnterParallelProgrammingMode+0xe6>
- 252:	00 00       	nop
- 254:	80 e0       	ldi	r24, 0x00	; 0
- 256:	7c df       	rcall	.-264    	; 0x150 <SPI_Switching_Circuitry_Write>
- 258:	9d e0       	ldi	r25, 0x0D	; 13
- 25a:	9a 95       	dec	r25
- 25c:	f1 f7       	brne	.-4      	; 0x25a <EnterParallelProgrammingMode+0xf2>
- 25e:	00 00       	nop
- 260:	80 e0       	ldi	r24, 0x00	; 0
- 262:	76 df       	rcall	.-276    	; 0x150 <SPI_Switching_Circuitry_Write>
- 264:	8d e0       	ldi	r24, 0x0D	; 13
- 266:	8a 95       	dec	r24
- 268:	f1 f7       	brne	.-4      	; 0x266 <EnterParallelProgrammingMode+0xfe>
- 26a:	00 00       	nop
- 26c:	80 e0       	ldi	r24, 0x00	; 0
- 26e:	70 df       	rcall	.-288    	; 0x150 <SPI_Switching_Circuitry_Write>
- 270:	9d e0       	ldi	r25, 0x0D	; 13
- 272:	9a 95       	dec	r25
- 274:	f1 f7       	brne	.-4      	; 0x272 <EnterParallelProgrammingMode+0x10a>
- 276:	00 00       	nop
- 278:	80 e0       	ldi	r24, 0x00	; 0
- 27a:	6a df       	rcall	.-300    	; 0x150 <SPI_Switching_Circuitry_Write>
- 27c:	8d e0       	ldi	r24, 0x0D	; 13
- 27e:	8a 95       	dec	r24
- 280:	f1 f7       	brne	.-4      	; 0x27e <EnterParallelProgrammingMode+0x116>
- 282:	00 00       	nop
- 284:	80 e2       	ldi	r24, 0x20	; 32
- 286:	64 df       	rcall	.-312    	; 0x150 <SPI_Switching_Circuitry_Write>
- 288:	9d e0       	ldi	r25, 0x0D	; 13
- 28a:	9a 95       	dec	r25
- 28c:	f1 f7       	brne	.-4      	; 0x28a <EnterParallelProgrammingMode+0x122>
- 28e:	00 00       	nop
- 290:	80 e0       	ldi	r24, 0x00	; 0
- 292:	5e df       	rcall	.-324    	; 0x150 <SPI_Switching_Circuitry_Write>
- 294:	8d e0       	ldi	r24, 0x0D	; 13
- 296:	8a 95       	dec	r24
- 298:	f1 f7       	brne	.-4      	; 0x296 <EnterParallelProgrammingMode+0x12e>
- 29a:	00 00       	nop
- 29c:	80 e0       	ldi	r24, 0x00	; 0
- 29e:	58 df       	rcall	.-336    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2a0:	9d e0       	ldi	r25, 0x0D	; 13
- 2a2:	9a 95       	dec	r25
- 2a4:	f1 f7       	brne	.-4      	; 0x2a2 <EnterParallelProgrammingMode+0x13a>
- 2a6:	00 00       	nop
- 2a8:	80 e0       	ldi	r24, 0x00	; 0
- 2aa:	52 df       	rcall	.-348    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2ac:	8d e0       	ldi	r24, 0x0D	; 13
- 2ae:	8a 95       	dec	r24
- 2b0:	f1 f7       	brne	.-4      	; 0x2ae <EnterParallelProgrammingMode+0x146>
- 2b2:	00 00       	nop
- 2b4:	80 e0       	ldi	r24, 0x00	; 0
- 2b6:	4c df       	rcall	.-360    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2b8:	9d e0       	ldi	r25, 0x0D	; 13
- 2ba:	9a 95       	dec	r25
- 2bc:	f1 f7       	brne	.-4      	; 0x2ba <EnterParallelProgrammingMode+0x152>
- 2be:	00 00       	nop
- 2c0:	80 e0       	ldi	r24, 0x00	; 0
- 2c2:	46 df       	rcall	.-372    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2c4:	8d e0       	ldi	r24, 0x0D	; 13
- 2c6:	8a 95       	dec	r24
- 2c8:	f1 f7       	brne	.-4      	; 0x2c6 <EnterParallelProgrammingMode+0x15e>
- 2ca:	00 00       	nop
- 2cc:	80 e0       	ldi	r24, 0x00	; 0
- 2ce:	40 df       	rcall	.-384    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2d0:	9d e0       	ldi	r25, 0x0D	; 13
- 2d2:	9a 95       	dec	r25
- 2d4:	f1 f7       	brne	.-4      	; 0x2d2 <EnterParallelProgrammingMode+0x16a>
- 2d6:	00 00       	nop
- 2d8:	84 e0       	ldi	r24, 0x04	; 4
- 2da:	3a df       	rcall	.-396    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2dc:	8d e0       	ldi	r24, 0x0D	; 13
- 2de:	8a 95       	dec	r24
- 2e0:	f1 f7       	brne	.-4      	; 0x2de <EnterParallelProgrammingMode+0x176>
- 2e2:	00 00       	nop
- 2e4:	80 e0       	ldi	r24, 0x00	; 0
- 2e6:	34 df       	rcall	.-408    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2e8:	9d e0       	ldi	r25, 0x0D	; 13
- 2ea:	9a 95       	dec	r25
- 2ec:	f1 f7       	brne	.-4      	; 0x2ea <EnterParallelProgrammingMode+0x182>
- 2ee:	00 00       	nop
- 2f0:	80 e0       	ldi	r24, 0x00	; 0
- 2f2:	2e df       	rcall	.-420    	; 0x150 <SPI_Switching_Circuitry_Write>
- 2f4:	8d e0       	ldi	r24, 0x0D	; 13
- 2f6:	8a 95       	dec	r24
- 2f8:	f1 f7       	brne	.-4      	; 0x2f6 <EnterParallelProgrammingMode+0x18e>
- 2fa:	00 00       	nop
- 2fc:	8f e1       	ldi	r24, 0x1F	; 31
- 2fe:	28 df       	rcall	.-432    	; 0x150 <SPI_Switching_Circuitry_Write>
- 300:	9d e0       	ldi	r25, 0x0D	; 13
- 302:	9a 95       	dec	r25
- 304:	f1 f7       	brne	.-4      	; 0x302 <EnterParallelProgrammingMode+0x19a>
- 306:	00 00       	nop
- 308:	87 ef       	ldi	r24, 0xF7	; 247
- 30a:	22 df       	rcall	.-444    	; 0x150 <SPI_Switching_Circuitry_Write>
- 30c:	8d e0       	ldi	r24, 0x0D	; 13
- 30e:	8a 95       	dec	r24
- 310:	f1 f7       	brne	.-4      	; 0x30e <EnterParallelProgrammingMode+0x1a6>
- 312:	00 00       	nop
- 314:	80 ed       	ldi	r24, 0xD0	; 208
- 316:	1c df       	rcall	.-456    	; 0x150 <SPI_Switching_Circuitry_Write>
- 318:	9d e0       	ldi	r25, 0x0D	; 13
- 31a:	9a 95       	dec	r25
- 31c:	f1 f7       	brne	.-4      	; 0x31a <EnterParallelProgrammingMode+0x1b2>
- 31e:	00 00       	nop
- 320:	80 e0       	ldi	r24, 0x00	; 0
- 322:	16 df       	rcall	.-468    	; 0x150 <SPI_Switching_Circuitry_Write>
- 324:	8d e0       	ldi	r24, 0x0D	; 13
- 326:	8a 95       	dec	r24
- 328:	f1 f7       	brne	.-4      	; 0x326 <EnterParallelProgrammingMode+0x1be>
- 32a:	00 00       	nop
- 32c:	e5 e0       	ldi	r30, 0x05	; 5
- 32e:	f1 e0       	ldi	r31, 0x01	; 1
- 330:	80 81       	ld	r24, Z
- 332:	80 61       	ori	r24, 0x10	; 16
- 334:	80 83       	st	Z, r24
- 336:	92 e4       	ldi	r25, 0x42	; 66
- 338:	9a 95       	dec	r25
- 33a:	f1 f7       	brne	.-4      	; 0x338 <EnterParallelProgrammingMode+0x1d0>
- 33c:	00 c0       	rjmp	.+0      	; 0x33e <EnterParallelProgrammingMode+0x1d6>
- 33e:	2c 9a       	sbi	0x05, 4	; 5
- 340:	82 e4       	ldi	r24, 0x42	; 66
- 342:	8a 95       	dec	r24
- 344:	f1 f7       	brne	.-4      	; 0x342 <EnterParallelProgrammingMode+0x1da>
- 346:	00 c0       	rjmp	.+0      	; 0x348 <EnterParallelProgrammingMode+0x1e0>
- 348:	8b b1       	in	r24, 0x0b	; 11
- 34a:	86 60       	ori	r24, 0x06	; 6
- 34c:	8b b9       	out	0x0b, r24	; 11
- 34e:	8f e8       	ldi	r24, 0x8F	; 143
- 350:	91 e0       	ldi	r25, 0x01	; 1
- 352:	01 97       	sbiw	r24, 0x01	; 1
- 354:	f1 f7       	brne	.-4      	; 0x352 <EnterParallelProgrammingMode+0x1ea>
- 356:	00 c0       	rjmp	.+0      	; 0x358 <EnterParallelProgrammingMode+0x1f0>
- 358:	00 00       	nop
- 35a:	df 91       	pop	r29
- 35c:	cf 91       	pop	r28
- 35e:	08 95       	ret
-
-00000360 <ExitParallelProgrammingMode>:
- 360:	87 e8       	ldi	r24, 0x87	; 135
- 362:	93 e1       	ldi	r25, 0x13	; 19
- 364:	01 97       	sbiw	r24, 0x01	; 1
- 366:	f1 f7       	brne	.-4      	; 0x364 <ExitParallelProgrammingMode+0x4>
- 368:	00 c0       	rjmp	.+0      	; 0x36a <ExitParallelProgrammingMode+0xa>
- 36a:	00 00       	nop
- 36c:	10 92 0b 01 	sts	0x010B, r1
- 370:	1b b8       	out	0x0b, r1	; 11
- 372:	87 ee       	ldi	r24, 0xE7	; 231
- 374:	93 e0       	ldi	r25, 0x03	; 3
- 376:	01 97       	sbiw	r24, 0x01	; 1
- 378:	f1 f7       	brne	.-4      	; 0x376 <ExitParallelProgrammingMode+0x16>
- 37a:	00 c0       	rjmp	.+0      	; 0x37c <ExitParallelProgrammingMode+0x1c>
- 37c:	00 00       	nop
- 37e:	80 e0       	ldi	r24, 0x00	; 0
- 380:	ec de       	rcall	.-552    	; 0x15a <SPI_FPGA_Write>
- 382:	e5 e0       	ldi	r30, 0x05	; 5
- 384:	f1 e0       	ldi	r31, 0x01	; 1
- 386:	80 81       	ld	r24, Z
- 388:	8f 7d       	andi	r24, 0xDF	; 223
- 38a:	80 83       	st	Z, r24
- 38c:	9a e1       	ldi	r25, 0x1A	; 26
- 38e:	9a 95       	dec	r25
- 390:	f1 f7       	brne	.-4      	; 0x38e <ExitParallelProgrammingMode+0x2e>
- 392:	00 c0       	rjmp	.+0      	; 0x394 <ExitParallelProgrammingMode+0x34>
- 394:	80 81       	ld	r24, Z
- 396:	80 62       	ori	r24, 0x20	; 32
- 398:	80 83       	st	Z, r24
- 39a:	80 81       	ld	r24, Z
- 39c:	8f 7e       	andi	r24, 0xEF	; 239
- 39e:	80 83       	st	Z, r24
- 3a0:	8a e1       	ldi	r24, 0x1A	; 26
- 3a2:	8a 95       	dec	r24
- 3a4:	f1 f7       	brne	.-4      	; 0x3a2 <ExitParallelProgrammingMode+0x42>
- 3a6:	00 c0       	rjmp	.+0      	; 0x3a8 <ExitParallelProgrammingMode+0x48>
- 3a8:	80 81       	ld	r24, Z
- 3aa:	80 61       	ori	r24, 0x10	; 16
- 3ac:	80 83       	st	Z, r24
- 3ae:	80 81       	ld	r24, Z
- 3b0:	88 60       	ori	r24, 0x08	; 8
- 3b2:	80 83       	st	Z, r24
- 3b4:	a0 9a       	sbi	0x14, 0	; 20
- 3b6:	08 95       	ret
-
-000003b8 <SPI_FPGA_Init>:
- 3b8:	84 b1       	in	r24, 0x04	; 4
- 3ba:	87 60       	ori	r24, 0x07	; 7
- 3bc:	84 b9       	out	0x04, r24	; 4
- 3be:	23 98       	cbi	0x04, 3	; 4
- 3c0:	9c 9a       	sbi	0x13, 4	; 19
- 3c2:	a4 9a       	sbi	0x14, 4	; 20
- 3c4:	83 e5       	ldi	r24, 0x53	; 83
- 3c6:	8c bd       	out	0x2c, r24	; 44
- 3c8:	8d b5       	in	r24, 0x2d	; 45
- 3ca:	8e 7f       	andi	r24, 0xFE	; 254
- 3cc:	8d bd       	out	0x2d, r24	; 45
- 3ce:	80 e0       	ldi	r24, 0x00	; 0
- 3d0:	c4 ce       	rjmp	.-632    	; 0x15a <SPI_FPGA_Write>
- 3d2:	08 95       	ret
-
-000003d4 <USB_UART0_Initialization>:
- 3d4:	69 9a       	sbi	0x0d, 1	; 13
- 3d6:	68 98       	cbi	0x0d, 0	; 13
- 3d8:	70 9a       	sbi	0x0e, 0	; 14
- 3da:	86 e0       	ldi	r24, 0x06	; 6
- 3dc:	80 93 c2 00 	sts	0x00C2, r24
- 3e0:	10 92 c5 00 	sts	0x00C5, r1
- 3e4:	81 e0       	ldi	r24, 0x01	; 1
- 3e6:	80 93 c4 00 	sts	0x00C4, r24
- 3ea:	e1 ec       	ldi	r30, 0xC1	; 193
- 3ec:	f0 e0       	ldi	r31, 0x00	; 0
- 3ee:	80 81       	ld	r24, Z
- 3f0:	88 60       	ori	r24, 0x08	; 8
- 3f2:	80 83       	st	Z, r24
- 3f4:	80 81       	ld	r24, Z
- 3f6:	80 61       	ori	r24, 0x10	; 16
- 3f8:	80 83       	st	Z, r24
- 3fa:	08 95       	ret
-
-000003fc <USB_UART2_Initialization>:
- 3fc:	e1 e0       	ldi	r30, 0x01	; 1
- 3fe:	f1 e0       	ldi	r31, 0x01	; 1
- 400:	80 81       	ld	r24, Z
- 402:	82 60       	ori	r24, 0x02	; 2
- 404:	80 83       	st	Z, r24
- 406:	80 81       	ld	r24, Z
- 408:	8e 7f       	andi	r24, 0xFE	; 254
- 40a:	80 83       	st	Z, r24
- 40c:	e2 e0       	ldi	r30, 0x02	; 2
- 40e:	f1 e0       	ldi	r31, 0x01	; 1
- 410:	80 81       	ld	r24, Z
- 412:	81 60       	ori	r24, 0x01	; 1
- 414:	80 83       	st	Z, r24
- 416:	86 e0       	ldi	r24, 0x06	; 6
- 418:	80 93 d2 00 	sts	0x00D2, r24
- 41c:	10 92 d5 00 	sts	0x00D5, r1
- 420:	89 e1       	ldi	r24, 0x19	; 25
- 422:	80 93 d4 00 	sts	0x00D4, r24
- 426:	e1 ed       	ldi	r30, 0xD1	; 209
- 428:	f0 e0       	ldi	r31, 0x00	; 0
- 42a:	80 81       	ld	r24, Z
- 42c:	88 60       	ori	r24, 0x08	; 8
- 42e:	80 83       	st	Z, r24
- 430:	80 81       	ld	r24, Z
- 432:	80 61       	ori	r24, 0x10	; 16
- 434:	80 83       	st	Z, r24
- 436:	08 95       	ret
-
-00000438 <USB_UART2_Out>:
-
-void USB_UART2_Out(unsigned char TransmissionValue)
-{
-	while(!(UCSR2A & (1<<UDRE2))); //buffer empty and ready to transmit
- 438:	e0 ed       	ldi	r30, 0xD0	; 208
- 43a:	f0 e0       	ldi	r31, 0x00	; 0
- 43c:	90 81       	ld	r25, Z
- 43e:	95 ff       	sbrs	r25, 5
- 440:	fd cf       	rjmp	.-6      	; 0x43c <USB_UART2_Out+0x4>
-	UDR2 = TransmissionValue; //start transmitting value
- 442:	80 93 d6 00 	sts	0x00D6, r24
-	while(!(UCSR2A & (1<<TXC2))); //wait for transmit to complete
- 446:	e0 ed       	ldi	r30, 0xD0	; 208
- 448:	f0 e0       	ldi	r31, 0x00	; 0
- 44a:	80 81       	ld	r24, Z
- 44c:	86 ff       	sbrs	r24, 6
- 44e:	fd cf       	rjmp	.-6      	; 0x44a <USB_UART2_Out+0x12>
-	UCSR2A |= 1<<TXC2; //clear transmit complete flag
- 450:	e0 ed       	ldi	r30, 0xD0	; 208
- 452:	f0 e0       	ldi	r31, 0x00	; 0
- 454:	80 81       	ld	r24, Z
- 456:	80 64       	ori	r24, 0x40	; 64
- 458:	80 83       	st	Z, r24
- 45a:	08 95       	ret
-
-0000045c <HexToASCII>:
+00000168 <USB_UART2_Initialization>:
 }
 
-void HexToASCII(unsigned char DataValue)
+void USB_UART2_Initialization(void)
 {
- 45c:	cf 93       	push	r28
- 45e:	c8 2f       	mov	r28, r24
-	unsigned char DataValue1 = 0;
-	unsigned char DataValue2 = 0;
-	
-	DataValue1 = (0xF0 & DataValue);
-	DataValue1 = (DataValue1>>4);
- 460:	82 95       	swap	r24
- 462:	8f 70       	andi	r24, 0x0F	; 15
-	
-	if (DataValue1 >= 10)
- 464:	8a 30       	cpi	r24, 0x0A	; 10
- 466:	18 f0       	brcs	.+6      	; 0x46e <HexToASCII+0x12>
-	{
-		DataValue1 = (DataValue1 - 9);
- 468:	89 50       	subi	r24, 0x09	; 9
-		DataValue1 = (0x40 | DataValue1);
- 46a:	80 64       	ori	r24, 0x40	; 64
- 46c:	01 c0       	rjmp	.+2      	; 0x470 <HexToASCII+0x14>
-	}
-	else
-	{
-		DataValue1 = (0x30 | DataValue1);
- 46e:	80 63       	ori	r24, 0x30	; 48
-	}
-	
-	USB_UART2_Out(DataValue1);
- 470:	e3 df       	rcall	.-58     	; 0x438 <USB_UART2_Out>
-	
-	DataValue2 = (0x0F & DataValue);
- 472:	cf 70       	andi	r28, 0x0F	; 15
-	
-	if (DataValue2 >= 10)
- 474:	ca 30       	cpi	r28, 0x0A	; 10
- 476:	20 f0       	brcs	.+8      	; 0x480 <HexToASCII+0x24>
-	{
-		DataValue2 = (DataValue2 - 9);
- 478:	c9 50       	subi	r28, 0x09	; 9
-		DataValue2 = (0x40 | DataValue2);
- 47a:	8c 2f       	mov	r24, r28
- 47c:	80 64       	ori	r24, 0x40	; 64
- 47e:	02 c0       	rjmp	.+4      	; 0x484 <HexToASCII+0x28>
-	}
-	else
-	{
-		DataValue2 = (0x30 | DataValue2);
- 480:	8c 2f       	mov	r24, r28
- 482:	80 63       	ori	r24, 0x30	; 48
-	}
-	
-	USB_UART2_Out(DataValue2);
- 484:	d9 df       	rcall	.-78     	; 0x438 <USB_UART2_Out>
- 486:	cf 91       	pop	r28
- 488:	08 95       	ret
+	DDRH |= 1<<1;
+ 168:	e1 e0       	ldi	r30, 0x01	; 1
+ 16a:	f1 e0       	ldi	r31, 0x01	; 1
+ 16c:	80 81       	ld	r24, Z
+ 16e:	82 60       	ori	r24, 0x02	; 2
+ 170:	80 83       	st	Z, r24
+	DDRH &= ~(1<<0);
+ 172:	80 81       	ld	r24, Z
+ 174:	8e 7f       	andi	r24, 0xFE	; 254
+ 176:	80 83       	st	Z, r24
+	PORTH |= 1<<0;
+ 178:	e2 e0       	ldi	r30, 0x02	; 2
+ 17a:	f1 e0       	ldi	r31, 0x01	; 1
+ 17c:	80 81       	ld	r24, Z
+ 17e:	81 60       	ori	r24, 0x01	; 1
+ 180:	80 83       	st	Z, r24
+	UCSR2C = (1<<UCSZ21 | 1<<UCSZ20);	//8 bit data
+ 182:	86 e0       	ldi	r24, 0x06	; 6
+ 184:	80 93 d2 00 	sts	0x00D2, r24
+	UBRR2H = 0;
+ 188:	10 92 d5 00 	sts	0x00D5, r1
+	UBRR2L = 25;						//9600 Baud at 8MHz
+ 18c:	89 e1       	ldi	r24, 0x19	; 25
+ 18e:	80 93 d4 00 	sts	0x00D4, r24
+	UCSR2B |= 1<<TXEN2; //Enable Transmit
+ 192:	e1 ed       	ldi	r30, 0xD1	; 209
+ 194:	f0 e0       	ldi	r31, 0x00	; 0
+ 196:	80 81       	ld	r24, Z
+ 198:	88 60       	ori	r24, 0x08	; 8
+ 19a:	80 83       	st	Z, r24
+	UCSR2B |= 1<<RXEN2; //Enable Receive
+ 19c:	80 81       	ld	r24, Z
+ 19e:	80 61       	ori	r24, 0x10	; 16
+ 1a0:	80 83       	st	Z, r24
+ 1a2:	08 95       	ret
 
-0000048a <ReadSignatureBytes>:
-void ReadSignatureBytes(void)
-{
-	unsigned char DataValueIn = 0;
-	
-	//A: Load Command "Read Signature Bytes"
-	ControlPort |= 1<<XA1_BS2;
- 48a:	5d 9a       	sbi	0x0b, 5	; 11
-	ControlPort &= ~(1<<XA0);
- 48c:	5c 98       	cbi	0x0b, 4	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 48e:	5b 98       	cbi	0x0b, 3	; 11
-	DATAOut = 0x08;
- 490:	88 e0       	ldi	r24, 0x08	; 8
- 492:	80 93 0b 01 	sts	0x010B, r24
+000001a4 <main>:
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 496:	85 e8       	ldi	r24, 0x85	; 133
- 498:	8a 95       	dec	r24
- 49a:	f1 f7       	brne	.-4      	; 0x498 <ReadSignatureBytes+0xe>
- 49c:	00 00       	nop
-	_delay_us(100);
-	ControlPort |= 1<<XTAL1;
- 49e:	58 9a       	sbi	0x0b, 0	; 11
- 4a0:	91 e2       	ldi	r25, 0x21	; 33
- 4a2:	9a 95       	dec	r25
- 4a4:	f1 f7       	brne	.-4      	; 0x4a2 <ReadSignatureBytes+0x18>
- 4a6:	00 00       	nop
-	_delay_us(25);
-	ControlPort &= ~(1<<XTAL1);
- 4a8:	58 98       	cbi	0x0b, 0	; 11
- 4aa:	85 e8       	ldi	r24, 0x85	; 133
- 4ac:	8a 95       	dec	r24
- 4ae:	f1 f7       	brne	.-4      	; 0x4ac <ReadSignatureBytes+0x22>
- 4b0:	00 00       	nop
-	_delay_us(100);
-	
-	//B: Load Address Low Byte
-	ControlPort &= ~(1<<XA1_BS2);
- 4b2:	5d 98       	cbi	0x0b, 5	; 11
-	ControlPort &= ~(1<<XA0);
- 4b4:	5c 98       	cbi	0x0b, 4	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 4b6:	5b 98       	cbi	0x0b, 3	; 11
-	DATAOut = 0x00;
- 4b8:	10 92 0b 01 	sts	0x010B, r1
- 4bc:	95 e8       	ldi	r25, 0x85	; 133
- 4be:	9a 95       	dec	r25
- 4c0:	f1 f7       	brne	.-4      	; 0x4be <ReadSignatureBytes+0x34>
- 4c2:	00 00       	nop
-	_delay_us(100);
-	ControlPort |= 1<<XTAL1;
- 4c4:	58 9a       	sbi	0x0b, 0	; 11
- 4c6:	81 e2       	ldi	r24, 0x21	; 33
- 4c8:	8a 95       	dec	r24
- 4ca:	f1 f7       	brne	.-4      	; 0x4c8 <ReadSignatureBytes+0x3e>
- 4cc:	00 00       	nop
-	_delay_us(25);
-	ControlPort &= ~(1<<XTAL1);
- 4ce:	58 98       	cbi	0x0b, 0	; 11
- 4d0:	95 e8       	ldi	r25, 0x85	; 133
- 4d2:	9a 95       	dec	r25
- 4d4:	f1 f7       	brne	.-4      	; 0x4d2 <ReadSignatureBytes+0x48>
- 4d6:	00 00       	nop
-	_delay_us(100);
-	
-	//Read data
-	DATADirection = 0;
- 4d8:	10 92 0a 01 	sts	0x010A, r1
-	WR_PORT |= (1<<FPGAWR);
- 4dc:	e5 e0       	ldi	r30, 0x05	; 5
- 4de:	f1 e0       	ldi	r31, 0x01	; 1
- 4e0:	80 81       	ld	r24, Z
- 4e2:	84 60       	ori	r24, 0x04	; 4
- 4e4:	80 83       	st	Z, r24
-	ControlPort &= ~(1<<OE);
- 4e6:	59 98       	cbi	0x0b, 1	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 4e8:	5b 98       	cbi	0x0b, 3	; 11
- 4ea:	83 ef       	ldi	r24, 0xF3	; 243
- 4ec:	91 e0       	ldi	r25, 0x01	; 1
- 4ee:	01 97       	sbiw	r24, 0x01	; 1
- 4f0:	f1 f7       	brne	.-4      	; 0x4ee <ReadSignatureBytes+0x64>
- 4f2:	00 c0       	rjmp	.+0      	; 0x4f4 <ReadSignatureBytes+0x6a>
- 4f4:	00 00       	nop
-	_delay_us(500);
-	DataValueIn = DATAIn;
- 4f6:	80 91 09 01 	lds	r24, 0x0109
-	HexToASCII(DataValueIn);
- 4fa:	b0 df       	rcall	.-160    	; 0x45c <HexToASCII>
-	ControlPort |= 1<<OE;
- 4fc:	59 9a       	sbi	0x0b, 1	; 11
-	WR_PORT &= ~(1<<FPGAWR);
- 4fe:	e5 e0       	ldi	r30, 0x05	; 5
- 500:	f1 e0       	ldi	r31, 0x01	; 1
- 502:	80 81       	ld	r24, Z
- 504:	8b 7f       	andi	r24, 0xFB	; 251
- 506:	80 83       	st	Z, r24
-	DATADirection = 0xFF;
- 508:	8f ef       	ldi	r24, 0xFF	; 255
- 50a:	80 93 0a 01 	sts	0x010A, r24
- 50e:	95 e8       	ldi	r25, 0x85	; 133
- 510:	9a 95       	dec	r25
- 512:	f1 f7       	brne	.-4      	; 0x510 <ReadSignatureBytes+0x86>
- 514:	00 00       	nop
-	_delay_us(100);
-	
-	//Load Address Low Byte
-	ControlPort &= ~(1<<XA1_BS2);
- 516:	5d 98       	cbi	0x0b, 5	; 11
-	ControlPort &= ~(1<<XA0);
- 518:	5c 98       	cbi	0x0b, 4	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 51a:	5b 98       	cbi	0x0b, 3	; 11
-	DATAOut = 0x01;
- 51c:	81 e0       	ldi	r24, 0x01	; 1
- 51e:	80 93 0b 01 	sts	0x010B, r24
- 522:	85 e8       	ldi	r24, 0x85	; 133
- 524:	8a 95       	dec	r24
- 526:	f1 f7       	brne	.-4      	; 0x524 <ReadSignatureBytes+0x9a>
- 528:	00 00       	nop
-	_delay_us(100);
-	ControlPort |= 1<<XTAL1;
- 52a:	58 9a       	sbi	0x0b, 0	; 11
- 52c:	91 e2       	ldi	r25, 0x21	; 33
- 52e:	9a 95       	dec	r25
- 530:	f1 f7       	brne	.-4      	; 0x52e <ReadSignatureBytes+0xa4>
- 532:	00 00       	nop
-	_delay_us(25);
-	ControlPort &= ~(1<<XTAL1);
- 534:	58 98       	cbi	0x0b, 0	; 11
- 536:	85 e8       	ldi	r24, 0x85	; 133
- 538:	8a 95       	dec	r24
- 53a:	f1 f7       	brne	.-4      	; 0x538 <ReadSignatureBytes+0xae>
- 53c:	00 00       	nop
-	_delay_us(100);
-	
-	//Read data
-	DATADirection = 0;
- 53e:	10 92 0a 01 	sts	0x010A, r1
-	WR_PORT |= (1<<FPGAWR);
- 542:	80 81       	ld	r24, Z
- 544:	84 60       	ori	r24, 0x04	; 4
- 546:	80 83       	st	Z, r24
-	ControlPort &= ~(1<<OE);
- 548:	59 98       	cbi	0x0b, 1	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 54a:	5b 98       	cbi	0x0b, 3	; 11
- 54c:	83 ef       	ldi	r24, 0xF3	; 243
- 54e:	91 e0       	ldi	r25, 0x01	; 1
- 550:	01 97       	sbiw	r24, 0x01	; 1
- 552:	f1 f7       	brne	.-4      	; 0x550 <ReadSignatureBytes+0xc6>
- 554:	00 c0       	rjmp	.+0      	; 0x556 <ReadSignatureBytes+0xcc>
- 556:	00 00       	nop
-	_delay_us(500);
-	DataValueIn = DATAIn;
- 558:	80 91 09 01 	lds	r24, 0x0109
-	HexToASCII(DataValueIn);
- 55c:	7f df       	rcall	.-258    	; 0x45c <HexToASCII>
-	ControlPort |= 1<<OE;
- 55e:	59 9a       	sbi	0x0b, 1	; 11
-	WR_PORT &= ~(1<<FPGAWR);
- 560:	e5 e0       	ldi	r30, 0x05	; 5
- 562:	f1 e0       	ldi	r31, 0x01	; 1
- 564:	80 81       	ld	r24, Z
- 566:	8b 7f       	andi	r24, 0xFB	; 251
- 568:	80 83       	st	Z, r24
-	DATADirection = 0xFF;
- 56a:	8f ef       	ldi	r24, 0xFF	; 255
- 56c:	80 93 0a 01 	sts	0x010A, r24
- 570:	95 e8       	ldi	r25, 0x85	; 133
- 572:	9a 95       	dec	r25
- 574:	f1 f7       	brne	.-4      	; 0x572 <ReadSignatureBytes+0xe8>
- 576:	00 00       	nop
-	_delay_us(100);
-	
-	//Load Address Low Byte
-	ControlPort &= ~(1<<XA1_BS2);
- 578:	5d 98       	cbi	0x0b, 5	; 11
-	ControlPort &= ~(1<<XA0);
- 57a:	5c 98       	cbi	0x0b, 4	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 57c:	5b 98       	cbi	0x0b, 3	; 11
-	DATAOut = 0x02;
- 57e:	82 e0       	ldi	r24, 0x02	; 2
- 580:	80 93 0b 01 	sts	0x010B, r24
- 584:	85 e8       	ldi	r24, 0x85	; 133
- 586:	8a 95       	dec	r24
- 588:	f1 f7       	brne	.-4      	; 0x586 <ReadSignatureBytes+0xfc>
- 58a:	00 00       	nop
-	_delay_us(100);
-	ControlPort |= 1<<XTAL1;
- 58c:	58 9a       	sbi	0x0b, 0	; 11
- 58e:	91 e2       	ldi	r25, 0x21	; 33
- 590:	9a 95       	dec	r25
- 592:	f1 f7       	brne	.-4      	; 0x590 <ReadSignatureBytes+0x106>
- 594:	00 00       	nop
-	_delay_us(25);
-	ControlPort &= ~(1<<XTAL1);
- 596:	58 98       	cbi	0x0b, 0	; 11
- 598:	85 e8       	ldi	r24, 0x85	; 133
- 59a:	8a 95       	dec	r24
- 59c:	f1 f7       	brne	.-4      	; 0x59a <ReadSignatureBytes+0x110>
- 59e:	00 00       	nop
-	_delay_us(100);
-	
-	//Read data
-	DATADirection = 0;
- 5a0:	10 92 0a 01 	sts	0x010A, r1
-	WR_PORT |= (1<<FPGAWR);
- 5a4:	80 81       	ld	r24, Z
- 5a6:	84 60       	ori	r24, 0x04	; 4
- 5a8:	80 83       	st	Z, r24
-	ControlPort &= ~(1<<OE);
- 5aa:	59 98       	cbi	0x0b, 1	; 11
-	ControlPort &= ~(1<<BS1_PAGEL);
- 5ac:	5b 98       	cbi	0x0b, 3	; 11
- 5ae:	83 ef       	ldi	r24, 0xF3	; 243
- 5b0:	91 e0       	ldi	r25, 0x01	; 1
- 5b2:	01 97       	sbiw	r24, 0x01	; 1
- 5b4:	f1 f7       	brne	.-4      	; 0x5b2 <ReadSignatureBytes+0x128>
- 5b6:	00 c0       	rjmp	.+0      	; 0x5b8 <ReadSignatureBytes+0x12e>
- 5b8:	00 00       	nop
-	_delay_us(500);
-	DataValueIn = DATAIn;
- 5ba:	80 91 09 01 	lds	r24, 0x0109
-	HexToASCII(DataValueIn);
- 5be:	4e df       	rcall	.-356    	; 0x45c <HexToASCII>
-	ControlPort |= 1<<OE;
- 5c0:	59 9a       	sbi	0x0b, 1	; 11
-	WR_PORT &= ~(1<<FPGAWR);
- 5c2:	e5 e0       	ldi	r30, 0x05	; 5
- 5c4:	f1 e0       	ldi	r31, 0x01	; 1
- 5c6:	80 81       	ld	r24, Z
- 5c8:	8b 7f       	andi	r24, 0xFB	; 251
- 5ca:	80 83       	st	Z, r24
-	DATADirection = 0xFF;
- 5cc:	8f ef       	ldi	r24, 0xFF	; 255
- 5ce:	80 93 0a 01 	sts	0x010A, r24
-	DATAOut = 0x00;
- 5d2:	10 92 0b 01 	sts	0x010B, r1
- 5d6:	08 95       	ret
-
-000005d8 <main>:
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 5d8:	2f e7       	ldi	r18, 0x7F	; 127
- 5da:	8a e1       	ldi	r24, 0x1A	; 26
- 5dc:	96 e0       	ldi	r25, 0x06	; 6
- 5de:	21 50       	subi	r18, 0x01	; 1
- 5e0:	80 40       	sbci	r24, 0x00	; 0
- 5e2:	90 40       	sbci	r25, 0x00	; 0
- 5e4:	e1 f7       	brne	.-8      	; 0x5de <main+0x6>
- 5e6:	00 c0       	rjmp	.+0      	; 0x5e8 <main+0x10>
- 5e8:	00 00       	nop
+ 1a4:	2f e7       	ldi	r18, 0x7F	; 127
+ 1a6:	8a e1       	ldi	r24, 0x1A	; 26
+ 1a8:	96 e0       	ldi	r25, 0x06	; 6
+ 1aa:	21 50       	subi	r18, 0x01	; 1
+ 1ac:	80 40       	sbci	r24, 0x00	; 0
+ 1ae:	90 40       	sbci	r25, 0x00	; 0
+ 1b0:	e1 f7       	brne	.-8      	; 0x1aa <main+0x6>
+ 1b2:	00 c0       	rjmp	.+0      	; 0x1b4 <main+0x10>
+ 1b4:	00 00       	nop
 
 int main(void)
 {
 	_delay_ms(500);
 	
 	USB_UART0_Initialization();
- 5ea:	f4 de       	rcall	.-536    	; 0x3d4 <USB_UART0_Initialization>
+ 1b6:	c4 df       	rcall	.-120    	; 0x140 <USB_UART0_Initialization>
 	USB_UART2_Initialization();
- 5ec:	07 df       	rcall	.-498    	; 0x3fc <USB_UART2_Initialization>
+ 1b8:	d7 df       	rcall	.-82     	; 0x168 <USB_UART2_Initialization>
 	SPI_FPGA_Init();
- 5ee:	e4 de       	rcall	.-568    	; 0x3b8 <SPI_FPGA_Init>
+ 1ba:	b4 df       	rcall	.-152    	; 0x124 <SPI_FPGA_Init>
 	SPI_Switching_Circuitry_Init();
- 5f0:	9f dd       	rcall	.-1218   	; 0x130 <SPI_Switching_Circuitry_Init>
-	ParallelProgrammingInit();
- 5f2:	81 dd       	rcall	.-1278   	; 0xf6 <ParallelProgrammingInit>
- 5f4:	2f e7       	ldi	r18, 0x7F	; 127
- 5f6:	8a e1       	ldi	r24, 0x1A	; 26
- 5f8:	96 e0       	ldi	r25, 0x06	; 6
- 5fa:	21 50       	subi	r18, 0x01	; 1
- 5fc:	80 40       	sbci	r24, 0x00	; 0
- 5fe:	90 40       	sbci	r25, 0x00	; 0
- 600:	e1 f7       	brne	.-8      	; 0x5fa <main+0x22>
- 602:	00 c0       	rjmp	.+0      	; 0x604 <main+0x2c>
- 604:	00 00       	nop
+ 1bc:	9c df       	rcall	.-200    	; 0xf6 <SPI_Switching_Circuitry_Init>
+ 1be:	2f e7       	ldi	r18, 0x7F	; 127
+ 1c0:	8a e1       	ldi	r24, 0x1A	; 26
+ 1c2:	96 e0       	ldi	r25, 0x06	; 6
+ 1c4:	21 50       	subi	r18, 0x01	; 1
+ 1c6:	80 40       	sbci	r24, 0x00	; 0
+ 1c8:	90 40       	sbci	r25, 0x00	; 0
+ 1ca:	e1 f7       	brne	.-8      	; 0x1c4 <main+0x20>
+ 1cc:	00 c0       	rjmp	.+0      	; 0x1ce <main+0x2a>
+ 1ce:	00 00       	nop
 	//USB_UART0_Out('l');
 	//USB_UART0_Out('p');
 	//USB_UART0_Out(0x0A);
 	
 	//turning on top board LEDs
 	LED_DDR |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
- 606:	83 b3       	in	r24, 0x13	; 19
- 608:	87 60       	ori	r24, 0x07	; 7
- 60a:	83 bb       	out	0x13, r24	; 19
+ 1d0:	83 b3       	in	r24, 0x13	; 19
+ 1d2:	87 60       	ori	r24, 0x07	; 7
+ 1d4:	83 bb       	out	0x13, r24	; 19
 	LED_PORT |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
- 60c:	84 b3       	in	r24, 0x14	; 20
- 60e:	87 60       	ori	r24, 0x07	; 7
- 610:	84 bb       	out	0x14, r24	; 20
- 612:	2f e7       	ldi	r18, 0x7F	; 127
- 614:	8a e1       	ldi	r24, 0x1A	; 26
- 616:	96 e0       	ldi	r25, 0x06	; 6
- 618:	21 50       	subi	r18, 0x01	; 1
- 61a:	80 40       	sbci	r24, 0x00	; 0
- 61c:	90 40       	sbci	r25, 0x00	; 0
- 61e:	e1 f7       	brne	.-8      	; 0x618 <main+0x40>
- 620:	00 c0       	rjmp	.+0      	; 0x622 <main+0x4a>
- 622:	00 00       	nop
-	//ExitParallelProgrammingMode();
-	
-	while(1)
-	{
-		_delay_ms(500);
-		EnterParallelProgrammingMode();
- 624:	a1 dd       	rcall	.-1214   	; 0x168 <EnterParallelProgrammingMode>
-		ReadSignatureBytes();
- 626:	31 df       	rcall	.-414    	; 0x48a <ReadSignatureBytes>
-		ExitParallelProgrammingMode();
- 628:	9b de       	rcall	.-714    	; 0x360 <ExitParallelProgrammingMode>
- 62a:	f3 cf       	rjmp	.-26     	; 0x612 <main+0x3a>
+ 1d6:	84 b3       	in	r24, 0x14	; 20
+ 1d8:	87 60       	ori	r24, 0x07	; 7
+ 1da:	84 bb       	out	0x14, r24	; 20
+ 1dc:	2f e7       	ldi	r18, 0x7F	; 127
+ 1de:	8a e1       	ldi	r24, 0x1A	; 26
+ 1e0:	96 e0       	ldi	r25, 0x06	; 6
+ 1e2:	21 50       	subi	r18, 0x01	; 1
+ 1e4:	80 40       	sbci	r24, 0x00	; 0
+ 1e6:	90 40       	sbci	r25, 0x00	; 0
+ 1e8:	e1 f7       	brne	.-8      	; 0x1e2 <main+0x3e>
+ 1ea:	00 c0       	rjmp	.+0      	; 0x1ec <main+0x48>
+ 1ec:	00 00       	nop
+ 1ee:	ff cf       	rjmp	.-2      	; 0x1ee <main+0x4a>
 
-0000062c <_exit>:
- 62c:	f8 94       	cli
+000001f0 <_exit>:
+ 1f0:	f8 94       	cli
 
-0000062e <__stop_program>:
- 62e:	ff cf       	rjmp	.-2      	; 0x62e <__stop_program>
+000001f2 <__stop_program>:
+ 1f2:	ff cf       	rjmp	.-2      	; 0x1f2 <__stop_program>
