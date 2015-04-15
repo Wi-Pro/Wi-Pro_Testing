@@ -15,12 +15,15 @@ void LED_off(void);
 
 int main(void)
 {
-	initialization();
+	//initialization();
+	DDRD |= (1<<PD6);//make PD6 an output
     while(1)
     {
-		LED_on();
+		//LED_on();
+		PORTD |= (1<<PD6);
         _delay_ms(1000);//delay for 1 second
-		LED_off();
+		//LED_off();
+		PORTD &= ~(1<<PD6);
 		_delay_ms(1000);
     }
 }

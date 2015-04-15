@@ -99,90 +99,94 @@ int main(void)
     while(1)
     {
 		//E4,E4,F4,G4,G4,F4,E4,D4,C4,C4,D4,E4,E4
-        note(E4, 1);
-		note(E4, 1);
-		note(F4, 1);
-		note(G4, 1);
-		note(G4, 1);
-		note(F4, 1);
-		note(E4, 1);
-		note(D4, 1);
-		note(C4, 1);
-		note(C4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(E4, 1);
+        note(E4, 2);
+		note(E4, 2);
+		note(F4, 2);
+		note(G4, 2);
+		note(G4, 2);
+		note(F4, 2);
+		note(E4, 2);
+		note(D4, 2);
+		note(C4, 2);
+		note(C4, 2);
+		note(D4, 2);
+		note(E4, 2);
+		note(E4, 4);
 		//D4,D4,E4,E4,F4,G4,G4,F4,E4,D4,C4,C4,D4,E4,D4,C4
 		note(D4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(E4, 1);
-		note(F4, 1);
-		note(G4, 1);
-		note(G4, 1);
-		note(F4, 1);
-		note(E4, 1);
-		note(D4, 1);
-		note(C4, 1);
-		note(C4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(D4, 1);
+		note(D4, 4);
+		note(E4, 2);
+		note(E4, 2);
+		note(F4, 2);
+		note(G4, 2);
+		note(G4, 2);
+		note(F4, 2);
+		note(E4, 2);
+		note(D4, 2);
+		note(C4, 2);
+		note(C4, 2);
+		note(D4, 2);
+		note(E4, 2);
+		note(D4, 4);
 		note(C4, 1);
 		//C4,D4,D4,E4,C4,D4,E4,F4,E4,C4,D4,E4,F4,E4,D4,C4
-		note(C4, 1);
-		note(D4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(C4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(F4, 1);
-		note(E4, 1);
-		note(C4, 1);
-		note(D4, 1);
+		note(C4, 4);
+		note(D4, 2);
+		note(D4, 2);
+		note(E4, 2);
+		note(C4, 2);
+		note(D4, 2);
 		note(E4, 1);
 		note(F4, 1);
 		note(E4, 1);
-		note(D4, 1);
-		note(C4, 1);
+		note(C4, 2);
+		note(D4, 2);
+		note(E4, 1);
+		note(F4, 1);
+		note(E4, 1);
+		note(D4, 2);
+		note(C4, 2);
 		//D4,G3,E4,E4,F4,G4,G4,F4,E4,D4,C4,C4,D4,E4,D4,C4,C4
-		note(D4, 1);
-		note(G3, 1);
-		note(E4, 1);
-		note(E4, 1);
-		note(F4, 1);
-		note(G4, 1);
-		note(G4, 1);
-		note(F4, 1);
-		note(E4, 1);
-		note(D4, 1);
+		note(D4, 2);
+		note(G3, 4);
+		note(E4, 2);
+		note(E4, 2);
+		note(F4, 2);
+		note(G4, 2);
+		note(G4, 2);
+		note(F4, 2);
+		note(E4, 2);
+		note(D4, 2);
+		note(C4, 2);
+		note(C4, 2);
+		note(D4, 2);
+		note(E4, 2);
+		note(D4, 4);
 		note(C4, 1);
-		note(C4, 1);
-		note(D4, 1);
-		note(E4, 1);
-		note(D4, 1);
-		note(C4, 1);
-		note(C4, 1);
-    }
+		note(C4, 4);
+		while(1);
+	}
 }
 
 void initialization(void){
-	DDRD |= (1<<PD6);//make PD6 an output
+	DDRD |= (1<<PD5);//make PD6 an output
 }
 
-void note(int frequency, int seconds){
+void note(int frequency, int seconds){ //f = 255 hz: t = 1/255 = 3.2ms/2 = 1.96 ms
 	int i, j;
 	int cycles;
+	int time;
 	DDRD |= (1<<PD5);//makes PD5 an output
-	cycles = (seconds*100000)/frequency; //calculates required cycles
-	for(j = 0; j < cycles; j++){
-		PORTB |= (1 << PB0);
-		for(i = j; i > 0; i--){
+	time = 50000/frequency;//each count is half note
+	time = time/2; 
+	//cycles = (seconds*1000000)/frequency; //calculates required cycles
+	for(j = 0; j < frequency; j++){
+		PORTD |= (1 << PD5);
+		for(i = 0; i < time; i++){
 			_delay_us(1);
 		}
-		PORTB &= ~(PORTB << PB0);
-		for(i = j; i > 0; i--){
+		PORTD &= ~(1 << PD5);
+		for(i = 0; i < time; i++){
 			_delay_us(1);
 		}
 	}

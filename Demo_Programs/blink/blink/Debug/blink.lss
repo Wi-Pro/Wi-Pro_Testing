@@ -3,23 +3,23 @@ blink.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000070  00000000  00000000  00000054  2**1
+  0 .text         00000064  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .comment      00000030  00000000  00000000  000000c4  2**0
+  1 .comment      00000030  00000000  00000000  000000b8  2**0
                   CONTENTS, READONLY
-  2 .debug_aranges 00000038  00000000  00000000  000000f4  2**0
+  2 .debug_aranges 00000038  00000000  00000000  000000e8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000001a6  00000000  00000000  0000012c  2**0
+  3 .debug_info   0000018b  00000000  00000000  00000120  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000000e7  00000000  00000000  000002d2  2**0
+  4 .debug_abbrev 000000ed  00000000  00000000  000002ab  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   00000173  00000000  00000000  000003b9  2**0
+  5 .debug_line   00000173  00000000  00000000  00000398  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  00000054  00000000  00000000  0000052c  2**2
+  6 .debug_frame  00000054  00000000  00000000  0000050c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    0000019f  00000000  00000000  00000580  2**0
+  7 .debug_str    0000019f  00000000  00000000  00000560  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_ranges 00000028  00000000  00000000  0000071f  2**0
+  8 .debug_ranges 00000028  00000000  00000000  000006ff  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -50,79 +50,57 @@ Disassembly of section .text:
   28:	1f be       	out	0x3f, r1	; 63
   2a:	cf ed       	ldi	r28, 0xDF	; 223
   2c:	cd bf       	out	0x3d, r28	; 61
-  2e:	08 d0       	rcall	.+16     	; 0x40 <main>
-  30:	1d c0       	rjmp	.+58     	; 0x6c <_exit>
+  2e:	02 d0       	rcall	.+4      	; 0x34 <main>
+  30:	17 c0       	rjmp	.+46     	; 0x60 <_exit>
 
 00000032 <__bad_interrupt>:
   32:	e6 cf       	rjmp	.-52     	; 0x0 <__vectors>
 
-00000034 <initialization>:
-		_delay_ms(1000);
-    }
-}
-
-void initialization(void){
-	DDRD |= (1<<PD6);//make PD6 an output
-  34:	8e 9a       	sbi	0x11, 6	; 17
-  36:	08 95       	ret
-
-00000038 <LED_on>:
-}
-void LED_on(void){
-	PORTD |= (1<<PD6);
-  38:	96 9a       	sbi	0x12, 6	; 18
-  3a:	08 95       	ret
-
-0000003c <LED_off>:
-}
-void LED_off(void){
-	PORTD &= ~(1<<PD6);
-  3c:	96 98       	cbi	0x12, 6	; 18
-  3e:	08 95       	ret
-
-00000040 <main>:
-void LED_on(void);
+00000034 <main>:
 void LED_off(void);
 
 int main(void)
 {
-	initialization();
-  40:	f9 df       	rcall	.-14     	; 0x34 <initialization>
+	//initialization();
+	DDRD |= (1<<PD6);//make PD6 an output
+  34:	8e 9a       	sbi	0x11, 6	; 17
     while(1)
     {
-		LED_on();
-  42:	fa df       	rcall	.-12     	; 0x38 <LED_on>
+		//LED_on();
+		PORTD |= (1<<PD6);
+  36:	96 9a       	sbi	0x12, 6	; 18
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  44:	2f e3       	ldi	r18, 0x3F	; 63
-  46:	8d e0       	ldi	r24, 0x0D	; 13
-  48:	93 e0       	ldi	r25, 0x03	; 3
-  4a:	21 50       	subi	r18, 0x01	; 1
-  4c:	80 40       	sbci	r24, 0x00	; 0
-  4e:	90 40       	sbci	r25, 0x00	; 0
-  50:	e1 f7       	brne	.-8      	; 0x4a <main+0xa>
-  52:	00 c0       	rjmp	.+0      	; 0x54 <main+0x14>
-  54:	00 00       	nop
+  38:	2f e3       	ldi	r18, 0x3F	; 63
+  3a:	8d e0       	ldi	r24, 0x0D	; 13
+  3c:	93 e0       	ldi	r25, 0x03	; 3
+  3e:	21 50       	subi	r18, 0x01	; 1
+  40:	80 40       	sbci	r24, 0x00	; 0
+  42:	90 40       	sbci	r25, 0x00	; 0
+  44:	e1 f7       	brne	.-8      	; 0x3e <__SP_L__+0x1>
+  46:	00 c0       	rjmp	.+0      	; 0x48 <__SREG__+0x9>
+  48:	00 00       	nop
         _delay_ms(1000);//delay for 1 second
-		LED_off();
-  56:	f2 df       	rcall	.-28     	; 0x3c <LED_off>
-  58:	2f e3       	ldi	r18, 0x3F	; 63
-  5a:	8d e0       	ldi	r24, 0x0D	; 13
-  5c:	93 e0       	ldi	r25, 0x03	; 3
-  5e:	21 50       	subi	r18, 0x01	; 1
-  60:	80 40       	sbci	r24, 0x00	; 0
-  62:	90 40       	sbci	r25, 0x00	; 0
-  64:	e1 f7       	brne	.-8      	; 0x5e <main+0x1e>
-  66:	00 c0       	rjmp	.+0      	; 0x68 <main+0x28>
-  68:	00 00       	nop
-  6a:	eb cf       	rjmp	.-42     	; 0x42 <main+0x2>
+		//LED_off();
+		PORTD &= ~(1<<PD6);
+  4a:	96 98       	cbi	0x12, 6	; 18
+  4c:	2f e3       	ldi	r18, 0x3F	; 63
+  4e:	8d e0       	ldi	r24, 0x0D	; 13
+  50:	93 e0       	ldi	r25, 0x03	; 3
+  52:	21 50       	subi	r18, 0x01	; 1
+  54:	80 40       	sbci	r24, 0x00	; 0
+  56:	90 40       	sbci	r25, 0x00	; 0
+  58:	e1 f7       	brne	.-8      	; 0x52 <__SREG__+0x13>
+  5a:	00 c0       	rjmp	.+0      	; 0x5c <__SREG__+0x1d>
+  5c:	00 00       	nop
+  5e:	eb cf       	rjmp	.-42     	; 0x36 <main+0x2>
 
-0000006c <_exit>:
-  6c:	f8 94       	cli
+00000060 <_exit>:
+  60:	f8 94       	cli
 
-0000006e <__stop_program>:
-  6e:	ff cf       	rjmp	.-2      	; 0x6e <__stop_program>
+00000062 <__stop_program>:
+  62:	ff cf       	rjmp	.-2      	; 0x62 <__stop_program>
