@@ -19,6 +19,7 @@
 #define CLEAR_FLAG "/data/clearflags?"
 //Server Files
 #define FLAG_FILE "/uploads/hex/1000000000/flagfile.txt"
+#define HEX_FILE "/uploads/hex/1000000000/new_hex.hex"
 
 //Flag positions
 #define ETHERNET 0 
@@ -33,6 +34,7 @@ void sendAvailableNetworks();
 int getFlagStatus();
 void pollingInit();
 int clearFlags(); 
+int getHexFile(); 
 
 
 

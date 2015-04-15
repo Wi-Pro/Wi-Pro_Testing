@@ -30,13 +30,13 @@
 #define hundreds 4
 #define tens 5
 #define ones 6
-#define endHeader 7
+#define endHeader 9
 
 //I/Os 
 //#define RTS PORTD4
 //#define CTS PORTD5 
 
-void setTestPrint(); 
+void setTestPrint(int print);
 void uart_init();
 int uart_send(char* data, unsigned int length);
 int uart_sendChar(unsigned char data);

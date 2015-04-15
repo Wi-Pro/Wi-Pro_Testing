@@ -19,7 +19,7 @@ c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-t
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
                               ClientController.o (printf)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
-                              RAM/RAMDriver.o (putchar)
+                              ClientController.o (putchar)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
                               ClientController.o (puts)
 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
@@ -57,20 +57,46 @@ Discarded input sections
  .bss           0x00000000        0x0 ClientController.o
  .text.flagInit
                 0x00000000       0x16 ClientController.o
+ .text.pollingInit
+                0x00000000       0x1a ClientController.o
  .text.checkNetworkStatus
                 0x00000000        0x2 ClientController.o
- .text.getHexFile
-                0x00000000        0x2 ClientController.o
+ .text.sendAvailableNetworks
+                0x00000000       0xc4 ClientController.o
  .text          0x00000000        0x0 Communications.o
  .bss           0x00000000        0x0 Communications.o
  .text          0x00000000        0x0 Ethernet/Ethernet.o
  .bss           0x00000000        0x0 Ethernet/Ethernet.o
+ .text.ethernetInit
+                0x00000000       0x2e Ethernet/Ethernet.o
+ .text.getFileEthernet
+                0x00000000       0xc8 Ethernet/Ethernet.o
  .text.sendRequestEthernet
                 0x00000000        0x2 Ethernet/Ethernet.o
+ .data.source_port
+                0x00000000        0x2 Ethernet/Ethernet.o
+ .data.server_port
+                0x00000000        0x2 Ethernet/Ethernet.o
+ .data.server_ip_addr
+                0x00000000        0x4 Ethernet/Ethernet.o
+ .data.gtw_addr
+                0x00000000        0x4 Ethernet/Ethernet.o
+ .data.sub_mask
+                0x00000000        0x4 Ethernet/Ethernet.o
+ .data.local_ip_addr
+                0x00000000        0x4 Ethernet/Ethernet.o
+ .data.mac_addr
+                0x00000000        0x6 Ethernet/Ethernet.o
  .text          0x00000000        0x0 Ethernet/EthernetDriver.o
  .bss           0x00000000        0x0 Ethernet/EthernetDriver.o
+ .text.NetworkSetup
+                0x00000000      0x148 Ethernet/EthernetDriver.o
+ .text.MemoryInit
+                0x00000000       0x42 Ethernet/EthernetDriver.o
  .text.ReceiveSize
                 0x00000000       0x28 Ethernet/EthernetDriver.o
+ .text.ReceiveData
+                0x00000000      0x13c Ethernet/EthernetDriver.o
  .text.SocketDisconnect
                 0x00000000       0x14 Ethernet/EthernetDriver.o
  .text.EnableEthernetInterrupt
@@ -97,29 +123,39 @@ Discarded input sections
  .bss           0x00000000        0x0 RAM/RAMDriver.o
  .text.setSPIClockDiv
                 0x00000000       0x38 RAM/RAMDriver.o
+ .text.getRAMStatus
+                0x00000000       0x1c RAM/RAMDriver.o
+ .text.RAMWrite
+                0x00000000       0x62 RAM/RAMDriver.o
  .text.RAMRead  0x00000000       0x54 RAM/RAMDriver.o
  .text          0x00000000        0x0 Wifi/Wifi.o
  .bss           0x00000000        0x0 Wifi/Wifi.o
- .text.wifiInit
-                0x00000000        0xc Wifi/Wifi.o
  .text.setMachineMode
                 0x00000000       0x40 Wifi/Wifi.o
  .text.setHumanMode
                 0x00000000       0x3c Wifi/Wifi.o
+ .text.networkScan
+                0x00000000       0x28 Wifi/Wifi.o
+ .text.networkConnect
+                0x00000000       0x44 Wifi/Wifi.o
  .text.serverConnect
                 0x00000000       0x44 Wifi/Wifi.o
- .text.getFileWifi
-                0x00000000       0x6a Wifi/Wifi.o
+ .text.networkQueryString
+                0x00000000       0xec Wifi/Wifi.o
  .text          0x00000000        0x0 Wifi/WifiDriver.o
  .bss           0x00000000        0x0 Wifi/WifiDriver.o
- .text.setTestPrint
-                0x00000000        0xe Wifi/WifiDriver.o
  .text.getStringLen
                 0x00000000       0x12 Wifi/WifiDriver.o
  .text.uart_receive
                 0x00000000       0x80 Wifi/WifiDriver.o
  .text.getReceiveBuffer
                 0x00000000       0x18 Wifi/WifiDriver.o
+ .text.getTransmissionLength
+                0x00000000        0xa Wifi/WifiDriver.o
+ .text.getMessageHeader
+                0x00000000       0x20 Wifi/WifiDriver.o
+ .text.errorCheck
+                0x00000000       0x2a Wifi/WifiDriver.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_udivmodhi4.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_udivmodhi4.o)
  .text.libgcc.mul
@@ -350,7 +386,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1930
+.text           0x00000000     0x13b4
  *(.vectors)
  .vectors       0x00000000       0x7c c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324pa.o
                 0x00000000                __vector_default
@@ -438,194 +474,161 @@ END GROUP
                 0x000000b6                __vector_20
                 0x000000ba                . = ALIGN (0x2)
  *(.text.*)
- .text.pollingInit
-                0x000000ba       0x1a ClientController.o
-                0x000000ba                pollingInit
  .text.clearFlags
-                0x000000d4       0x92 ClientController.o
-                0x000000d4                clearFlags
- .text.sendAvailableNetworks
-                0x00000166       0xc4 ClientController.o
-                0x00000166                sendAvailableNetworks
+                0x000000ba       0x92 ClientController.o
+                0x000000ba                clearFlags
+ .text.getHexFile
+                0x0000014c       0x38 ClientController.o
+                0x0000014c                getHexFile
  .text.getFlagStatus
-                0x0000022a       0xb2 ClientController.o
-                0x0000022a                getFlagStatus
+                0x00000184       0xd4 ClientController.o
+                0x00000184                getFlagStatus
  .text.__vector_15
-                0x000002dc       0x5c ClientController.o
-                0x000002dc                __vector_15
+                0x00000258       0x5c ClientController.o
+                0x00000258                __vector_15
  .text.startup.main
-                0x00000338       0x20 Communications.o
-                0x00000338                main
- .text.ethernetInit
-                0x00000358       0x2e Ethernet/Ethernet.o
-                0x00000358                ethernetInit
- .text.getFileEthernet
-                0x00000386       0xc8 Ethernet/Ethernet.o
-                0x00000386                getFileEthernet
+                0x000002b4       0x2e Communications.o
+                0x000002b4                main
  .text.updateFileEthernet
-                0x0000044e       0x62 Ethernet/Ethernet.o
-                0x0000044e                updateFileEthernet
+                0x000002e2       0x62 Ethernet/Ethernet.o
+                0x000002e2                updateFileEthernet
  .text.SPI_EthernetWrite
-                0x000004b0       0x28 Ethernet/EthernetDriver.o
-                0x000004b0                SPI_EthernetWrite
+                0x00000344       0x28 Ethernet/EthernetDriver.o
+                0x00000344                SPI_EthernetWrite
  .text.SPI_EthernetRead
-                0x000004d8       0x2a Ethernet/EthernetDriver.o
-                0x000004d8                SPI_EthernetRead
- .text.NetworkSetup
-                0x00000502      0x148 Ethernet/EthernetDriver.o
-                0x00000502                NetworkSetup
+                0x0000036c       0x2a Ethernet/EthernetDriver.o
+                0x0000036c                SPI_EthernetRead
  .text.Server_Connect
-                0x0000064a      0x156 Ethernet/EthernetDriver.o
-                0x0000064a                Server_Connect
- .text.MemoryInit
-                0x000007a0       0x42 Ethernet/EthernetDriver.o
-                0x000007a0                MemoryInit
+                0x00000396      0x156 Ethernet/EthernetDriver.o
+                0x00000396                Server_Connect
  .text.SocketCommand
-                0x000007e2        0xa Ethernet/EthernetDriver.o
-                0x000007e2                SocketCommand
+                0x000004ec        0xa Ethernet/EthernetDriver.o
+                0x000004ec                SocketCommand
  .text.SendData
-                0x000007ec      0x1d8 Ethernet/EthernetDriver.o
-                0x000007ec                SendData
- .text.ReceiveData
-                0x000009c4      0x13c Ethernet/EthernetDriver.o
-                0x000009c4                ReceiveData
+                0x000004f6      0x1d8 Ethernet/EthernetDriver.o
+                0x000004f6                SendData
  .text.uart_sendStream
-                0x00000b00       0x22 Print/PrintDriver.o
-                0x00000b00                uart_sendStream
+                0x000006ce       0x22 Print/PrintDriver.o
+                0x000006ce                uart_sendStream
  .text.uart_receiveStream
-                0x00000b22       0x1e Print/PrintDriver.o
-                0x00000b22                uart_receiveStream
+                0x000006f0       0x1e Print/PrintDriver.o
+                0x000006f0                uart_receiveStream
  .text.uart0_init
-                0x00000b40       0x2c Print/PrintDriver.o
-                0x00000b40                uart0_init
- .text.getRAMStatus
-                0x00000b6c       0x1c RAM/RAMDriver.o
-                0x00000b6c                getRAMStatus
+                0x0000070e       0x2c Print/PrintDriver.o
+                0x0000070e                uart0_init
  .text.setRAMStatus
-                0x00000b88       0x18 RAM/RAMDriver.o
-                0x00000b88                setRAMStatus
+                0x0000073a       0x18 RAM/RAMDriver.o
+                0x0000073a                setRAMStatus
  .text.SPI_WriteAddress
-                0x00000ba0       0x1c RAM/RAMDriver.o
-                0x00000ba0                SPI_WriteAddress
+                0x00000752       0x1c RAM/RAMDriver.o
+                0x00000752                SPI_WriteAddress
  .text.SPI_WriteData
-                0x00000bbc        0xa RAM/RAMDriver.o
-                0x00000bbc                SPI_WriteData
+                0x0000076e        0xa RAM/RAMDriver.o
+                0x0000076e                SPI_WriteData
  .text.SPI_ReadAddress
-                0x00000bc6       0x1c RAM/RAMDriver.o
-                0x00000bc6                SPI_ReadAddress
+                0x00000778       0x1c RAM/RAMDriver.o
+                0x00000778                SPI_ReadAddress
  .text.SPI_ReadData
-                0x00000be2        0xc RAM/RAMDriver.o
-                0x00000be2                SPI_ReadData
- .text.RAMWrite
-                0x00000bee       0x62 RAM/RAMDriver.o
-                0x00000bee                RAMWrite
+                0x00000794        0xc RAM/RAMDriver.o
+                0x00000794                SPI_ReadData
  .text.RAMPrint
-                0x00000c50       0x82 RAM/RAMDriver.o
-                0x00000c50                RAMPrint
+                0x000007a0       0x82 RAM/RAMDriver.o
+                0x000007a0                RAMPrint
  .text.RAMWriteByte
-                0x00000cd2       0x18 RAM/RAMDriver.o
-                0x00000cd2                RAMWriteByte
+                0x00000822       0x18 RAM/RAMDriver.o
+                0x00000822                RAMWriteByte
  .text.SPI_Init
-                0x00000cea       0x14 RAM/RAMDriver.o
-                0x00000cea                SPI_Init
+                0x0000083a       0x14 RAM/RAMDriver.o
+                0x0000083a                SPI_Init
  .text.RAMReadByte
-                0x00000cfe        0xe RAM/RAMDriver.o
-                0x00000cfe                RAMReadByte
- .text.networkScan
-                0x00000d0c       0x28 Wifi/Wifi.o
-                0x00000d0c                networkScan
- .text.networkConnect
-                0x00000d34       0x44 Wifi/Wifi.o
-                0x00000d34                networkConnect
- .text.networkQueryString
-                0x00000d78       0xec Wifi/Wifi.o
-                0x00000d78                networkQueryString
+                0x0000084e        0xe RAM/RAMDriver.o
+                0x0000084e                RAMReadByte
+ .text.wifiInit
+                0x0000085c       0x12 Wifi/Wifi.o
+                0x0000085c                wifiInit
+ .text.getFileWifi
+                0x0000086e       0x4e Wifi/Wifi.o
+                0x0000086e                getFileWifi
  .text.updateFileWifi
-                0x00000e64       0x1a Wifi/Wifi.o
-                0x00000e64                updateFileWifi
+                0x000008bc       0x28 Wifi/Wifi.o
+                0x000008bc                updateFileWifi
+ .text.setTestPrint
+                0x000008e4        0xa Wifi/WifiDriver.o
+                0x000008e4                setTestPrint
  .text.uart_init
-                0x00000e7e       0x22 Wifi/WifiDriver.o
-                0x00000e7e                uart_init
+                0x000008ee       0x22 Wifi/WifiDriver.o
+                0x000008ee                uart_init
  .text.uart_send
-                0x00000ea0       0x46 Wifi/WifiDriver.o
-                0x00000ea0                uart_send
+                0x00000910       0x46 Wifi/WifiDriver.o
+                0x00000910                uart_send
  .text.uart_receiveChar
-                0x00000ee6        0xe Wifi/WifiDriver.o
-                0x00000ee6                uart_receiveChar
+                0x00000956        0xe Wifi/WifiDriver.o
+                0x00000956                uart_receiveChar
  .text.enableReceiveINT
-                0x00000ef4       0x12 Wifi/WifiDriver.o
-                0x00000ef4                enableReceiveINT
+                0x00000964       0x12 Wifi/WifiDriver.o
+                0x00000964                enableReceiveINT
  .text.disableReceiveINT
-                0x00000f06       0x10 Wifi/WifiDriver.o
-                0x00000f06                disableReceiveINT
+                0x00000976       0x10 Wifi/WifiDriver.o
+                0x00000976                disableReceiveINT
  .text.receiveStatus
-                0x00000f16       0x18 Wifi/WifiDriver.o
-                0x00000f16                receiveStatus
+                0x00000986       0x18 Wifi/WifiDriver.o
+                0x00000986                receiveStatus
  .text.buildTransmissionLength
-                0x00000f2e      0x114 Wifi/WifiDriver.o
-                0x00000f2e                buildTransmissionLength
- .text.getTransmissionLength
-                0x00001042        0xa Wifi/WifiDriver.o
-                0x00001042                getTransmissionLength
- .text.getMessageHeader
-                0x0000104c       0x20 Wifi/WifiDriver.o
-                0x0000104c                getMessageHeader
- .text.errorCheck
-                0x0000106c       0x2a Wifi/WifiDriver.o
-                0x0000106c                errorCheck
+                0x0000099e      0x114 Wifi/WifiDriver.o
+                0x0000099e                buildTransmissionLength
  .text.updateRAMAddress
-                0x00001096       0x12 Wifi/WifiDriver.o
-                0x00001096                updateRAMAddress
+                0x00000ab2       0x12 Wifi/WifiDriver.o
+                0x00000ab2                updateRAMAddress
  .text.sendCommand
-                0x000010a8       0xda Wifi/WifiDriver.o
-                0x000010a8                sendCommand
+                0x00000ac4       0xda Wifi/WifiDriver.o
+                0x00000ac4                sendCommand
  .text.__vector_28
-                0x00001182      0x170 Wifi/WifiDriver.o
-                0x00001182                __vector_28
+                0x00000b9e      0x1d8 Wifi/WifiDriver.o
+                0x00000b9e                __vector_28
  .text.libgcc.div
-                0x000012f2       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_udivmodhi4.o)
-                0x000012f2                __udivmodhi4
+                0x00000d76       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_udivmodhi4.o)
+                0x00000d76                __udivmodhi4
  .text.avr-libc
-                0x0000131a       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
-                0x0000131a                strcat
+                0x00000d9e       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcat.o)
+                0x00000d9e                strcat
  .text.avr-libc
-                0x00001330        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
-                0x00001330                strcpy
+                0x00000db4        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strcpy.o)
+                0x00000db4                strcpy
  .text.avr-libc
-                0x0000133e       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
-                0x0000133e                fputc
+                0x00000dc2       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(fputc.o)
+                0x00000dc2                fputc
  .text.avr-libc
-                0x000013a2       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
-                0x000013a2                printf
+                0x00000e26       0x28 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(printf.o)
+                0x00000e26                printf
  .text.avr-libc
-                0x000013ca        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
-                0x000013ca                putchar
+                0x00000e4e        0xe c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(putchar.o)
+                0x00000e4e                putchar
  .text.avr-libc
-                0x000013d8       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
-                0x000013d8                puts
+                0x00000e5c       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(puts.o)
+                0x00000e5c                puts
  .text.avr-libc
-                0x00001432      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
-                0x00001432                vfprintf
+                0x00000eb6      0x3a4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(vfprintf_std.o)
+                0x00000eb6                vfprintf
  .text.avr-libc
-                0x000017d6       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
-                0x000017d6                strnlen_P
+                0x0000125a       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen_P.o)
+                0x0000125a                strnlen_P
  .text.avr-libc
-                0x000017ec       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
-                0x000017ec                strnlen
+                0x00001270       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(strnlen.o)
+                0x00001270                strnlen
  .text.avr-libc
-                0x00001802       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
-                0x00001802                __ultoa_invert
+                0x00001286       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(ultoa_invert.o)
+                0x00001286                __ultoa_invert
  .text.libgcc.prologue
-                0x000018be       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
-                0x000018be                __prologue_saves__
+                0x00001342       0x38 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
+                0x00001342                __prologue_saves__
  .text.libgcc.prologue
-                0x000018f6       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
-                0x000018f6                __epilogue_restores__
-                0x0000192c                . = ALIGN (0x2)
+                0x0000137a       0x36 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
+                0x0000137a                __epilogue_restores__
+                0x000013b0                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000192c        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
-                0x0000192c                _exit
-                0x0000192c                exit
+ .fini9         0x000013b0        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+                0x000013b0                _exit
+                0x000013b0                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -644,11 +647,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000192c        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x000013b0        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001930                _etext = .
+                0x000013b4                _etext = .
 
-.data           0x00800100      0x382 load address 0x00001930
+.data           0x00800100      0x3a0 load address 0x000013b4
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5/crtm324pa.o
@@ -678,113 +681,91 @@ END GROUP
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_prologue.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr5\libgcc.a(_epilogue.o)
  *(.data*)
- .data.source_port
-                0x00800100        0x2 Ethernet/Ethernet.o
-                0x00800100                source_port
- .data.server_port
-                0x00800102        0x2 Ethernet/Ethernet.o
-                0x00800102                server_port
- .data.server_ip_addr
-                0x00800104        0x4 Ethernet/Ethernet.o
-                0x00800104                server_ip_addr
- .data.gtw_addr
-                0x00800108        0x4 Ethernet/Ethernet.o
-                0x00800108                gtw_addr
- .data.sub_mask
-                0x0080010c        0x4 Ethernet/Ethernet.o
-                0x0080010c                sub_mask
- .data.local_ip_addr
-                0x00800110        0x4 Ethernet/Ethernet.o
-                0x00800110                local_ip_addr
- .data.mac_addr
-                0x00800114        0x6 Ethernet/Ethernet.o
-                0x00800114                mac_addr
  .data.gl_source_port
-                0x0080011a        0x2 Ethernet/EthernetDriver.o
-                0x0080011a                gl_source_port
+                0x00800100        0x2 Ethernet/EthernetDriver.o
+                0x00800100                gl_source_port
  .data.gl_server_port
-                0x0080011c        0x2 Ethernet/EthernetDriver.o
-                0x0080011c                gl_server_port
+                0x00800102        0x2 Ethernet/EthernetDriver.o
+                0x00800102                gl_server_port
  .data.gl_server_ip_addr
-                0x0080011e        0x4 Ethernet/EthernetDriver.o
-                0x0080011e                gl_server_ip_addr
+                0x00800104        0x4 Ethernet/EthernetDriver.o
+                0x00800104                gl_server_ip_addr
  .data.uart_stream
-                0x00800122        0xe Print/PrintDriver.o
-                0x00800122                uart_stream
+                0x00800108        0xe Print/PrintDriver.o
+                0x00800108                uart_stream
  *(.rodata)
- .rodata        0x00800130        0x4 Wifi/WifiDriver.o
+ .rodata        0x00800116        0x4 Wifi/WifiDriver.o
  *(.rodata*)
  .rodata.str1.1
-                0x00800134       0xcc ClientController.o
+                0x0080011a      0x118 ClientController.o
  .rodata.str1.1
-                0x00800200        0x6 Communications.o
+                0x00800232        0x6 Communications.o
  .rodata.str1.1
-                0x00800206       0x2c Ethernet/Ethernet.o
+                0x00800238       0x2c Ethernet/Ethernet.o
                                  0x44 (size before relaxing)
  .rodata.str1.1
-                0x00800232       0xd8 Ethernet/EthernetDriver.o
+                0x00800264       0xd8 Ethernet/EthernetDriver.o
  .rodata.str1.1
-                0x0080030a       0x1c RAM/RAMDriver.o
+                0x0080033c       0x1c RAM/RAMDriver.o
  .rodata.str1.1
-                0x00800326       0xd9 Wifi/Wifi.o
-                                 0xf5 (size before relaxing)
+                0x00800358       0xcb Wifi/Wifi.o
+                                 0xe8 (size before relaxing)
  .rodata.str1.1
-                0x008003ff       0x82 Wifi/WifiDriver.o
+                0x00800423       0x7d Wifi/WifiDriver.o
                                  0x8e (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x00800482                . = ALIGN (0x2)
- *fill*         0x00800481        0x1 
-                0x00800482                _edata = .
-                0x00800482                PROVIDE (__data_end, .)
+                0x008004a0                . = ALIGN (0x2)
+                0x008004a0                _edata = .
+                0x008004a0                PROVIDE (__data_end, .)
 
-.bss            0x00800482      0x198
-                0x00800482                PROVIDE (__bss_start, .)
+.bss            0x008004a0      0x198
+                0x008004a0                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.RAMAddress
-                0x00800482        0x4 Wifi/WifiDriver.o
-                0x00800482                RAMAddress
+                0x008004a0        0x4 Wifi/WifiDriver.o
+                0x008004a0                RAMAddress
  .bss.transLength
-                0x00800486        0x2 Wifi/WifiDriver.o
-                0x00800486                transLength
+                0x008004a4        0x2 Wifi/WifiDriver.o
+                0x008004a4                transLength
  .bss.receiveWifiFlag
-                0x00800488        0x1 Wifi/WifiDriver.o
-                0x00800488                receiveWifiFlag
- .bss.i         0x00800489        0x2 Wifi/WifiDriver.o
-                0x00800489                i
+                0x008004a6        0x1 Wifi/WifiDriver.o
+                0x008004a6                receiveWifiFlag
+ .bss.i         0x008004a7        0x2 Wifi/WifiDriver.o
+                0x008004a7                i
  .bss.testPrint
-                0x0080048b        0x2 Wifi/WifiDriver.o
-                0x0080048b                testPrint
+                0x008004a9        0x2 Wifi/WifiDriver.o
+                0x008004a9                testPrint
  .bss.bufferStart
-                0x0080048d        0x2 Wifi/WifiDriver.o
-                0x0080048d                bufferStart
+                0x008004ab        0x2 Wifi/WifiDriver.o
+                0x008004ab                bufferStart
  *(COMMON)
- COMMON         0x0080048f       0x69 ClientController.o
-                0x0080048f                filepath
-                0x008004f3                Flags
- COMMON         0x008004f8       0x96 Ethernet/Ethernet.o
-                0x008004f8                httpBuff
- COMMON         0x0080058e        0x8 Ethernet/EthernetDriver.o
-                0x0080058e                S0_TX_MASK
-                0x00800590                S0_TX_BASE
-                0x00800592                S0_RX_BASE
-                0x00800594                S0_RX_MASK
- COMMON         0x00800596       0x7e Wifi/WifiDriver.o
-                0x00800596                buff
-                0x00800597                receiveBuffer
-                0x008005b0                fullCommand
- COMMON         0x00800614        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
-                0x00800614                __iob
-                0x0080061a                PROVIDE (__bss_end, .)
-                0x00001930                __data_load_start = LOADADDR (.data)
-                0x00001cb2                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x008004ad       0x69 ClientController.o
+                0x008004ad                filepath
+                0x00800511                Flags
+ COMMON         0x00800516       0x96 Ethernet/Ethernet.o
+                0x00800516                httpBuff
+ COMMON         0x008005ac        0x8 Ethernet/EthernetDriver.o
+                0x008005ac                S0_TX_MASK
+                0x008005ae                S0_TX_BASE
+                0x008005b0                S0_RX_BASE
+                0x008005b2                S0_RX_MASK
+ COMMON         0x008005b4       0x7e Wifi/WifiDriver.o
+                0x008005b4                buff
+                0x008005b5                receiveBuffer
+                0x008005ce                fullCommand
+ COMMON         0x00800632        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr5\libc.a(iob.o)
+                0x00800632                __iob
+                0x00800638                PROVIDE (__bss_end, .)
+                0x000013b4                __data_load_start = LOADADDR (.data)
+                0x00001754                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080061a        0x0
-                0x0080061a                PROVIDE (__noinit_start, .)
+.noinit         0x00800638        0x0
+                0x00800638                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x0080061a                PROVIDE (__noinit_end, .)
-                0x0080061a                _end = .
-                0x0080061a                PROVIDE (__heap_start, .)
+                0x00800638                PROVIDE (__noinit_end, .)
+                0x00800638                _end = .
+                0x00800638                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
