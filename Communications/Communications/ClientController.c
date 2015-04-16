@@ -107,8 +107,11 @@ int getHexFile()
 		strcpy(filepath, URL);
 		strcat(filepath, HEX_FILE);
 		//setTestPrint(1);
+		setCompressFlag(1);
 		getFileWifi(filepath, 1, HEX_FILE_ADDRESS);
-		printf("Hex File Downloaded!\n");
+		setCompressFlag(0); 
+		RAMPrint(HEX_FILE_ADDRESS, 230);
+		//printf("Hex File Downloaded!\n");
 	}
 }
 
@@ -151,10 +154,13 @@ int getFlagStatus()
 	if(Flags[PROGRAM] == 0x01)
 	{
 		//Program Function 
-		printf("Program!\n");
-		setTestPrint(1);
+		//printf("Program!\n");
+		//PORTD &= ~(1<<CTS);
+		//wifiDriverInit(); 
+		//PORTD |= (1<<CTS); 
+		//_delay_ms(2000); 
 		getHexFile(); 
-		printf("Done Downloading!\n");
+		//printf("Done Downloading!\n");
 	}
 	else if(Flags[NETWORK_SCAN] == 0x01)
 	{

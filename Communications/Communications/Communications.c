@@ -36,7 +36,7 @@ int main(void)
 	//pollingInit(); 
 	getFlagStatus(); 
 	//getHexFile(); 
-	RAMPrint(HEX_FILE_ADDRESS, 200);
+	//RAMPrint(HEX_FILE_ADDRESS, 200);
 	//getFlagStatus(); 
 	//clearFlags();
 	//getFlagStatus(); 

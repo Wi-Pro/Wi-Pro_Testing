@@ -19,7 +19,7 @@
 #define CLEAR_FLAG "/data/clearflags?"
 //Server Files
 #define FLAG_FILE "/uploads/hex/1000000000/flagfile.txt"
-#define HEX_FILE "/uploads/hex/1000000000/new_hex.hex"
+#define HEX_FILE "/uploads/hex/1000000000/default.hex"
 
 //Flag positions
 #define ETHERNET 0 

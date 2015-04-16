@@ -31,7 +31,8 @@ void wifiInit()
 	PORTD |= (1<<CTS);
 	//PUll the CTS line up 
 	//PORTD |= (1<<CTS);
-	setTestPrint(0);
+	//setTestPrint(0);
+	wifiDriverInit();
 } 
 
 void setMachineMode()
@@ -156,21 +157,23 @@ uint16_t networkQueryString(char* filepath)
 	//Overwrite the terminating byte with two new lines for the http request 
 	RAMWrite(footer, WIFI_QSTRING_ADDRESS + j-1, strlen(footer));
 	j+=strlen(footer)-1; 
-	
 	return j; 
 }
 
 char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress)
-{
+{ 
 	if(externRAM){
 		updateRAMAddress(RAMAddress); 
 	}
 	//printf("Filepath: %s\n", filepath);
 	//enableReceiveINT();
-	//setTestPrint(1);
+	//setTestPrint(1); 
 	enableReceiveINT();   
+	PORTD &= ~(1<<CTS);
+	setReceiveCounter(0);
+	PORTD |= (1<<CTS);
 	sendCommand(NOPREFIX, HTTP_GET, filepath); 
-	receiveStatus(); 
+	receiveStatus();
 	//_delay_ms(3000);
 	sendCommand(NOPREFIX, STREAM_READ, "0 8000");
 	receiveStatus();
