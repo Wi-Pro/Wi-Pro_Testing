@@ -23,23 +23,27 @@ int main(void)
 {
 	char* SignatureBytes;
 	uart2_init();
-	//Write test file to external RAM 
+	hexInit();
+	
 	SPI_Init();
-	writeHexFileTest(); 
+	printf("\n\n");
+	writeHexFileTest();
 	RAMPrint(HEX_FILE_ADDRESS, 50);
+	//Write test file to external RAM 
 	//Test switching circuitry code
 	ProgInit();
 	EnableProgMode(ATtiny2313);
 	SignatureBytes = ReadSignatureBytes();
 	
 	printf("\nSignature Bytes: %02X %02X %02X\n", *SignatureBytes, *(SignatureBytes + 1), *(SignatureBytes + 2));
-	
 	if ( (*SignatureBytes == 0x1E) && (*(SignatureBytes + 1) == 0x91) && (*(SignatureBytes + 2) == 0x0A) )
 	{
 		printf("Programming!\n");
 		ChipErase();
 		printf("Done Erasing!\n");
-		//ProgramFlash();
+		ReadFlash();
+		printf("\n");
+		ProgramFlash();
 		printf("Done Programming!\n");
 		ReadFlash();
 		printf("\nDone!\n\n");

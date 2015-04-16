@@ -15,10 +15,6 @@
 #define RAM_DDR DDRG 
 #define RAM_CS 3
 
-#define RAM_HOLD_DDR DDRB
-#define RAM_HOLD_PORT PORTB
-#define RAM_HOLD 7
-
 #define MOSI 2
 #define SCK 1
 #define SS 0
@@ -40,8 +36,8 @@ void setRAMStatus(char mode);
 void SPI_WriteAddress(uint32_t address);
 void SPI_WriteData(char data);
 uint16_t RAMWrite(char* data, uint16_t startAddress, uint16_t length);
-void RAMWriteByte(char data, uint16_t address);
-char RAMReadByte(uint16_t address);
+void RAMWriteByte(char data, uint32_t address);
+char RAMReadByte(uint32_t address);
 void SPI_ReadAddress(uint32_t address);
 char* RAMRead(uint32_t startAddress, uint16_t length, char* buffer);
 void RAMPrint(uint32_t startAddress, uint16_t length);

@@ -36,6 +36,7 @@ char* getHexRow()
 	{
 		//Read the bytes from RAM and throw them into the buffer
 		buffer = RAMReadByte(HEX_FILE_ADDRESS + RAMOffset);
+		//printf("0x%02X ",buffer);
 		hexRow[i] = buffer; 
 		RAMOffset++; 
 	}
@@ -45,6 +46,7 @@ char* getHexRow()
 	for(i=0;i<dataLength+1;i++)
 	{
 		buffer = RAMReadByte(HEX_FILE_ADDRESS + RAMOffset);
+		//printf("0x%02X ",buffer);
 		hexRow[DATA_BEGIN + i] = RAMReadByte(HEX_FILE_ADDRESS + RAMOffset);
 		RAMOffset++; 
 	}

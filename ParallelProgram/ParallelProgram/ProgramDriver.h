@@ -20,12 +20,16 @@
 #define SR_CNTRL_PORT PORTJ
 #define SR_CNTRL_DDR DDRJ
 #define SR_RESET 5
-#define SRCS 4
+#define MAXCS 4
 #define SROE 3
 
-#define LT_OE_DDR DDRG
-#define LT_OE_PORT PORTG
-#define LTOE 5
+//#define LT_OE_DDR DDRG
+//#define LT_OE_PORT PORTG
+//#define LTOE 5
+
+#define SRCS_PORT PORTB
+#define SRCS_DDR DDRB
+#define SRCS 7
 
 #define WR_DDR DDRJ
 #define WR_PORT PORTJ
@@ -45,7 +49,7 @@
 #define WRITE_EEPROM 0x11 
 #define READ_SIG_BYTE 0x08
 #define READ_FUSE_LOCK_BITS 0x40 
-#define READ_FLASH 0x20 
+#define READ_FLASH 0x02 
 #define READ_EEPROM 0x03 
 
 
@@ -92,6 +96,8 @@ char* ReadSignatureBytes();
 void ChipErase();
 void ReadFlash();
 void ProgramFlash();
+void ProgramFlashTest();
+void EndPageProgramming();
 
 
 

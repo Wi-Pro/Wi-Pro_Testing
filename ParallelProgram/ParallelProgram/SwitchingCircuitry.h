@@ -12,12 +12,13 @@
 #define SOCKET_SIZE 40 
 #define PIN_TYPES 6
 //Array Order
-#define PULL_DOWN 0
-#define GROUND 1 
-#define PULL_UP 2 
-#define VCC 3
-#define VPP 4
-#define LOGIC 5 
+#define LOGIC 0 
+#define PULL_DOWN 1
+#define GROUND 2 
+#define PULL_UP 3 
+#define VCC 4
+#define VPP 5
+
   
 
 

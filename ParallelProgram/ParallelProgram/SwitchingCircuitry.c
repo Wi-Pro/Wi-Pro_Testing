@@ -22,16 +22,15 @@ void SPI_Switching_Circuitry_Init()
 {
 	// Set MOSI ,SCK, and SS as output, others as input
 	SPI_DDR |= ((1<<MOSI)|(1<<SCK)|(1<<SS));
-	SPI_DDR &= ~(1<<MISO);
 	
 	// Enable SPI, Master Mode 0, set the clock rate fck/64
 	SPCR = ((1<<SPE)|(1<<MSTR)|(1<<SPR1));
 	
-	LT_OE_DDR |= 1<<LTOE;
-	SR_CNTRL_DDR |= ((1<<SR_RESET) | (1<<SRCS) | (1<<SROE));
-	SR_CNTRL_PORT |= ((1<<SRCS) | (1<<SROE));
+	SR_CNTRL_DDR |= ((1<<SR_RESET) | (1<<MAXCS) | (1<<SROE));
+	SRCS_DDR |= (1<<SRCS);
+	SRCS_PORT &= ~(1<<SRCS);
+	SR_CNTRL_PORT |= ((1<<MAXCS) | (1<<SROE));
 	SR_CNTRL_PORT &= ~(1<<SR_RESET);
-	LT_OE_PORT |= 1<<LTOE;
 }
 
 void SPI_Switching_Circuitry_Write(unsigned char SPI_Data)
@@ -48,9 +47,11 @@ void SwitchingCircuitryEnable()
 	_delay_us(25);
 	SR_CNTRL_PORT |= (1<<SR_RESET);
 	
+	SRCS_PORT |= (1<<SRCS);
+	_delay_us(20);
+	SRCS_PORT &= ~(1<<SRCS);
+	
 	SR_CNTRL_PORT &= ~(1<<SROE);
-
-	SR_CNTRL_PORT &= ~(1<<SRCS); //Applying VCC and GND
 }
 
 //Clears the internal buffer
@@ -79,23 +80,38 @@ void WriteShiftRegData()
 {
 	SwitchingCircuitryEnable(); 
 	
-	for(int i=0; i<PIN_TYPES; i++)
+	SR_CNTRL_PORT &= ~(1<<MAXCS);
+	int i = 0; 
+	for(int j=0; j<SOCKET_SIZE/8; j++)
+	{
+		SPI_Switching_Circuitry_Write(ShiftRegData[i][j]);
+	}
+	SR_CNTRL_PORT |= (1<<MAXCS);
+	
+	
+	for(i=1; i<PIN_TYPES; i++)
 	{
 		for(int j=0; j<SOCKET_SIZE/8; j++)
 		{
-			SPI_Switching_Circuitry_Write(ShiftRegData[i][j]);
-			_delay_us(10); 
+			SPI_Switching_Circuitry_Write(ShiftRegData[i][j]); 
 		}
 	}
-	
-	SR_CNTRL_PORT |= (1<<SRCS);
+	SRCS_PORT |= (1<<SRCS);
+	_delay_us(20);
+	SRCS_PORT &= ~(1<<SRCS);
 }
 
 void setAtTiny2313()
 {
-	char shiftTempBuff[5] = {0x00, 0x00, 0x00, 0x00, 0x00};
-	SetShiftRegData(PULL_DOWN, shiftTempBuff);
+	char shiftTempBuff[5] = {0x00, 0x1F, 0xF7, 0xD0, 0x00};
+	SetShiftRegData(LOGIC, shiftTempBuff);
 	//Modify Values and shift again 
+	shiftTempBuff[0] = 0x00;
+	shiftTempBuff[1] = 0x00;
+	shiftTempBuff[2] = 0x00; //setting GND to ZIF19
+	shiftTempBuff[3] = 0x00;
+	shiftTempBuff[4] = 0x00;
+	SetShiftRegData(PULL_DOWN, shiftTempBuff);
 	shiftTempBuff[0] = 0x00;
 	shiftTempBuff[1] = 0x00;
 	shiftTempBuff[2] = 0x08; //setting GND to ZIF19
@@ -120,12 +136,6 @@ void setAtTiny2313()
 	shiftTempBuff[3] = 0x04; //Setting VPP to ZIF10
 	shiftTempBuff[4] = 0x00;
 	SetShiftRegData(VPP, shiftTempBuff);
-	shiftTempBuff[0] = 0x00;
-	shiftTempBuff[1] = 0x1F;
-	shiftTempBuff[2] = 0xF7;
-	shiftTempBuff[3] = 0xD0;
-	shiftTempBuff[4] = 0x00;
-	SetShiftRegData(LOGIC, shiftTempBuff);
 	
 	WriteShiftRegData();
 }

@@ -25,7 +25,10 @@ void ProgInit(void)
 	setVpp(VPP_12V);
 	setVcc(VCC_5V);
 	setVLogic(VL_5V);
-	
+	_delay_ms(5);
+	enableVccRegulator();
+	enableVLogic();
+	_delay_ms(500);
 	//Setting up Control lines
 	CONTROL_DDR |= ( (1<<XTAL1) | (1<<OE) | (1<<WR) | (1<<BS1_PAGEL) | (1<<XA0) | (1<<XA1_BS2) | (1<<PAGEL) | (1<<BS2));
 	RDY_BSY_DDR &= ~(1<<RDY_BSY);
@@ -64,7 +67,7 @@ void WriteWord(uint16_t data)
 	CONTROL_PORT |= 1<<BS1_PAGEL;
 	CONTROL_PORT &= ~(1<<XA1_BS2);
 	CONTROL_PORT |= 1<<XA0;
-	DATA_PORT = (data & 0xFF00) >> 8; 
+	DATA_PORT = ((data & 0xFF00) >> 8); 
 	_delay_us(25);
 	CONTROL_PORT |= 1<<XTAL1;
 	_delay_us(25);
@@ -92,7 +95,7 @@ void LoadHighAddress(uint16_t address)
 	CONTROL_PORT &= ~(1<<XA1_BS2);
 	CONTROL_PORT &= ~(1<<XA0);
 	CONTROL_PORT |= 1<<BS1_PAGEL;
-	DATA_PORT = (address & 0xFF00) >> 8;
+	DATA_PORT = ((address & 0xFF00) >> 8);
 	_delay_us(25);
 	CONTROL_PORT |= 1<<XTAL1;
 	_delay_us(25);
@@ -108,8 +111,11 @@ void ProgramPage(void)
 	CONTROL_PORT |= 1<<WR;
 	_delay_us(25);
 	//while(!(CONTROL_PIN & (1<<RDY_BSY)));
-	_delay_ms(500);
-		
+	_delay_ms(1000);
+}
+
+void EndPageProgramming(void)
+{
 	//I: End Page Programming
 	CONTROL_PORT |= 1<<XA1_BS2;
 	CONTROL_PORT &= ~(1<<XA0);
@@ -127,8 +133,6 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 	CONTROL_PORT &= ~(1<<XA1_BS2 | 1<<XA0 | 1<<BS1_PAGEL | 1<<WR);
 	DATA_PORT = 0x00;
 	CONTROL_PORT = 0x00;
-	enableVccRegulator();
-	enableVLogic();
 	
 	WR_PORT &= ~(1<<FPGAWR);
 	SPI_FPGA_Write(FPGA_ATtiny2313_Mapping);
@@ -148,12 +152,11 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 			break;
 	}
 	
-	_delay_us(50);
-	
+	_delay_us(100);
 	enableVppRegulator();
 	_delay_us(50);
 	CONTROL_PORT |= (1<<WR | 1<<OE);
-	_delay_us(400);
+	_delay_us(500);
 }
 
 char* ReadSignatureBytes(void)
@@ -242,51 +245,27 @@ void ReadFlash(void)
 {
 	char DataValueIn = 0;
 	
-	for (unsigned int LowAddressByte = 0; LowAddressByte <= 0x18; LowAddressByte++)
+	for (unsigned int LowAddressByte = 0; LowAddressByte < 16; LowAddressByte++)
 	{
 		//A: Load Command "Read Flash"
-		CONTROL_PORT |= 1<<XA1_BS2;
-		CONTROL_PORT &= ~(1<<XA0);
-		CONTROL_PORT &= ~(1<<BS1_PAGEL);
-		DATA_PORT = 0x02;
-		_delay_us(25);
-		CONTROL_PORT |= 1<<XTAL1;
-		_delay_us(25);
-		CONTROL_PORT &= ~(1<<XTAL1);
-		_delay_us(25);
+		LoadCommand(READ_FLASH);
 		
 		//F: Load Address High Byte
-		CONTROL_PORT &= ~(1<<XA1_BS2);
-		CONTROL_PORT &= ~(1<<XA0);
-		CONTROL_PORT |= 1<<BS1_PAGEL;
-		DATA_PORT = 0x00;
-		_delay_us(25);
-		CONTROL_PORT |= 1<<XTAL1;
-		_delay_us(25);
-		CONTROL_PORT &= ~(1<<XTAL1);
-		_delay_us(25);
+		LoadHighAddress(0x00);
 		
 		//B: Load Address Low Byte
-		CONTROL_PORT &= ~(1<<XA1_BS2);
-		CONTROL_PORT &= ~(1<<XA0);
-		CONTROL_PORT &= ~(1<<BS1_PAGEL);
-		DATA_PORT = LowAddressByte;
-		_delay_us(25);
-		CONTROL_PORT |= 1<<XTAL1;
-		_delay_us(25);
-		CONTROL_PORT &= ~(1<<XTAL1);
-		_delay_us(25);
+		LoadLowAddress(LowAddressByte);
 		
 		//Read data
 		DATA_DDR = 0;
 		WR_PORT |= (1<<FPGAWR);
 		CONTROL_PORT &= ~(1<<OE);
 		CONTROL_PORT &= ~(1<<BS1_PAGEL); //Reading flash word low byte
-		_delay_us(100);
+		_delay_us(500);
 		DataValueIn = DATA_PIN;
 		printf("0x%02X ", DataValueIn);
 		CONTROL_PORT |= 1<<BS1_PAGEL; //Reading flash word high byte
-		_delay_us(100);
+		_delay_us(500);
 		DataValueIn = DATA_PIN;
 		printf("0x%02X ", DataValueIn);
 		CONTROL_PORT |= 1<<OE;
@@ -312,7 +291,7 @@ void ChipErase(void)
 	CONTROL_PORT |= 1<<WR;
 	_delay_us(25);
 	//while(!(CONTROL_PIN & (1<<RDY_BSY)));
-	_delay_ms(500);
+	_delay_ms(1000);
 }
 
 void ProgramFlash(char* hexData)
@@ -323,27 +302,35 @@ void ProgramFlash(char* hexData)
 	uint16_t data;
 	uint32_t totalBytes = 0; 
 	//Keep looping until the hexRow is the end of file or we hit the end of a page 
+	
+	LoadCommand(WRITE_FLASH);
+	
 	while(1)
 	{
 		hexRow = getHexRow();
-		printf("%d\n", *hexRow);
-		if(hexRow[START_CODE] == TYPE_END_OF_FILE)
+		
+		//printf("We're here now\n");
+		
+		if(hexRow[RECORD_TYPE] == TYPE_END_OF_FILE)
 			break; 
 			
-		byteCount = hexRow[BYTE_COUNT];
+		byteCount = (hexRow[BYTE_COUNT]);
 		address = hexRow[ADDRESS_H];
 		address <<= 8;
-		address |= hexRow[ADDRESS_L];
+		address |= (hexRow[ADDRESS_L]/2);
 		
+		int j =0;
 		for(int i=0; i<byteCount; i+=2)
 		{
-			LoadCommand(WRITE_FLASH);
-			LoadLowAddress(address + i);
-			data = hexRow[DATA_BEGIN + i];
+			LoadLowAddress(address + j);
+			printf("Address: 0x%04X\n",(address + j));
+			data = hexRow[DATA_BEGIN + i + 1];
 			data <<= 8;
-			data |= hexRow[DATA_BEGIN + i + 1];
+			data |= hexRow[DATA_BEGIN + i];
 			WriteWord(data);
+			printf("Word: 0x%04X\n",(data));
 			totalBytes+=i; 
+			j++;
 		}
 		
 		//Check to see if we hit the end of a page 
@@ -360,10 +347,45 @@ void ProgramFlash(char* hexData)
 		LoadHighAddress(address);
 		ProgramPage();
 	} 
+	
+	EndPageProgramming();
+}
+
+void ProgramFlashTest(void)
+{
+	//A: Load Command "Program Flash"
+	LoadCommand(WRITE_FLASH);
+
+	//B: Load Address Low Byte
+	LoadLowAddress(0x0000);
+
+	//C: Load Data Low Byte
+	//D: Load Data High Byte
+	WriteWord(0xC012);
+	
+	//B: Load Address Low Byte
+	//D: Load Data High Byte
+	LoadLowAddress(0x0001);
+	
+	//C: Load Data Low Byte
+	WriteWord(0x3322);
+	
+	//F: Load Address High Byte
+	LoadHighAddress(0x0000);
+	
+	//G: Program Page
+	ProgramPage();
+	
+	//I: End Page Programming
+	EndPageProgramming();
 }
 
 void ExitParallelProgrammingMode(void)
 {
+	disableVppRegulator();
+	disableVccRegulator();
+	disableVLogic();
+	
 	_delay_ms(5);
 	DATA_PORT = 0x00;
 	CONTROL_PORT = 0x00;
@@ -373,18 +395,14 @@ void ExitParallelProgrammingMode(void)
 	SR_CNTRL_PORT &= ~(1<<SR_RESET); //Clearing Max395s and Shift Registers
 	_delay_us(20);
 	SR_CNTRL_PORT |= (1<<SR_RESET);
-	
-	SR_CNTRL_PORT &= ~(1<<SRCS);
+	_delay_us(5);
+	SRCS_PORT |= (1<<SRCS);
 	_delay_us(20);
-	SR_CNTRL_PORT |= (1<<SRCS);
+	SRCS_PORT &= ~(1<<SRCS);
 	
 	SR_CNTRL_PORT |= (1<<SROE);
 	
 	LED_PORT |= (1<<LED_Green);
 	_delay_ms(1000);
 	LED_PORT &= ~((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
-	
-	disableVccRegulator();
-	disableVppRegulator();
-	disableVLogic();
 }

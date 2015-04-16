@@ -21,8 +21,6 @@ void SPI_Init()
 	RAM_DDR |= (1<<RAM_CS);
 	RAM_PORT |= (1<<RAM_CS);
 	
-	RAM_HOLD_DDR |= (1<<RAM_HOLD);
-	RAM_HOLD_PORT |= (1<<RAM_HOLD);
 	// Enable SPI, Master Mode 0, set the clock rate fck/16
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 	RAMWriteByte(0x32, 0000);
@@ -205,7 +203,7 @@ void RAMPrint(uint32_t startAddress, uint16_t length)
 	printf("\nSize: %d\n", i); 
 }
 
-void RAMWriteByte(char data, uint16_t address)
+void RAMWriteByte(char data, uint32_t address)
 {
 	RAM_PORT &= ~(1<<RAM_CS);
 	SPI_WriteAddress(address);
@@ -213,7 +211,7 @@ void RAMWriteByte(char data, uint16_t address)
 	RAM_PORT |= (1<<RAM_CS);
 }
 
-char RAMReadByte(uint16_t address)
+char RAMReadByte(uint32_t address)
 {
 	RAM_PORT &= ~(1<<RAM_CS);
 	SPI_ReadAddress(address);
