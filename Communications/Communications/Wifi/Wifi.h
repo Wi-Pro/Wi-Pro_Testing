@@ -45,7 +45,7 @@ char* networkScan();
 int networkConnect(char* SSID, char* password); 
 int serverConnect(char* serverDNS, unsigned char* port);
 uint16_t networkQueryString(char* filepath);
-char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress);
+char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress, int multiReceive);
 void updateFileWifi(char* filepath);
 
 

@@ -189,7 +189,7 @@ void RAMPrint(uint32_t startAddress, uint16_t length)
 	int i; 
 	for(i=0; i<length; i++)
 	{
-		printf("0x%02x ", SPI_ReadData());
+		printf("%c", SPI_ReadData());
 	}
 	RAM_PORT |= (1<<RAM_CS); 
 	printf("\nSize: %d\n", i); 

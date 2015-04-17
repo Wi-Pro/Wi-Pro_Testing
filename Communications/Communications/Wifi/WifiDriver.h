@@ -9,7 +9,7 @@
 #ifndef WIFIDRIVER_H_
 #define WIFIDRIVER_H_
 
-#define BAUD_RATE 9600
+#define BAUD_RATE 62500
 #define F_CPU 8000000UL
 
 #define MaxRecSize 25
@@ -41,7 +41,7 @@
 void wifiDriverInit();
 void setTestPrint(int print);
 void setReceiveCounter(int val);
-void setCompressFlag(int compress);
+void setCompressFlag(uint8_t compress);
 void uart_init();
 int uart_send(char* data, unsigned int length);
 int uart_sendChar(unsigned char data);

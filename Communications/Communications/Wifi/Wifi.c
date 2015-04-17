@@ -160,23 +160,36 @@ uint16_t networkQueryString(char* filepath)
 	return j; 
 }
 
-char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress)
+char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress, int multiReceive)
 { 
-	if(externRAM){
-		updateRAMAddress(RAMAddress); 
-	}
 	//printf("Filepath: %s\n", filepath);
 	//enableReceiveINT();
 	//setTestPrint(1); 
 	enableReceiveINT();   
 	PORTD &= ~(1<<CTS);
 	setReceiveCounter(0);
+	uint16_t i = 0; 
+	char* receiveHeader; 
+	//setCompressFlag(1);
 	PORTD |= (1<<CTS);
-	sendCommand(NOPREFIX, HTTP_GET, filepath); 
+	sendCommand(NOPREFIX, HTTP_GET, filepath);
 	receiveStatus();
-	//_delay_ms(3000);
-	sendCommand(NOPREFIX, STREAM_READ, "0 8000");
-	receiveStatus();
+	do 
+	{
+		if(externRAM){
+			updateRAMAddress(RAMAddress + i);
+			printf("RAM Address: %d\n", RAMAddress+i); 
+		}
+		sendCommand(NOPREFIX, STREAM_READ, "0 10000");
+		receiveStatus();
+		receiveHeader = getMessageHeader(); 
+		printf("Tran Length: %d\n", receiveHeader); 
+		if(receiveHeader[errorCode] == '1'){
+			break; 
+		}
+		i += getTransmissionLength(); 
+	} while (multiReceive);
+	
 	disableReceiveINT(); 
 	//_delay_ms(3000);  
 	sendCommand(NOPREFIX, STREAM_CLOSE, NOVAL);

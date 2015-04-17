@@ -30,7 +30,8 @@ volatile uint32_t RAMAddress;
 volatile uint8_t endHeaderFlag; 
 volatile uint8_t compressFlag; 
 volatile uint8_t secondNibble; 
-volatile uint8_t compressBuff; 
+volatile uint8_t multiReceiveFlag; 
+uint8_t compressBuff; 
 
 void wifiDriverInit()
 {
@@ -52,14 +53,21 @@ void setTestPrint(int print)
 	testPrint = print; 
 }
 
-void setCompressFlag(int compress)
+void setCompressFlag(uint8_t compress)
 {
-	compressFlag = compress; 
+	PORTD &= ~(1<<CTS); 
+	compressFlag = compress;
+	PORTD |= (1<<CTS); 
 }
 
 void setReceiveCounter(int val)
 {
 	i = val; 
+}
+
+void setMultiReceiveFlag(uint8_t receiveFlag)
+{
+	multiReceiveFlag = receiveFlag; 
 }
 
 void uart_init()
@@ -183,7 +191,7 @@ unsigned int buildTransmissionLength()
 	if(testPrint)
 	{
 		//printf("Header: ");
-		for(int i = 0; i < endHeader+5; i++)
+		for(int i = 0; i < endHeader; i++)
 		{
 			printf("Value: 0x%02x, Address: %p\n", headerBuffer[i], headerBuffer + i);
 			//printf("0x%02x ", receiveBuffer[i]);
@@ -210,14 +218,7 @@ uint16_t getTransmissionLength()
 
 char* getMessageHeader()
 {
-	char* header = ""; 
-	
-	for(int i = 0; i < endHeader; i++)
-	{
-		*(header + i) = headerBuffer[i]; 
-	}
-	
-	return header; 
+	return headerBuffer; 
 }
 
 int errorCheck() 
@@ -397,13 +398,14 @@ ISR(USART1_RX_vect)
 			if(i < transLength + endHeader)
 			{
 				//printf("Translength: %d", transLength);
-				PORTD &= ~(1<<CTS);
 				buff = uart_receiveChar();
-				if(compressFlag)
+				if(compressFlag == 1)
 				{
-					printf("Compressing!\n");
+					//printf("Compressing!\n");
+					PORTD &= ~(1<<CTS);
 					if(buff == ':')
 					{
+						PORTD &= ~(1<<RTS);
 						RAMWriteByte(buff, RAMAddress + i - endHeader -1);
 					}
 					else if(!secondNibble)
@@ -411,8 +413,8 @@ ISR(USART1_RX_vect)
 						//Mask the ASCII Nibble 
 						compressBuff = (buff & 0x0F);
 						//Shift it into the upper nibble  
-						compressBuff <<= 4;  
-						secondNibble =  1; 
+						compressBuff <<= 4; 
+						secondNibble =  1;
 					}
 					else
 					{

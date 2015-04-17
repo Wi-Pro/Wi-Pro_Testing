@@ -72,7 +72,7 @@ int clearFlags()
 	}
 	
 	memset(filepath, 0x00, 100);
-
+	return 1; 
 }
 
 void sendAvailableNetworks()
@@ -107,12 +107,15 @@ int getHexFile()
 		strcpy(filepath, URL);
 		strcat(filepath, HEX_FILE);
 		//setTestPrint(1);
+		printf("Compress Flag Set!");
 		setCompressFlag(1);
-		getFileWifi(filepath, 1, HEX_FILE_ADDRESS);
-		setCompressFlag(0); 
-		RAMPrint(HEX_FILE_ADDRESS, 230);
+		getFileWifi(filepath, 1, HEX_FILE_ADDRESS, 1);
+		//setCompressFlag(0); 
+		RAMPrint(HEX_FILE_ADDRESS, 1045);
 		//printf("Hex File Downloaded!\n");
 	}
+	
+	return 1; 
 }
 
 int getFlagStatus()
@@ -140,7 +143,7 @@ int getFlagStatus()
 		strcpy(filepath, URL);
 		strcat(filepath, FLAG_FILE); 
 		//setTestPrint(1);
-		getFileWifi(filepath, 1, STATUS_FLAG_ADDRESS); 
+		getFileWifi(filepath, 1, STATUS_FLAG_ADDRESS, 0); 
 		printf("Ram Print: ");
 		RAMPrint(STATUS_FLAG_ADDRESS, 3);
 		printf("\n");
