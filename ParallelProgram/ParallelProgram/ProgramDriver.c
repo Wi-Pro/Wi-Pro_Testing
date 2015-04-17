@@ -25,7 +25,6 @@ void ProgInit(void)
 	setVpp(VPP_12V);
 	setVcc(VCC_5V);
 	setVLogic(VL_5V);
-	_delay_ms(5);
 	enableVccRegulator();
 	enableVLogic();
 	_delay_ms(500);
@@ -156,7 +155,7 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 	enableVppRegulator();
 	_delay_us(50);
 	CONTROL_PORT |= (1<<WR | 1<<OE);
-	_delay_us(500);
+	_delay_ms(5);
 }
 
 char* ReadSignatureBytes(void)
@@ -171,7 +170,7 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<XA0);
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	DATA_PORT = 0x00;
-	_delay_us(100);
+	_delay_us(25);
 	CONTROL_PORT |= 1<<XTAL1;
 	_delay_us(25);
 	CONTROL_PORT &= ~(1<<XTAL1);
@@ -184,7 +183,6 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	_delay_us(500);
 	SignatureBytes[0] = DATA_PIN;
-	printf("0x%02X ", SignatureBytes[0]);
 	CONTROL_PORT |= 1<<OE;
 	WR_PORT &= ~(1<<FPGAWR);
 	DATA_DDR = 0xFF;
@@ -195,7 +193,7 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<XA0);
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	DATA_PORT = 0x01;
-	_delay_us(100);
+	_delay_us(25);
 	CONTROL_PORT |= 1<<XTAL1;
 	_delay_us(25);
 	CONTROL_PORT &= ~(1<<XTAL1);
@@ -208,7 +206,6 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	_delay_us(500);
 	SignatureBytes[1] = DATA_PIN;
-	printf("0x%02X ", SignatureBytes[1]);
 	CONTROL_PORT |= 1<<OE;
 	WR_PORT &= ~(1<<FPGAWR);
 	DATA_DDR = 0xFF;
@@ -219,7 +216,7 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<XA0);
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	DATA_PORT = 0x02;
-	_delay_us(100);
+	_delay_us(25);
 	CONTROL_PORT |= 1<<XTAL1;
 	_delay_us(25);
 	CONTROL_PORT &= ~(1<<XTAL1);
@@ -232,7 +229,6 @@ char* ReadSignatureBytes(void)
 	CONTROL_PORT &= ~(1<<BS1_PAGEL);
 	_delay_us(500);
 	SignatureBytes[2] = DATA_PIN;
-	printf("0x%02X ", SignatureBytes[2]);
 	CONTROL_PORT |= 1<<OE;
 	WR_PORT &= ~(1<<FPGAWR);
 	DATA_DDR = 0xFF;
@@ -245,11 +241,11 @@ void ReadFlash(void)
 {
 	char DataValueIn = 0;
 	
+	//A: Load Command "Read Flash"
+	LoadCommand(READ_FLASH);
+	
 	for (unsigned int LowAddressByte = 0; LowAddressByte < 16; LowAddressByte++)
 	{
-		//A: Load Command "Read Flash"
-		LoadCommand(READ_FLASH);
-		
 		//F: Load Address High Byte
 		LoadHighAddress(0x00);
 		

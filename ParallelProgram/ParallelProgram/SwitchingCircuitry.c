@@ -29,8 +29,7 @@ void SPI_Switching_Circuitry_Init()
 	SR_CNTRL_DDR |= ((1<<SR_RESET) | (1<<MAXCS) | (1<<SROE));
 	SRCS_DDR |= (1<<SRCS);
 	SRCS_PORT &= ~(1<<SRCS);
-	SR_CNTRL_PORT |= ((1<<MAXCS) | (1<<SROE));
-	SR_CNTRL_PORT &= ~(1<<SR_RESET);
+	SR_CNTRL_PORT |= ((1<<MAXCS) | (1<<SROE) | (1<<SR_RESET));
 }
 
 void SPI_Switching_Circuitry_Write(unsigned char SPI_Data)
@@ -87,7 +86,6 @@ void WriteShiftRegData()
 		SPI_Switching_Circuitry_Write(ShiftRegData[i][j]);
 	}
 	SR_CNTRL_PORT |= (1<<MAXCS);
-	
 	
 	for(i=1; i<PIN_TYPES; i++)
 	{
