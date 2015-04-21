@@ -18,22 +18,63 @@
 
 void ProgInit(void)
 {
-	SPI_Switching_Circuitry_Init(); 
+	//SPI_Switching_Circuitry_Init(); 
 	SPI_FPGA_Init();
 	
 	voltageControlInit();
 	setVpp(VPP_12V);
 	setVcc(VCC_5V);
 	setVLogic(VL_5V);
+	_delay_us(10);
 	enableVccRegulator();
 	enableVLogic();
-	_delay_ms(500);
+	_delay_ms(25);
 	//Setting up Control lines
 	CONTROL_DDR |= ( (1<<XTAL1) | (1<<OE) | (1<<WR) | (1<<BS1_PAGEL) | (1<<XA0) | (1<<XA1_BS2) | (1<<PAGEL) | (1<<BS2));
 	RDY_BSY_DDR &= ~(1<<RDY_BSY);
 	DATA_DDR = 0xFF;
 	
-	LED_PORT &= ~((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
+	LED_DDR |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
+	LED_PORT |= (1<<LED_Green);
+}
+
+void ApplyPullDowns(void)
+{
+	SPI_Switching_Circuitry_Init();
+	
+	SPI_Switching_Circuitry_Write(0xFF); //Pull Downs
+	SPI_Switching_Circuitry_Write(0xFF);
+	SPI_Switching_Circuitry_Write(0xFF);
+	SPI_Switching_Circuitry_Write(0xFF);
+	SPI_Switching_Circuitry_Write(0xFF);
+	
+	SPI_Switching_Circuitry_Write(0x00); //GND
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	
+	SPI_Switching_Circuitry_Write(0x00); //Pull Ups
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	
+	SPI_Switching_Circuitry_Write(0x00); //VCC
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	
+	SPI_Switching_Circuitry_Write(0x00); //VPP
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	SPI_Switching_Circuitry_Write(0x00);
+	
+	SR_CNTRL_PORT |= (1<<SRCS);
+	_delay_us(20);
+	SR_CNTRL_PORT &= ~(1<<SRCS);
 }
 
 void LoadCommand(char command)
@@ -109,8 +150,7 @@ void ProgramPage(void)
 	_delay_us(25);
 	CONTROL_PORT |= 1<<WR;
 	_delay_us(25);
-	//while(!(CONTROL_PIN & (1<<RDY_BSY)));
-	_delay_ms(1000);
+	while(!(RDY_BSY_In & (1<<RDY_BSY)));
 }
 
 void EndPageProgramming(void)
@@ -134,7 +174,7 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 	CONTROL_PORT = 0x00;
 	
 	WR_PORT &= ~(1<<FPGAWR);
-	SPI_FPGA_Write(FPGA_ATtiny2313_Mapping);
+	SPI_FPGA_Write(TargetMicrocontroller);
 	
 	switch (TargetMicrocontroller)
 	{
@@ -142,6 +182,7 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 			setAtTiny2313();
 			break;
 		case 2 :
+			setAtMega324PA();
 			break;
 		case 3 :
 			break;
@@ -155,7 +196,7 @@ void EnableProgMode(unsigned char TargetMicrocontroller)
 	enableVppRegulator();
 	_delay_us(50);
 	CONTROL_PORT |= (1<<WR | 1<<OE);
-	_delay_ms(5);
+	_delay_us(500);
 }
 
 char* ReadSignatureBytes(void)
@@ -286,8 +327,7 @@ void ChipErase(void)
 	_delay_us(25);
 	CONTROL_PORT |= 1<<WR;
 	_delay_us(25);
-	//while(!(CONTROL_PIN & (1<<RDY_BSY)));
-	_delay_ms(1000);
+	while(!(RDY_BSY_In & (1<<RDY_BSY)));
 }
 
 void ProgramFlash(char* hexData)
@@ -388,17 +428,18 @@ void ExitParallelProgrammingMode(void)
 	_delay_ms(1);
 	SPI_FPGA_Write(FPGA_Disable);
 	
-	SR_CNTRL_PORT &= ~(1<<SR_RESET); //Clearing Max395s and Shift Registers
+	SR_CNTRL_PORT &= ~(1<<SR_RESET); //Clearing Shift Registers
 	_delay_us(20);
 	SR_CNTRL_PORT |= (1<<SR_RESET);
 	_delay_us(5);
-	SRCS_PORT |= (1<<SRCS);
+	SR_CNTRL_PORT |= (1<<SRCS);
 	_delay_us(20);
-	SRCS_PORT &= ~(1<<SRCS);
+	SR_CNTRL_PORT &= ~(1<<SRCS);
 	
 	SR_CNTRL_PORT |= (1<<SROE);
 	
-	LED_PORT |= (1<<LED_Green);
+	LED_PORT |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
 	_delay_ms(1000);
-	LED_PORT &= ~((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
+	LED_PORT |= (1<<LED_Green);
+	LED_PORT &= ~((1<<LED_Yellow) | (1<<LED_Red));
 }

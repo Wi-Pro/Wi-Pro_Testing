@@ -14,6 +14,9 @@
 #define RAM_PORT PORTG
 #define RAM_DDR DDRG 
 #define RAM_CS 3
+#define RAM_HOLD_PORT PORTB
+#define RAM_HOLD_DDR DDRB
+#define RAM_HOLD 7
 
 #define MOSI 2
 #define SCK 1

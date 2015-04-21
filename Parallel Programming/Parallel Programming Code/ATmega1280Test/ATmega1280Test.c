@@ -88,13 +88,13 @@ int main(void)
 {
 	_delay_ms(500);
 	
-	USB_UART0_Initialization();
-	USB_UART2_Initialization();
+	//USB_UART0_Initialization();
+	//USB_UART2_Initialization();
 	SPI_FPGA_Init();
-	SPI_Switching_Circuitry_Init();
+	//SPI_Switching_Circuitry_Init();
 	//ParallelProgrammingInit();
 	
-	_delay_ms(500);
+	//_delay_ms(500);
 
 	//_delay_ms(1000);
 	//
@@ -105,13 +105,36 @@ int main(void)
 	//USB_UART0_Out(0x0A);
 	
 	//turning on top board LEDs
-	LED_DDR |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
-	LED_PORT |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
-	
-	_delay_ms(500);
+	//LED_DDR |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
+	//LED_PORT |= ((1<<LED_Green) | (1<<LED_Yellow) | (1<<LED_Red));
+	//
+	//_delay_ms(500);
 	//EnterParallelProgrammingMode();
 	//ReadSignatureBytes();
 	//ExitParallelProgrammingMode();
+	
+	SR_Cntrl_DDR |= ((1<<SReset) | (1<<SRCS));
+	SR_Cntrl_PORT |= (1<<SRCS);
+	//SR_Cntrl_PORT |= (1<<SReset);
+	
+	SR_Cntrl_PORT &= ~(1<<SRCS);
+	SPI_Switching_Circuitry_Write(0x00);//MAX395s
+	_delay_us(10);
+	SPI_Switching_Circuitry_Write(0x1F);
+	_delay_us(10);
+	SPI_Switching_Circuitry_Write(0xF7);
+	_delay_us(10);
+	SPI_Switching_Circuitry_Write(0xD0);
+	_delay_us(10);
+	SPI_Switching_Circuitry_Write(0x00);
+	_delay_us(10);
+	SR_Cntrl_PORT |= 1<<SRCS;
+	ControlDirection |= ( (1<<XTAL1) | (1<<OE) | (1<<WR) | (1<<BS1_PAGEL) | (1<<XA0) | (1<<XA1_BS2) | (1<<PAGEL) | (1<<BS2));
+	DATADirection = 0xFF;
+	WR_DDR |= 1<<FPGAWR;
+	WR_PORT &= ~(1<<FPGAWR);
+	SPI_FPGA_Write(0x01);
+	ReadSignatureBytes();
 	
 	while(1)
 	{

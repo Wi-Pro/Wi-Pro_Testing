@@ -22,7 +22,7 @@ void VppClear()
 void voltageControlInit()
 {
 	VCNTRL_DDR = 0xFF;
-	VCNTRL_PORT = 0x00;
+	VCNTRL_PORT = 0;
 	
 	VEN_DDR |= ((1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE));
 	VEN_PORT &= ~((1<<VPPENABLE) | (1<<VCCENABLE) | (1<<VLENABLE));

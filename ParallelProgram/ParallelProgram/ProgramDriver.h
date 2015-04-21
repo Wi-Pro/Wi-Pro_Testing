@@ -20,16 +20,17 @@
 #define SR_CNTRL_PORT PORTJ
 #define SR_CNTRL_DDR DDRJ
 #define SR_RESET 5
-#define MAXCS 4
+//#define MAXCS 4
+#define SRCS 4
 #define SROE 3
 
 //#define LT_OE_DDR DDRG
 //#define LT_OE_PORT PORTG
 //#define LTOE 5
 
-#define SRCS_PORT PORTB
-#define SRCS_DDR DDRB
-#define SRCS 7
+//#define SRCS_PORT PORTB
+//#define SRCS_DDR DDRB
+//#define SRCS 7
 
 #define WR_DDR DDRJ
 #define WR_PORT PORTJ
@@ -90,6 +91,7 @@ void SPI_Switching_Circuitry_Init();
 void SPI_Switching_Circuitry_Write(unsigned char SPI_Data);
 
 void ProgInit();
+void ApplyPullDowns();
 void EnableProgMode(unsigned char TargetMicrocontroller);
 void ExitParallelProgrammingMode();
 char* ReadSignatureBytes();

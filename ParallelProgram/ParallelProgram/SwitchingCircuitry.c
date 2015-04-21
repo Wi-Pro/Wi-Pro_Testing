@@ -26,10 +26,11 @@ void SPI_Switching_Circuitry_Init()
 	// Enable SPI, Master Mode 0, set the clock rate fck/64
 	SPCR = ((1<<SPE)|(1<<MSTR)|(1<<SPR1));
 	
-	SR_CNTRL_DDR |= ((1<<SR_RESET) | (1<<MAXCS) | (1<<SROE));
-	SRCS_DDR |= (1<<SRCS);
-	SRCS_PORT &= ~(1<<SRCS);
-	SR_CNTRL_PORT |= ((1<<MAXCS) | (1<<SROE) | (1<<SR_RESET));
+	SR_CNTRL_DDR |= ((1<<SR_RESET) | (1<<SRCS) | (1<<SROE));
+	//SRCS_DDR |= (1<<SRCS);
+	//SRCS_PORT &= ~(1<<SRCS);
+	SR_CNTRL_PORT |= ((1<<SR_RESET));
+	SR_CNTRL_PORT &= ~((1<<SRCS) | (1<<SROE));
 }
 
 void SPI_Switching_Circuitry_Write(unsigned char SPI_Data)
@@ -46,9 +47,9 @@ void SwitchingCircuitryEnable()
 	_delay_us(25);
 	SR_CNTRL_PORT |= (1<<SR_RESET);
 	
-	SRCS_PORT |= (1<<SRCS);
+	SR_CNTRL_PORT |= (1<<SRCS);
 	_delay_us(20);
-	SRCS_PORT &= ~(1<<SRCS);
+	SR_CNTRL_PORT &= ~(1<<SRCS);
 	
 	SR_CNTRL_PORT &= ~(1<<SROE);
 }
@@ -77,39 +78,35 @@ void SetShiftRegData(uint8_t pinType, char data[SOCKET_SIZE/8])
 
 void WriteShiftRegData()
 {
-	SwitchingCircuitryEnable(); 
+	//SwitchingCircuitryEnable(); 
 	
-	SR_CNTRL_PORT &= ~(1<<MAXCS);
-	int i = 0; 
-	for(int j=0; j<SOCKET_SIZE/8; j++)
-	{
-		SPI_Switching_Circuitry_Write(ShiftRegData[i][j]);
-	}
-	SR_CNTRL_PORT |= (1<<MAXCS);
+	//SR_CNTRL_PORT &= ~(1<<MAXCS);
+	//int i = 0; 
+	//for(int j=0; j<SOCKET_SIZE/8; j++)
+	//{
+		//SPI_Switching_Circuitry_Write(ShiftRegData[i][j]);
+	//}
+	//SR_CNTRL_PORT |= (1<<MAXCS);
 	
-	for(i=1; i<PIN_TYPES; i++)
+	for(int i=1; i<(PIN_TYPES); i++)
 	{
 		for(int j=0; j<SOCKET_SIZE/8; j++)
 		{
 			SPI_Switching_Circuitry_Write(ShiftRegData[i][j]); 
 		}
 	}
-	SRCS_PORT |= (1<<SRCS);
+	
+	SR_CNTRL_PORT |= (1<<SRCS);
 	_delay_us(20);
-	SRCS_PORT &= ~(1<<SRCS);
+	SR_CNTRL_PORT &= ~(1<<SRCS);
 }
 
 void setAtTiny2313()
 {
-	char shiftTempBuff[5] = {0x00, 0x1F, 0xF7, 0xD0, 0x00};
-	SetShiftRegData(LOGIC, shiftTempBuff);
-	//Modify Values and shift again 
-	shiftTempBuff[0] = 0x00;
-	shiftTempBuff[1] = 0x00;
-	shiftTempBuff[2] = 0x00; //setting GND to ZIF19
-	shiftTempBuff[3] = 0x00;
-	shiftTempBuff[4] = 0x00;
+	//char shiftTempBuff[5] = {0x00, 0x1F, 0xF7, 0xD0, 0xFF};
+	char shiftTempBuff[5] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 	SetShiftRegData(PULL_DOWN, shiftTempBuff);
+	//Modify Values and shift again 
 	shiftTempBuff[0] = 0x00;
 	shiftTempBuff[1] = 0x00;
 	shiftTempBuff[2] = 0x08; //setting GND to ZIF19
@@ -132,6 +129,45 @@ void setAtTiny2313()
 	shiftTempBuff[1] = 0x00;
 	shiftTempBuff[2] = 0x00;
 	shiftTempBuff[3] = 0x04; //Setting VPP to ZIF10
+	shiftTempBuff[4] = 0x00;
+	SetShiftRegData(VPP, shiftTempBuff);
+	//shiftTempBuff[0] = 0x00;
+	//shiftTempBuff[1] = 0x1F;
+	//shiftTempBuff[2] = 0xF7;
+	//shiftTempBuff[3] = 0xD0; //Setting up Logic
+	//shiftTempBuff[4] = 0x00;
+	//SetShiftRegData(LOGIC, shiftTempBuff);
+	
+	WriteShiftRegData();
+}
+
+void setAtMega324PA()
+{
+	char shiftTempBuff[5] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	SetShiftRegData(PULL_DOWN, shiftTempBuff);
+	//Modify Values and shift again
+	shiftTempBuff[0] = 0x00;
+	shiftTempBuff[1] = 0x40;
+	shiftTempBuff[2] = 0x00; //setting GND to ZIF19
+	shiftTempBuff[3] = 0x04;
+	shiftTempBuff[4] = 0x00;
+	SetShiftRegData(GROUND, shiftTempBuff);
+	shiftTempBuff[0] = 0x00;
+	shiftTempBuff[1] = 0x00;
+	shiftTempBuff[2] = 0x00;
+	shiftTempBuff[3] = 0x00;
+	shiftTempBuff[4] = 0x00;
+	SetShiftRegData(PULL_UP, shiftTempBuff);
+	shiftTempBuff[0] = 0x00;
+	shiftTempBuff[1] = 0x20; //Setting VCC to ZIF29
+	shiftTempBuff[2] = 0x00;
+	shiftTempBuff[3] = 0x02;
+	shiftTempBuff[4] = 0x00;
+	SetShiftRegData(VCC, shiftTempBuff);
+	shiftTempBuff[0] = 0x00;
+	shiftTempBuff[1] = 0x00;
+	shiftTempBuff[2] = 0x00;
+	shiftTempBuff[3] = 0x01; //Setting VPP to ZIF10
 	shiftTempBuff[4] = 0x00;
 	SetShiftRegData(VPP, shiftTempBuff);
 	

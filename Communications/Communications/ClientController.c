@@ -122,8 +122,8 @@ int getFlagStatus()
 {
 	//Testing 
 	TIMSK1 &= ~(1 << TOIE1);
-	Flags[ETHERNET] = 0; 
-	Flags[WIFI] = 1; 
+	Flags[ETHERNET] = 1; 
+	Flags[WIFI] = 0; 
 	
 	if(Flags[ETHERNET]){
 		getFileEthernet(FLAG_FILE, 1, STATUS_FLAG_ADDRESS, 3); 
