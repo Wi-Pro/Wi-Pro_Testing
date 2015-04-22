@@ -55,9 +55,9 @@ void setTestPrint(int print)
 
 void setCompressFlag(uint8_t compress)
 {
-	PORTD &= ~(1<<CTS); 
+	//PORTD &= ~(1<<CTS); 
 	compressFlag = compress;
-	PORTD |= (1<<CTS); 
+	//PORTD |= (1<<CTS); 
 }
 
 void setReceiveCounter(int val)
@@ -98,14 +98,14 @@ int uart_send(char* data, unsigned int length)
 	//UCSR1B |= (1<<RXCIE1);
 	receiveWifiFlag = 0;
 	memset(headerBuffer, 0x00, endHeader);
-	PORTD |= (1<<RTS);
+	//PORTD |= (1<<RTS);
 	//while(!(PIND & (1<<CTS))){
 		//_delay_us(100);
 		//printf("Waiting..\n");
 	//} 
 	while(i < length){
-		while(!(UCSR1A & (1<<UDRE1)));
-		UDR1 = data[i];
+		while(!(UCSR0A & (1<<UDRE0)));
+		UDR0 = data[i];
 		i++;
 	}
 	//while(!(PIND & (1<<CTS))){_delay_us(100);}
@@ -119,8 +119,8 @@ unsigned char uart_receive(unsigned char* data, unsigned char size)
  
 	while(1 < size - 1) {
 		unsigned char c;
-		while (!(UCSR1A & (1<<RXC1)));
-		c = UDR1;
+		while (!(UCSR0A & (1<<RXC0)));
+		c = UDR0;
 		//printf("Moving Received Byte %d: %c\n", i, c);
 		//_delay_ms(500);
 		printf("%c",c);
@@ -137,20 +137,20 @@ unsigned char uart_receive(unsigned char* data, unsigned char size)
 unsigned char uart_receiveChar()
 {
 	//printf("Receiving...\n");
-	while (!(UCSR1A & (1<<RXC1)));
-	return UDR1; 
+	while (!(UCSR0A & (1<<RXC0)));
+	return UDR0; 
 }
 
 int enableReceiveINT()
 {
-	UCSR1B |= (1<<RXCIE1);
+	UCSR0B |= (1<<RXCIE0);
 	sei(); 
 	return 1; 
 }
 
 int disableReceiveINT()
 {
-	UCSR1B &= ~(1<<RXCIE1);
+	UCSR0B &= ~(1<<RXCIE0);
 	return 1; 
 }
 
@@ -346,7 +346,7 @@ unsigned int sendCommand(int8_t prefix, char* command, char* value)
 	//sei();
 //}
 
-ISR(USART1_RX_vect)
+ISR(USART0_RX_vect)
 {
 	cli();
 	//if(testPrint)
@@ -357,7 +357,7 @@ ISR(USART1_RX_vect)
 		//Header always begins with letter 'R'
 		if(buff == headerStartVal)
 		{
-			PORTD &= ~(1<<RTS);
+			//PORTD &= ~(1<<RTS);
 			//if(testPrint)
 				//printf("Beginning Found @ %d\n", i); 
 				
@@ -368,7 +368,7 @@ ISR(USART1_RX_vect)
 					//printf("Header: %c @ address %p", headerBuffer[i], headerBuffer); 
 					
 			bufferStart = 1;
-			PORTD |= (1<<RTS); 
+			//PORTD |= (1<<RTS); 
 		}
 	}
 	
@@ -378,13 +378,13 @@ ISR(USART1_RX_vect)
 		//Grab Receive Header
 		if(i < endHeader)
 		{
-			PORTD &= ~(1<<RTS);
+			//PORTD &= ~(1<<RTS);
 			headerBuffer[i] = uart_receiveChar();
 			//if(testPrint)
 				//printf("Header: %c @ address %p\n", headerBuffer[i], headerBuffer + i);
 			//i++; 
 			//RAMWriteByte(uart_receiveChar(), i);
-			PORTD |= (1<<RTS); 
+			//PORTD |= (1<<RTS); 
 		}
 		else if(i == endHeader)
 		{
@@ -399,34 +399,34 @@ ISR(USART1_RX_vect)
 			{
 				//printf("Translength: %d", transLength);
 				buff = uart_receiveChar();
-				if(compressFlag == 1)
-				{
-					//printf("Compressing!\n");
-					PORTD &= ~(1<<CTS);
-					if(buff == ':')
-					{
-						PORTD &= ~(1<<RTS);
-						RAMWriteByte(buff, RAMAddress + i - endHeader -1);
-					}
-					else if(!secondNibble)
-					{
-						//Mask the ASCII Nibble 
-						compressBuff = (buff & 0x0F);
-						//Shift it into the upper nibble  
-						compressBuff <<= 4; 
-						secondNibble =  1;
-					}
-					else
-					{
-						compressBuff |= buff; 
-						RAMWriteByte(compressBuff, RAMAddress + i - endHeader -1);
-						secondNibble = 0; 
-					}
-				}
-				else
-				{
+				//if(compressFlag == 1)
+				//{
+					////printf("Compressing!\n");
+					////PORTD &= ~(1<<CTS);
+					//if(buff == ':')
+					//{
+						////PORTD &= ~(1<<RTS);
+						//RAMWriteByte(buff, RAMAddress + i - endHeader -1);
+					//}
+					//else if(!secondNibble)
+					//{
+						////Mask the ASCII Nibble 
+						//compressBuff = (buff & 0x0F);
+						////Shift it into the upper nibble  
+						//compressBuff <<= 4; 
+						//secondNibble =  1;
+					//}
+					//else
+					//{
+						//compressBuff |= buff; 
+						//RAMWriteByte(compressBuff, RAMAddress + i - endHeader -1);
+						//secondNibble = 0; 
+					//}
+				//}
+				//else
+				//{
 					RAMWriteByte(buff, RAMAddress + i - endHeader -1);	
-				}
+				//}
 				
 				//printf("Received String: %c @ location %d\n", receiveBuffer[i], i);
 				//i++; 
@@ -454,6 +454,6 @@ ISR(USART1_RX_vect)
 	//if(bufferStart && !receiveWifiFlag)
 	i++; 
 		
-	PORTD |= (1<<CTS); 
+	//PORTD |= (1<<CTS); 
 	sei(); 
 }

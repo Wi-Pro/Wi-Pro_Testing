@@ -20,12 +20,14 @@
 
 int main(void)
 {
+	_delay_ms(1000);
 	char buffer[100];
 	char* message = "What the fuck is this shit";
 	uart_init();
 	uart0_init(); 
 	SPI_Init();  
 	sei(); 
+	//uart_send("help\n",5);
 	//RAMWrite(message, 0, strlen(message));
 	//RAMPrint(0, strlen(message));
 	//RAMRead(0, 30, buffer);
@@ -36,8 +38,8 @@ int main(void)
 	wifiInit(); 
 	setMachineMode(); 
 	networkScan(); 
-	
-
+	//
+//
 	printf("Done!\n");
     while(1)
     {
