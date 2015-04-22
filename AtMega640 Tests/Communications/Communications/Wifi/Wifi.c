@@ -24,13 +24,15 @@
 
 void wifiInit()
 {
-	DDRD |= (1<<RTS) | (1<<CTS);
+	//DDRD |= (1<<RTS) | (1<<CTS);
 	//DDRD &= ~(1<<CTS);
 	//Requesting not to send data
-	PORTD |= (1<<RTS);
-	PORTD |= (1<<CTS);
+	//PORTD |= (1<<RTS);
+	//PORTD |= (1<<CTS);
 	//PUll the CTS line up 
 	//PORTD |= (1<<CTS);
+	//setTestPrint(0);
+	wifiDriverInit();
 } 
 
 void setMachineMode()
@@ -155,28 +157,49 @@ uint16_t networkQueryString(char* filepath)
 	//Overwrite the terminating byte with two new lines for the http request 
 	RAMWrite(footer, WIFI_QSTRING_ADDRESS + j-1, strlen(footer));
 	j+=strlen(footer)-1; 
-	
 	return j; 
 }
 
-char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress)
-{
-	if(externRAM){
-		updateRAMAddress(RAMAddress); 
-	}
-	printf("Filepath: %s\n", filepath);
-	enableReceiveINT(); 
-	sendCommand(NOPREFIX, HTTP_GET, filepath); 
-	receiveStatus(); 
-	sendCommand(NOPREFIX, STREAM_READ, "0 8000");
-	receiveStatus(); 
+char* getFileWifi(char* filepath, int externRAM, uint32_t RAMAddress, int multiReceive)
+{ 
+	//printf("Filepath: %s\n", filepath);
+	//enableReceiveINT();
+	//setTestPrint(1); 
+	enableReceiveINT();   
+	PORTD &= ~(1<<CTS);
+	setReceiveCounter(0);
+	uint16_t i = 0; 
+	char* receiveHeader; 
+	//setCompressFlag(1);
+	PORTD |= (1<<CTS);
+	sendCommand(NOPREFIX, HTTP_GET, filepath);
+	receiveStatus();
+	do 
+	{
+		if(externRAM){
+			updateRAMAddress(RAMAddress + i);
+			printf("RAM Address: %d\n", RAMAddress+i); 
+		}
+		sendCommand(NOPREFIX, STREAM_READ, "0 10000");
+		receiveStatus();
+		receiveHeader = getMessageHeader(); 
+		printf("Tran Length: %d\n", receiveHeader); 
+		if(receiveHeader[errorCode] == '1'){
+			break; 
+		}
+		i += getTransmissionLength(); 
+	} while (multiReceive);
+	
 	disableReceiveINT(); 
+	//_delay_ms(3000);  
 	sendCommand(NOPREFIX, STREAM_CLOSE, NOVAL);
+	//receiveStatus(); 
 }
 
 void updateFileWifi(char* filepath)
 {
 	disableReceiveINT(); 
-	sendCommand(NOPREFIX, filepath, NOVAL); 	
+	sendCommand(NOPREFIX, filepath, NOVAL);
+	sendCommand(NOPREFIX, STREAM_CLOSE, NOVAL); 	
 }
 

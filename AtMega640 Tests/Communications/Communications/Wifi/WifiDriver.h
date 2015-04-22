@@ -30,13 +30,18 @@
 #define hundreds 4
 #define tens 5
 #define ones 6
-#define endHeader 7
+#define endHeader 9
+
+#define headerStartVal 'R'
 
 //I/Os 
 //#define RTS PORTD4
 //#define CTS PORTD5 
 
-void setTestPrint(); 
+void wifiDriverInit();
+void setTestPrint(int print);
+void setReceiveCounter(int val);
+void setCompressFlag(uint8_t compress);
 void uart_init();
 int uart_send(char* data, unsigned int length);
 int uart_sendChar(unsigned char data);

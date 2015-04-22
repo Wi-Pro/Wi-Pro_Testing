@@ -26,13 +26,16 @@ int main(void)
 	uart0_init(); 
 	SPI_Init();  
 	sei(); 
-	RAMWrite(message, 0, strlen(message));
-	RAMPrint(0, strlen(message));
-	RAMRead(0, 30, buffer);
+	//RAMWrite(message, 0, strlen(message));
+	//RAMPrint(0, strlen(message));
+	//RAMRead(0, 30, buffer);
 	
-	ethernetInit();
-	printf("ethernetInit Done");
-	pollingInit(); 
+	//ethernetInit();
+	//printf("ethernetInit Done");
+	//pollingInit();
+	wifiInit(); 
+	setMachineMode(); 
+	networkScan(); 
 	
 
 	printf("Done!\n");
