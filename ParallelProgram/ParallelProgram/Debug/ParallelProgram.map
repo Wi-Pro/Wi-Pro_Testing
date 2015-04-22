@@ -40,8 +40,28 @@ Discarded input sections
  .bss           0x00000000        0x0 FPGA.o
  .text          0x00000000        0x0 IntelHex.o
  .bss           0x00000000        0x0 IntelHex.o
+ .text.getHexRow
+                0x00000000       0x90 IntelHex.o
  .text          0x00000000        0x0 ProgramDriver.o
  .bss           0x00000000        0x0 ProgramDriver.o
+ .text.WriteWord
+                0x00000000       0x4c ProgramDriver.o
+ .text.LoadLowAddress
+                0x00000000       0x28 ProgramDriver.o
+ .text.LoadHighAddress
+                0x00000000       0x28 ProgramDriver.o
+ .text.ProgramPage
+                0x00000000       0x1a ProgramDriver.o
+ .text.EndPageProgramming
+                0x00000000       0x26 ProgramDriver.o
+ .rodata.str1.1
+                0x00000000       0x27 ProgramDriver.o
+ .text.ReadFlash
+                0x00000000       0xea ProgramDriver.o
+ .text.ChipErase
+                0x00000000       0x42 ProgramDriver.o
+ .text.ProgramFlash
+                0x00000000      0x180 ProgramDriver.o
  .text.ProgramFlashTest
                 0x00000000       0x38 ProgramDriver.o
  .text          0x00000000        0x0 ParallelProgram.o
@@ -65,6 +85,8 @@ Discarded input sections
  .text.setSPIClockDiv
                 0x00000000        0x6 RAM/RAMDriver.o
  .text.RAMRead  0x00000000       0x68 RAM/RAMDriver.o
+ .text.RAMReadByte
+                0x00000000        0xe RAM/RAMDriver.o
  .text          0x00000000        0x0 SwitchingCircuitry.o
  .bss           0x00000000        0x0 SwitchingCircuitry.o
  .text.SwitchingCircuitryEnable
@@ -267,7 +289,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x13ee
+.text           0x00000000      0xf7c
  *(.vectors)
  .vectors       0x00000000       0xe4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
                 0x00000000                __vector_default
@@ -320,244 +342,214 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x0000011a        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+ .init9         0x0000011a        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
  *(.init9)
  *(.text)
- .text          0x00000120        0x2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
-                0x00000120                __vector_38
-                0x00000120                __vector_22
-                0x00000120                __vector_28
-                0x00000120                __vector_1
-                0x00000120                __vector_32
-                0x00000120                __vector_34
-                0x00000120                __vector_24
-                0x00000120                __vector_12
-                0x00000120                __vector_55
-                0x00000120                __vector_46
-                0x00000120                __bad_interrupt
-                0x00000120                __vector_6
-                0x00000120                __vector_31
-                0x00000120                __vector_35
-                0x00000120                __vector_39
-                0x00000120                __vector_3
-                0x00000120                __vector_23
-                0x00000120                __vector_30
-                0x00000120                __vector_45
-                0x00000120                __vector_25
-                0x00000120                __vector_11
-                0x00000120                __vector_54
-                0x00000120                __vector_13
-                0x00000120                __vector_17
-                0x00000120                __vector_19
-                0x00000120                __vector_56
-                0x00000120                __vector_7
-                0x00000120                __vector_49
-                0x00000120                __vector_41
-                0x00000120                __vector_43
-                0x00000120                __vector_27
-                0x00000120                __vector_5
-                0x00000120                __vector_33
-                0x00000120                __vector_47
-                0x00000120                __vector_52
-                0x00000120                __vector_37
-                0x00000120                __vector_4
-                0x00000120                __vector_44
-                0x00000120                __vector_51
-                0x00000120                __vector_9
-                0x00000120                __vector_2
-                0x00000120                __vector_21
-                0x00000120                __vector_15
-                0x00000120                __vector_36
-                0x00000120                __vector_29
-                0x00000120                __vector_40
-                0x00000120                __vector_8
-                0x00000120                __vector_26
-                0x00000120                __vector_48
-                0x00000120                __vector_14
-                0x00000120                __vector_53
-                0x00000120                __vector_10
-                0x00000120                __vector_50
-                0x00000120                __vector_16
-                0x00000120                __vector_18
-                0x00000120                __vector_20
-                0x00000120                __vector_42
-                0x00000122                . = ALIGN (0x2)
+ .text          0x0000011e        0x2 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
+                0x0000011e                __vector_38
+                0x0000011e                __vector_22
+                0x0000011e                __vector_28
+                0x0000011e                __vector_1
+                0x0000011e                __vector_32
+                0x0000011e                __vector_34
+                0x0000011e                __vector_24
+                0x0000011e                __vector_12
+                0x0000011e                __vector_55
+                0x0000011e                __vector_46
+                0x0000011e                __bad_interrupt
+                0x0000011e                __vector_6
+                0x0000011e                __vector_31
+                0x0000011e                __vector_35
+                0x0000011e                __vector_39
+                0x0000011e                __vector_3
+                0x0000011e                __vector_23
+                0x0000011e                __vector_30
+                0x0000011e                __vector_45
+                0x0000011e                __vector_25
+                0x0000011e                __vector_11
+                0x0000011e                __vector_54
+                0x0000011e                __vector_13
+                0x0000011e                __vector_17
+                0x0000011e                __vector_19
+                0x0000011e                __vector_56
+                0x0000011e                __vector_7
+                0x0000011e                __vector_49
+                0x0000011e                __vector_41
+                0x0000011e                __vector_43
+                0x0000011e                __vector_27
+                0x0000011e                __vector_5
+                0x0000011e                __vector_33
+                0x0000011e                __vector_47
+                0x0000011e                __vector_52
+                0x0000011e                __vector_37
+                0x0000011e                __vector_4
+                0x0000011e                __vector_44
+                0x0000011e                __vector_51
+                0x0000011e                __vector_9
+                0x0000011e                __vector_2
+                0x0000011e                __vector_21
+                0x0000011e                __vector_15
+                0x0000011e                __vector_36
+                0x0000011e                __vector_29
+                0x0000011e                __vector_40
+                0x0000011e                __vector_8
+                0x0000011e                __vector_26
+                0x0000011e                __vector_48
+                0x0000011e                __vector_14
+                0x0000011e                __vector_53
+                0x0000011e                __vector_10
+                0x0000011e                __vector_50
+                0x0000011e                __vector_16
+                0x0000011e                __vector_18
+                0x0000011e                __vector_20
+                0x0000011e                __vector_42
+                0x00000120                . = ALIGN (0x2)
  *(.text.*)
  .text.SPI_FPGA_Write
-                0x00000122        0xe FPGA.o
-                0x00000122                SPI_FPGA_Write
+                0x00000120        0xe FPGA.o
+                0x00000120                SPI_FPGA_Write
  .text.SPI_FPGA_Init
-                0x00000130       0x1e FPGA.o
-                0x00000130                SPI_FPGA_Init
- .text.hexInit  0x0000014e       0x18 IntelHex.o
-                0x0000014e                hexInit
- .text.getHexRow
-                0x00000166       0x8a IntelHex.o
-                0x00000166                getHexRow
+                0x0000012e       0x1e FPGA.o
+                0x0000012e                SPI_FPGA_Init
+ .text.hexInit  0x0000014c       0x18 IntelHex.o
+                0x0000014c                hexInit
  .text.writeHexFileTest
-                0x000001f0       0x5c IntelHex.o
-                0x000001f0                writeHexFileTest
+                0x00000164       0x5c IntelHex.o
+                0x00000164                writeHexFileTest
  .text.ProgInit
-                0x0000024c       0x3e ProgramDriver.o
-                0x0000024c                ProgInit
+                0x000001c0       0x3e ProgramDriver.o
+                0x000001c0                ProgInit
  .text.ApplyPullDowns
-                0x0000028a       0x80 ProgramDriver.o
-                0x0000028a                ApplyPullDowns
+                0x000001fe       0x80 ProgramDriver.o
+                0x000001fe                ApplyPullDowns
  .text.LoadCommand
-                0x0000030a       0x28 ProgramDriver.o
-                0x0000030a                LoadCommand
- .text.WriteWord
-                0x00000332       0x4c ProgramDriver.o
-                0x00000332                WriteWord
- .text.LoadLowAddress
-                0x0000037e       0x28 ProgramDriver.o
-                0x0000037e                LoadLowAddress
- .text.LoadHighAddress
-                0x000003a6       0x28 ProgramDriver.o
-                0x000003a6                LoadHighAddress
- .text.ProgramPage
-                0x000003ce       0x1a ProgramDriver.o
-                0x000003ce                ProgramPage
- .text.EndPageProgramming
-                0x000003e8       0x26 ProgramDriver.o
-                0x000003e8                EndPageProgramming
+                0x0000027e       0x28 ProgramDriver.o
+                0x0000027e                LoadCommand
  .text.EnableProgMode
-                0x0000040e       0x5c ProgramDriver.o
-                0x0000040e                EnableProgMode
+                0x000002a6       0x5c ProgramDriver.o
+                0x000002a6                EnableProgMode
  .text.ReadSignatureBytes
-                0x0000046a      0x13c ProgramDriver.o
-                0x0000046a                ReadSignatureBytes
- .text.ReadFlash
-                0x000005a6       0xe0 ProgramDriver.o
-                0x000005a6                ReadFlash
- .text.ChipErase
-                0x00000686       0x42 ProgramDriver.o
-                0x00000686                ChipErase
- .text.ProgramFlash
-                0x000006c8      0x16a ProgramDriver.o
-                0x000006c8                ProgramFlash
+                0x00000302      0x13c ProgramDriver.o
+                0x00000302                ReadSignatureBytes
  .text.ExitParallelProgrammingMode
-                0x00000832       0x84 ProgramDriver.o
-                0x00000832                ExitParallelProgrammingMode
- .text.main     0x000008b6       0x9c ParallelProgram.o
-                0x000008b6                main
+                0x0000043e       0x84 ProgramDriver.o
+                0x0000043e                ExitParallelProgrammingMode
+ .text.main     0x000004c2       0x28 ParallelProgram.o
+                0x000004c2                main
  .text.uart_sendStream
-                0x00000952       0x22 Print/PrintDriver.o
-                0x00000952                uart_sendStream
+                0x000004ea       0x22 Print/PrintDriver.o
+                0x000004ea                uart_sendStream
  .text.uart_receiveStream
-                0x00000974       0x1e Print/PrintDriver.o
-                0x00000974                uart_receiveStream
+                0x0000050c       0x1e Print/PrintDriver.o
+                0x0000050c                uart_receiveStream
  .text.uart2_init
-                0x00000992       0x2c Print/PrintDriver.o
-                0x00000992                uart2_init
+                0x0000052a       0x2c Print/PrintDriver.o
+                0x0000052a                uart2_init
  .text.getRAMStatus
-                0x000009be       0x1c RAM/RAMDriver.o
-                0x000009be                getRAMStatus
+                0x00000556       0x1c RAM/RAMDriver.o
+                0x00000556                getRAMStatus
  .text.setRAMStatus
-                0x000009da       0x18 RAM/RAMDriver.o
-                0x000009da                setRAMStatus
+                0x00000572       0x18 RAM/RAMDriver.o
+                0x00000572                setRAMStatus
  .text.SPI_WriteAddress
-                0x000009f2       0x2c RAM/RAMDriver.o
-                0x000009f2                SPI_WriteAddress
+                0x0000058a       0x2c RAM/RAMDriver.o
+                0x0000058a                SPI_WriteAddress
  .text.SPI_WriteData
-                0x00000a1e        0xa RAM/RAMDriver.o
-                0x00000a1e                SPI_WriteData
+                0x000005b6        0xa RAM/RAMDriver.o
+                0x000005b6                SPI_WriteData
  .text.SPI_ReadAddress
-                0x00000a28       0x2c RAM/RAMDriver.o
-                0x00000a28                SPI_ReadAddress
+                0x000005c0       0x2c RAM/RAMDriver.o
+                0x000005c0                SPI_ReadAddress
  .text.SPI_ReadData
-                0x00000a54        0xc RAM/RAMDriver.o
-                0x00000a54                SPI_ReadData
+                0x000005ec        0xc RAM/RAMDriver.o
+                0x000005ec                SPI_ReadData
  .text.RAMWrite
-                0x00000a60       0x7e RAM/RAMDriver.o
-                0x00000a60                RAMWrite
+                0x000005f8       0x7e RAM/RAMDriver.o
+                0x000005f8                RAMWrite
  .text.RAMPrint
-                0x00000ade       0x9a RAM/RAMDriver.o
-                0x00000ade                RAMPrint
+                0x00000676       0x9a RAM/RAMDriver.o
+                0x00000676                RAMPrint
  .text.RAMWriteByte
-                0x00000b78       0x16 RAM/RAMDriver.o
-                0x00000b78                RAMWriteByte
+                0x00000710       0x16 RAM/RAMDriver.o
+                0x00000710                RAMWriteByte
  .text.SPI_Init
-                0x00000b8e       0x1c RAM/RAMDriver.o
-                0x00000b8e                SPI_Init
- .text.RAMReadByte
-                0x00000baa        0xa RAM/RAMDriver.o
-                0x00000baa                RAMReadByte
+                0x00000726       0x1c RAM/RAMDriver.o
+                0x00000726                SPI_Init
  .text.SPI_Switching_Circuitry_Init
-                0x00000bb4       0x26 SwitchingCircuitry.o
-                0x00000bb4                SPI_Switching_Circuitry_Init
+                0x00000742       0x26 SwitchingCircuitry.o
+                0x00000742                SPI_Switching_Circuitry_Init
  .text.SPI_Switching_Circuitry_Write
-                0x00000bda        0xa SwitchingCircuitry.o
-                0x00000bda                SPI_Switching_Circuitry_Write
+                0x00000768        0xa SwitchingCircuitry.o
+                0x00000768                SPI_Switching_Circuitry_Write
  .text.SetShiftRegData
-                0x00000be4       0x28 SwitchingCircuitry.o
-                0x00000be4                SetShiftRegData
+                0x00000772       0x28 SwitchingCircuitry.o
+                0x00000772                SetShiftRegData
  .text.WriteShiftRegData
-                0x00000c0c       0x88 SwitchingCircuitry.o
-                0x00000c0c                WriteShiftRegData
+                0x0000079a       0x88 SwitchingCircuitry.o
+                0x0000079a                WriteShiftRegData
  .text.setAtTiny2313
-                0x00000c94       0x92 SwitchingCircuitry.o
-                0x00000c94                setAtTiny2313
+                0x00000822       0x92 SwitchingCircuitry.o
+                0x00000822                setAtTiny2313
  .text.setAtMega324PA
-                0x00000d26       0x96 SwitchingCircuitry.o
-                0x00000d26                setAtMega324PA
+                0x000008b4       0x96 SwitchingCircuitry.o
+                0x000008b4                setAtMega324PA
  .text.voltageControlInit
-                0x00000dbc       0x14 VoltageControlDriver.o
-                0x00000dbc                voltageControlInit
+                0x0000094a       0x14 VoltageControlDriver.o
+                0x0000094a                voltageControlInit
  .text.enableVppRegulator
-                0x00000dd0        0x4 VoltageControlDriver.o
-                0x00000dd0                enableVppRegulator
+                0x0000095e        0x4 VoltageControlDriver.o
+                0x0000095e                enableVppRegulator
  .text.disableVppRegulator
-                0x00000dd4        0x4 VoltageControlDriver.o
-                0x00000dd4                disableVppRegulator
+                0x00000962        0x4 VoltageControlDriver.o
+                0x00000962                disableVppRegulator
  .text.enableVccRegulator
-                0x00000dd8        0x4 VoltageControlDriver.o
-                0x00000dd8                enableVccRegulator
+                0x00000966        0x4 VoltageControlDriver.o
+                0x00000966                enableVccRegulator
  .text.disableVccRegulator
-                0x00000ddc        0x4 VoltageControlDriver.o
-                0x00000ddc                disableVccRegulator
- .text.setVcc   0x00000de0       0x1c VoltageControlDriver.o
-                0x00000de0                setVcc
- .text.setVpp   0x00000dfc       0x1c VoltageControlDriver.o
-                0x00000dfc                setVpp
+                0x0000096a        0x4 VoltageControlDriver.o
+                0x0000096a                disableVccRegulator
+ .text.setVcc   0x0000096e       0x1c VoltageControlDriver.o
+                0x0000096e                setVcc
+ .text.setVpp   0x0000098a       0x1c VoltageControlDriver.o
+                0x0000098a                setVpp
  .text.enableVLogic
-                0x00000e18        0x4 VoltageControlDriver.o
-                0x00000e18                enableVLogic
+                0x000009a6        0x4 VoltageControlDriver.o
+                0x000009a6                enableVLogic
  .text.disableVLogic
-                0x00000e1c        0x4 VoltageControlDriver.o
-                0x00000e1c                disableVLogic
+                0x000009aa        0x4 VoltageControlDriver.o
+                0x000009aa                disableVLogic
  .text.setVLogic
-                0x00000e20       0x1c VoltageControlDriver.o
-                0x00000e20                setVLogic
+                0x000009ae       0x1c VoltageControlDriver.o
+                0x000009ae                setVLogic
  .text.avr-libc
-                0x00000e3c       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(fputc.o)
-                0x00000e3c                fputc
+                0x000009ca       0x64 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(fputc.o)
+                0x000009ca                fputc
  .text.avr-libc
-                0x00000ea0       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(printf.o)
-                0x00000ea0                printf
+                0x00000a2e       0x22 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(printf.o)
+                0x00000a2e                printf
  .text.avr-libc
-                0x00000ec2        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(putchar.o)
-                0x00000ec2                putchar
+                0x00000a50        0xa c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(putchar.o)
+                0x00000a50                putchar
  .text.avr-libc
-                0x00000ecc       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(puts.o)
-                0x00000ecc                puts
+                0x00000a5a       0x5a c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(puts.o)
+                0x00000a5a                puts
  .text.avr-libc
-                0x00000f26      0x3dc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
-                0x00000f26                vfprintf
+                0x00000ab4      0x3dc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(vfprintf_std.o)
+                0x00000ab4                vfprintf
  .text.avr-libc
-                0x00001302       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
-                0x00001302                strnlen_P
+                0x00000e90       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strnlen_P.o)
+                0x00000e90                strnlen_P
  .text.avr-libc
-                0x00001318       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strnlen.o)
-                0x00001318                strnlen
+                0x00000ea6       0x16 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(strnlen.o)
+                0x00000ea6                strnlen
  .text.avr-libc
-                0x0000132e       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
-                0x0000132e                __ultoa_invert
-                0x000013ea                . = ALIGN (0x2)
+                0x00000ebc       0xbc c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(ultoa_invert.o)
+                0x00000ebc                __ultoa_invert
+                0x00000f78                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000013ea        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
-                0x000013ea                _exit
-                0x000013ea                exit
+ .fini9         0x00000f78        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+                0x00000f78                _exit
+                0x00000f78                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -576,11 +568,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000013ea        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000f78        0x4 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000013ee                _etext = .
+                0x00000f7c                _etext = .
 
-.data           0x00800200      0x12e load address 0x000013ee
+.data           0x00800200       0x74 load address 0x00000f7c
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800200        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51/crtm1280.o
@@ -617,43 +609,41 @@ END GROUP
  .rodata.str1.1
                 0x0080024f        0x8 IntelHex.o
  .rodata.str1.1
-                0x00800257       0x1f ProgramDriver.o
-                                 0x27 (size before relaxing)
+                0x00000000        0x8 ParallelProgram.o
+                                  0x2 (size before relaxing)
  .rodata.str1.1
-                0x00800276       0x9c ParallelProgram.o
-                                 0x9e (size before relaxing)
- .rodata.str1.1
-                0x00800312       0x1c RAM/RAMDriver.o
+                0x00800257       0x1c RAM/RAMDriver.o
                                  0x24 (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x0080032e                . = ALIGN (0x2)
-                0x0080032e                _edata = .
-                0x0080032e                PROVIDE (__data_end, .)
+                0x00800274                . = ALIGN (0x2)
+ *fill*         0x00800273        0x1 
+                0x00800274                _edata = .
+                0x00800274                PROVIDE (__data_end, .)
 
-.bss            0x0080032e       0x5b
-                0x0080032e                PROVIDE (__bss_start, .)
+.bss            0x00800274       0x5b
+                0x00800274                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.SignatureBytes.1849
-                0x0080032e        0x3 ProgramDriver.o
+                0x00800274        0x3 ProgramDriver.o
  *(COMMON)
- COMMON         0x00800331       0x34 IntelHex.o
-                0x00800331                hexRow
-                0x00800363                RAMOffset
- COMMON         0x00800365       0x1e SwitchingCircuitry.o
-                0x00800365                ShiftRegData
- COMMON         0x00800383        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(iob.o)
-                0x00800383                __iob
-                0x00800389                PROVIDE (__bss_end, .)
-                0x000013ee                __data_load_start = LOADADDR (.data)
-                0x0000151c                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800277       0x34 IntelHex.o
+                0x00800277                hexRow
+                0x008002a9                RAMOffset
+ COMMON         0x008002ab       0x1e SwitchingCircuitry.o
+                0x008002ab                ShiftRegData
+ COMMON         0x008002c9        0x6 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr51\libc.a(iob.o)
+                0x008002c9                __iob
+                0x008002cf                PROVIDE (__bss_end, .)
+                0x00000f7c                __data_load_start = LOADADDR (.data)
+                0x00000ff0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800389        0x0
-                0x00800389                PROVIDE (__noinit_start, .)
+.noinit         0x008002cf        0x0
+                0x008002cf                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800389                PROVIDE (__noinit_end, .)
-                0x00800389                _end = .
-                0x00800389                PROVIDE (__heap_start, .)
+                0x008002cf                PROVIDE (__noinit_end, .)
+                0x008002cf                _end = .
+                0x008002cf                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -751,52 +741,52 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2b7e
+.debug_info     0x00000000     0x2a42
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0xbb FPGA.o
  .debug_info    0x000000bb      0x29b IntelHex.o
  .debug_info    0x00000356     0x14d0 ProgramDriver.o
- .debug_info    0x00001826      0x357 ParallelProgram.o
- .debug_info    0x00001b7d      0x497 Print/PrintDriver.o
- .debug_info    0x00002014       0x5d Print/UARTStream.o
- .debug_info    0x00002071      0x4c8 RAM/RAMDriver.o
- .debug_info    0x00002539      0x479 SwitchingCircuitry.o
- .debug_info    0x000029b2      0x1cc VoltageControlDriver.o
+ .debug_info    0x00001826      0x21b ParallelProgram.o
+ .debug_info    0x00001a41      0x497 Print/PrintDriver.o
+ .debug_info    0x00001ed8       0x5d Print/UARTStream.o
+ .debug_info    0x00001f35      0x4c8 RAM/RAMDriver.o
+ .debug_info    0x000023fd      0x479 SwitchingCircuitry.o
+ .debug_info    0x00002876      0x1cc VoltageControlDriver.o
 
-.debug_abbrev   0x00000000      0xbb1
+.debug_abbrev   0x00000000      0xb9a
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x91 FPGA.o
  .debug_abbrev  0x00000091      0x161 IntelHex.o
  .debug_abbrev  0x000001f2      0x2df ProgramDriver.o
- .debug_abbrev  0x000004d1      0x117 ParallelProgram.o
- .debug_abbrev  0x000005e8      0x1e3 Print/PrintDriver.o
- .debug_abbrev  0x000007cb       0x26 Print/UARTStream.o
- .debug_abbrev  0x000007f1      0x17c RAM/RAMDriver.o
- .debug_abbrev  0x0000096d      0x1b0 SwitchingCircuitry.o
- .debug_abbrev  0x00000b1d       0x94 VoltageControlDriver.o
+ .debug_abbrev  0x000004d1      0x100 ParallelProgram.o
+ .debug_abbrev  0x000005d1      0x1e3 Print/PrintDriver.o
+ .debug_abbrev  0x000007b4       0x26 Print/UARTStream.o
+ .debug_abbrev  0x000007da      0x17c RAM/RAMDriver.o
+ .debug_abbrev  0x00000956      0x1b0 SwitchingCircuitry.o
+ .debug_abbrev  0x00000b06       0x94 VoltageControlDriver.o
 
-.debug_line     0x00000000     0x1afc
+.debug_line     0x00000000     0x1a97
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000       0xf4 FPGA.o
  .debug_line    0x000000f4      0x18a IntelHex.o
  .debug_line    0x0000027e      0xa4c ProgramDriver.o
- .debug_line    0x00000cca      0x1bf ParallelProgram.o
- .debug_line    0x00000e89      0x27c Print/PrintDriver.o
- .debug_line    0x00001105       0x1a Print/UARTStream.o
- .debug_line    0x0000111f      0x3f7 RAM/RAMDriver.o
- .debug_line    0x00001516      0x3e3 SwitchingCircuitry.o
- .debug_line    0x000018f9      0x203 VoltageControlDriver.o
+ .debug_line    0x00000cca      0x15a ParallelProgram.o
+ .debug_line    0x00000e24      0x27c Print/PrintDriver.o
+ .debug_line    0x000010a0       0x1a Print/UARTStream.o
+ .debug_line    0x000010ba      0x3f7 RAM/RAMDriver.o
+ .debug_line    0x000014b1      0x3e3 SwitchingCircuitry.o
+ .debug_line    0x00001894      0x203 VoltageControlDriver.o
 
-.debug_frame    0x00000000      0x700
+.debug_frame    0x00000000      0x6e4
  *(.debug_frame)
  .debug_frame   0x00000000       0x34 FPGA.o
  .debug_frame   0x00000034       0x88 IntelHex.o
  .debug_frame   0x000000bc      0x1c0 ProgramDriver.o
- .debug_frame   0x0000027c       0x40 ParallelProgram.o
- .debug_frame   0x000002bc       0xdc Print/PrintDriver.o
- .debug_frame   0x00000398      0x19c RAM/RAMDriver.o
- .debug_frame   0x00000534       0xe8 SwitchingCircuitry.o
- .debug_frame   0x0000061c       0xe4 VoltageControlDriver.o
+ .debug_frame   0x0000027c       0x24 ParallelProgram.o
+ .debug_frame   0x000002a0       0xdc Print/PrintDriver.o
+ .debug_frame   0x0000037c      0x19c RAM/RAMDriver.o
+ .debug_frame   0x00000518       0xe8 SwitchingCircuitry.o
+ .debug_frame   0x00000600       0xe4 VoltageControlDriver.o
 
 .debug_str      0x00000000      0x718
  *(.debug_str)
@@ -807,7 +797,7 @@ END GROUP
  .debug_str     0x000001fa      0x28c ProgramDriver.o
                                 0x452 (size before relaxing)
  .debug_str     0x00000486       0x48 ParallelProgram.o
-                                0x25f (size before relaxing)
+                                0x237 (size before relaxing)
  .debug_str     0x000004ce       0xc1 Print/PrintDriver.o
                                 0x235 (size before relaxing)
  .debug_str     0x0000058f       0x16 Print/UARTStream.o
@@ -819,15 +809,14 @@ END GROUP
  .debug_str     0x000006d1       0x47 VoltageControlDriver.o
                                 0x23d (size before relaxing)
 
-.debug_loc      0x00000000     0x1125
+.debug_loc      0x00000000     0x1073
  *(.debug_loc)
  .debug_loc     0x00000000      0x200 IntelHex.o
  .debug_loc     0x00000200      0x471 ProgramDriver.o
- .debug_loc     0x00000671       0xb2 ParallelProgram.o
- .debug_loc     0x00000723      0x22e Print/PrintDriver.o
- .debug_loc     0x00000951      0x559 RAM/RAMDriver.o
- .debug_loc     0x00000eaa      0x218 SwitchingCircuitry.o
- .debug_loc     0x000010c2       0x63 VoltageControlDriver.o
+ .debug_loc     0x00000671      0x22e Print/PrintDriver.o
+ .debug_loc     0x0000089f      0x559 RAM/RAMDriver.o
+ .debug_loc     0x00000df8      0x218 SwitchingCircuitry.o
+ .debug_loc     0x00001010       0x63 VoltageControlDriver.o
 
 .debug_macinfo
  *(.debug_macinfo)
