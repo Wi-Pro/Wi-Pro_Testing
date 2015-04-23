@@ -38,24 +38,24 @@ int main(void)
 	//EnableProgMode(ATmega324PA);
 	SignatureBytes = ReadSignatureBytes();
 	
-	printf("\nSignature Bytes: 0x%02X 0x%02X 0x%02X\n", *SignatureBytes, *(SignatureBytes + 1), *(SignatureBytes + 2));
-	if ( (*SignatureBytes == 0x1E) && (*(SignatureBytes + 1) == 0x91) && (*(SignatureBytes + 2) == 0x0A) )
-	{
-		printf("Starting Programming!\n");
-		printf("Erasing...\n");
-		ChipErase();
-		ReadFlash();
-		printf("\nDone Erasing!\n");
-		printf("Programming...\n");
-		ProgramFlash();
-		printf("Verifying...\n");
-		ReadFlash();
-		printf("\nDone!\n\n");
-	}
-	else
-	{
-		printf("ERROR: Signature Bytes Mismatch\n");
-	}
+	//printf("\nSignature Bytes: 0x%02X 0x%02X 0x%02X\n", *SignatureBytes, *(SignatureBytes + 1), *(SignatureBytes + 2));
+	//if ( (*SignatureBytes == 0x1E) && (*(SignatureBytes + 1) == 0x91) && (*(SignatureBytes + 2) == 0x0A) )
+	//{
+		//printf("Starting Programming!\n");
+		//printf("Erasing...\n");
+		//ChipErase();
+		//ReadFlash();
+		//printf("\nDone Erasing!\n");
+		//printf("Programming...\n");
+		//ProgramFlash();
+		//printf("Verifying...\n");
+		//ReadFlash();
+		//printf("\nDone!\n\n");
+	//}
+	//else
+	//{
+		//printf("ERROR: Signature Bytes Mismatch\n");
+	//}
 	
 	//if ( (*SignatureBytes == 0x1E) && (*(SignatureBytes + 1) == 0x95) && (*(SignatureBytes + 2) == 0x11) )
 	//{
