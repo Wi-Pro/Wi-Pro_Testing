@@ -37,9 +37,9 @@ Discarded input sections
  .text.HexToASCII
                 0x00000000       0x32 ATmega1280Test.o
  .text.ReadSignatureBytes
-                0x00000000      0x154 ATmega1280Test.o
+                0x00000000      0x17c ATmega1280Test.o
  .text.ReadFlash
-                0x00000000      0x118 ATmega1280Test.o
+                0x00000000      0x120 ATmega1280Test.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/avr8 gcc/native/3.4.1056/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.8.1/avr51\libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -414,9 +414,9 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1e1e
+.debug_info     0x00000000     0x1e20
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000     0x1e1e ATmega1280Test.o
+ .debug_info    0x00000000     0x1e20 ATmega1280Test.o
 
 .debug_abbrev   0x00000000      0x217
  *(.debug_abbrev)

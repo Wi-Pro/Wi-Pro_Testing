@@ -5,7 +5,7 @@
  *  Author: Adam Vogel
  */ 
 
-#define F_CPU 4000000UL
+#define F_CPU 8000000UL
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -608,7 +608,7 @@ void USB_UART0_Initialization(void)
 
 	UCSR0C = (1<<UCSZ01 | 1<<UCSZ00);	//8 bit data
 	UBRR0H = 0;
-	UBRR0L = 1;						//250,000 Baud at 8MHz
+	UBRR0L = 7;						//250,000 Baud at 8MHz
 	UCSR0B |= 1<<TXEN0; //Enable Transmit
 	UCSR0B |= 1<<RXEN0; //Enable Receive
 }
